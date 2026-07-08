@@ -15,25 +15,25 @@
 
     <!-- Hidden form definitions so Netlify detects them at deploy time.
          Field names must match what the intake wizard submits. -->
-    <form name="website-intake" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data">
-      <input type="text" name="bot-field" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="text" name="phone" />
-      <input type="text" name="profession" />
-      <input type="text" name="package" />
-      <input type="text" name="care_plan" />
-      <input type="text" name="rush" />
-      <input type="text" name="smart_features" />
-      <input type="text" name="style_pick" />
-      <input type="text" name="palette" />
-      <input type="text" name="brand_inspo" />
-      <input type="text" name="emulate_links" />
-      <textarea name="bio"></textarea>
-      <input type="text" name="sections" />
-      <input type="text" name="socials" />
-      <textarea name="extra_notes"></textarea>
-      <textarea name="summary"></textarea>
+    <form name="website-intake" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data" autocomplete="off">
+      <input type="text" name="bot-field" autocomplete="off" />
+      <input type="text" name="name" autocomplete="name" />
+      <input type="email" name="email" autocomplete="email" />
+      <input type="text" name="phone" autocomplete="tel" />
+      <input type="text" name="profession" autocomplete="organization-title" />
+      <input type="text" name="package" autocomplete="off" />
+      <input type="text" name="care_plan" autocomplete="off" />
+      <input type="text" name="rush" autocomplete="off" />
+      <input type="text" name="smart_features" autocomplete="off" />
+      <input type="text" name="style_pick" autocomplete="off" />
+      <input type="text" name="palette" autocomplete="off" />
+      <input type="text" name="brand_inspo" autocomplete="off" />
+      <input type="text" name="emulate_links" autocomplete="url" />
+      <textarea name="bio" autocomplete="off"></textarea>
+      <input type="text" name="sections" autocomplete="off" />
+      <input type="text" name="socials" autocomplete="url" />
+      <textarea name="extra_notes" autocomplete="off"></textarea>
+      <textarea name="summary" autocomplete="off"></textarea>
       <input type="file" name="headshot" />
       <input type="file" name="resume_file" />
       <input type="file" name="logo_file" />
@@ -43,16 +43,16 @@
       <input type="file" name="project_4" />
     </form>
 
-    <form name="resume-intake" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data">
-      <input type="text" name="bot-field" />
-      <input type="text" name="name" />
-      <input type="email" name="email" />
-      <input type="text" name="phone" />
-      <input type="text" name="package" />
-      <input type="text" name="target_role" />
-      <textarea name="whats_wrong"></textarea>
-      <textarea name="extra_notes"></textarea>
-      <textarea name="summary"></textarea>
+    <form name="resume-intake" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data" autocomplete="off">
+      <input type="text" name="bot-field" autocomplete="off" />
+      <input type="text" name="name" autocomplete="name" />
+      <input type="email" name="email" autocomplete="email" />
+      <input type="text" name="phone" autocomplete="tel" />
+      <input type="text" name="package" autocomplete="off" />
+      <input type="text" name="target_role" autocomplete="organization-title" />
+      <textarea name="whats_wrong" autocomplete="off"></textarea>
+      <textarea name="extra_notes" autocomplete="off"></textarea>
+      <textarea name="summary" autocomplete="off"></textarea>
       <input type="file" name="resume_file" />
     </form>
 
