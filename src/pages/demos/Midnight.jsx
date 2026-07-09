@@ -84,11 +84,11 @@ export default function Midnight() {
       <section id="contact" className="mx-auto max-w-3xl px-6 py-16 text-center">
         <Reveal>
           <h2 className="font-display text-3xl font-bold">
-            Let us build something <span className="text-gradient">that flies.</span>
+            Build something <span className="text-gradient">that flies.</span>
           </h2>
           <p className="mt-3 text-mist">mara.chen@example.com</p>
         </Reveal>
-        <p className="mt-14 text-xs text-mist/60">A Foliolab style demo. Mara is fictional, your site will not be.</p>
+        <p className="mt-14 text-xs text-mist/60">A FolioLabz style example, not a finished site. Mara is made up; yours is built around you.</p>
       </section>
 
       <DemoBar styleId="midnight" styleName="Midnight" />

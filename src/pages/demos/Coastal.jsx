@@ -78,7 +78,7 @@ export default function Coastal() {
           <p className="mt-3" style={{ color: '#4f6b76' }}>hannah.reed@example.com</p>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#93a8b0' }}>
-          A Foliolab style demo. Hannah is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. Hannah is made up; yours is built around you.
         </p>
       </section>
 

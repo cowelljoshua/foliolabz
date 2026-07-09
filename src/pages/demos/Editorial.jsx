@@ -83,7 +83,7 @@ export default function Editorial() {
           </a>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#9a948a', fontFamily: 'Inter, sans-serif' }}>
-          A Foliolab style demo. Devon is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. Devon is made up; yours is built around you.
         </p>
       </section>
 

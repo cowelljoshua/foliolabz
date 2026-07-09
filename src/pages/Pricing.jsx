@@ -229,7 +229,7 @@ export default function Pricing() {
       </Reveal>
       <Reveal delay={0.1} className="mt-3 text-center">
         <p className="text-xs text-mist">
-          {care ? `${carePlan.blurb} Send changes anytime, cancel anytime.` : 'Just the build. You can add the Care Plan later.'}
+          {care ? `${carePlan.blurb} Cancel anytime, your site stays online either way.` : 'Just the build. Hosting is included free. You can add the Care Plan later.'}
         </p>
       </Reveal>
 
@@ -241,18 +241,6 @@ export default function Pricing() {
           </Reveal>
         ))}
       </div>
-
-      <Reveal className="mt-10">
-        <div className="star-border mx-auto max-w-3xl rounded-3xl">
-          <div className="flex flex-col items-center gap-4 rounded-3xl p-7 text-center sm:flex-row sm:gap-6 sm:p-8 sm:text-left">
-            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-violet/15 text-3xl">💜</span>
-            <div>
-              <p className="font-display text-xl font-bold">{promises.website.title}</p>
-              <p className="mt-1.5 text-sm leading-relaxed text-mist">{promises.website.detail}</p>
-            </div>
-          </div>
-        </div>
-      </Reveal>
 
       <AnimatePresence>
         {openTier && <TierModal tier={openTier} care={care} onClose={() => setOpenTier(null)} />}
@@ -299,10 +287,6 @@ export default function Pricing() {
             )
           })}
         </div>
-
-        <Reveal className="mx-auto mt-6 max-w-2xl text-center">
-          <p className="text-sm leading-relaxed text-mist">{resumeService.credibility}</p>
-        </Reveal>
 
         {/* Resume X-ray */}
         <Reveal className="mx-auto mt-12 max-w-3xl">

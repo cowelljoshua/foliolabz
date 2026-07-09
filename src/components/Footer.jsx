@@ -7,8 +7,8 @@ export default function Footer() {
       <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-12 text-center sm:flex-row sm:justify-between sm:text-left">
         <div>
           <p className="font-display text-lg font-bold">
-            <span className="text-frost">folio</span>
-            <span className="text-gradient">lab</span>
+            <span className="text-frost">Folio</span>
+            <span className="text-gradient">Labz</span>
           </p>
           <p className="mt-1 text-sm text-mist">
             Yes, this site is my work too.

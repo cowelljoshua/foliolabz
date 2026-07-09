@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'motion/react'
+import { asset } from '../lib/asset.js'
 
 // Tracks whether we are on a small screen (phones).
 function useIsMobile() {
@@ -94,7 +95,7 @@ function ExpandedModal({ name, url, onClose }) {
         exit={{ scale: 0.96, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 26 }}
         className={`overflow-hidden rounded-2xl border border-white/15 bg-ink-800 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.9)] transition-all duration-500 ${
-          mode === 'laptop' ? 'h-[80vh] w-full max-w-6xl' : 'h-[80vh] w-[22rem] max-w-full'
+          mode === 'laptop' ? 'h-[80vh] w-full max-w-6xl' : 'h-[78vh] max-h-[780px] w-[26rem] max-w-full'
         }`}
       >
         <BrowserBar url={url} />
@@ -125,7 +126,7 @@ export default function DeviceFrame({ name, url, thumb, field }) {
         <div className="relative h-40 w-full overflow-hidden bg-ink-900">
           {thumb && (
             <img
-              src={thumb}
+              src={asset(thumb)}
               alt={`${name} website`}
               className="h-full w-full object-cover object-top"
               onError={(e) => (e.target.style.display = 'none')}
@@ -160,7 +161,7 @@ export default function DeviceFrame({ name, url, thumb, field }) {
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-ink-900">
               {thumb && (
                 <img
-                  src={thumb}
+                  src={asset(thumb)}
                   alt=""
                   className="h-full w-full object-cover object-top opacity-50"
                   onError={(e) => (e.target.style.display = 'none')}

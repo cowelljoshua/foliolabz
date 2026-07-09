@@ -99,7 +99,7 @@ export default function Neon() {
             </a>
           </p>
         </Reveal>
-        <p className="mt-14 text-xs text-[#5c5770]">A Foliolab style demo. Kai is fictional, your site will not be.</p>
+        <p className="mt-14 text-xs text-[#5c5770]">A FolioLabz style example, not a finished site. Kai is made up; yours is built around you.</p>
       </section>
 
       <DemoBar styleId="neon" styleName="Neon Grid" />

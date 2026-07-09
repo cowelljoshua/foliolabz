@@ -71,7 +71,7 @@ export default function Luxe() {
           </a>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#a49c8b' }}>
-          A Foliolab style demo. Camille is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. Camille is made up; yours is built around you.
         </p>
       </section>
 

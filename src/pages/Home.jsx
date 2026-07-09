@@ -6,9 +6,8 @@ import BlurText from '../components/reactbits/BlurText.jsx'
 import ShinyText from '../components/reactbits/ShinyText.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
 import StarBorder from '../components/reactbits/StarBorder.jsx'
-import CountUp from '../components/reactbits/CountUp.jsx'
 import Reveal from '../components/reactbits/Reveal.jsx'
-import { demoStyles, stats, promises, resumeService } from '../config/site.js'
+import { demoStyles, promises, resumeService } from '../config/site.js'
 
 const steps = [
   {
@@ -65,6 +64,17 @@ export default function Home() {
           <Reveal delay={1.3} className="mt-10">
             <ShinyText className="text-sm">Websites from $300 · Resume polish from $40</ShinyText>
           </Reveal>
+          <Reveal delay={1.45} className="mt-8">
+            <div className="star-border mx-auto max-w-md rounded-2xl">
+              <div className="flex items-center gap-3 rounded-2xl px-5 py-3 text-left">
+                <span className="shrink-0 text-2xl">💜</span>
+                <p className="text-sm">
+                  <span className="font-semibold text-frost">{promises.website.title}.</span>{' '}
+                  <span className="text-mist">{promises.website.short}</span>
+                </p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -74,9 +84,6 @@ export default function Home() {
           <h2 className="font-display text-center text-3xl font-bold sm:text-4xl">
             The worry-free build
           </h2>
-          <p className="mt-3 text-center text-mist">
-            No tech skills needed. No design decisions you do not want to make.
-          </p>
         </Reveal>
         <div className="mt-12 grid gap-5 sm:grid-cols-3">
           {steps.map((s, i) => (
@@ -86,31 +93,6 @@ export default function Home() {
                 <h3 className="font-display mt-3 text-xl font-semibold">{s.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-mist">{s.body}</p>
               </SpotlightCard>
-            </Reveal>
-          ))}
-        </div>
-        <Reveal delay={0.3} className="mt-10">
-          <div className="star-border mx-auto max-w-3xl rounded-3xl">
-            <div className="flex flex-col items-center gap-4 rounded-3xl p-7 text-center sm:flex-row sm:gap-6 sm:p-8 sm:text-left">
-              <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-violet/15 text-3xl">💜</span>
-              <div>
-                <p className="font-display text-xl font-bold">{promises.website.title}</p>
-                <p className="mt-1.5 text-sm leading-relaxed text-mist">{promises.website.detail}</p>
-              </div>
-            </div>
-          </div>
-        </Reveal>
-      </section>
-
-      {/* STATS */}
-      <section className="border-y hairline bg-ink-900/60">
-        <div className="mx-auto grid max-w-5xl gap-10 px-6 py-14 text-center sm:grid-cols-3">
-          {stats.map((s, i) => (
-            <Reveal key={s.label} delay={i * 0.1}>
-              <p className="font-display text-5xl font-bold text-gradient">
-                <CountUp to={s.value} suffix={s.suffix} />
-              </p>
-              <p className="mt-2 text-sm text-mist">{s.label}</p>
             </Reveal>
           ))}
         </div>
@@ -125,7 +107,7 @@ export default function Home() {
           </div>
           <Link to="/styles" className="btn-ghost shrink-0">Explore all styles</Link>
         </Reveal>
-        <div className="scroll-x mt-10 flex gap-4 overflow-x-auto pb-4">
+        <div className="scroll-x mt-10 flex gap-4 overflow-x-auto overflow-y-hidden pb-4 pt-1">
           {demoStyles.map((d, i) => (
             <Reveal key={d.id} delay={Math.min(i, 5) * 0.06} className="shrink-0">
               <Link

@@ -1,4 +1,4 @@
-# Foliolab: Your Setup Checklist
+# FolioLabz: Your Setup Checklist
 
 The site is built. Three things are left, and they are all yours because they need
 your accounts: **Stripe** (payments), **Netlify** (hosting + the intake form), and a
@@ -79,7 +79,7 @@ No server needed. (This is why we are not using GitHub Pages: it cannot receive 
    ```
    git init
    git add .
-   git commit -m "Foliolab site"
+   git commit -m "FolioLabz site"
    ```
    then create a repo on github.com and follow its push instructions.
 2. Go to https://app.netlify.com, sign up with GitHub, click
@@ -101,11 +101,41 @@ No server needed. (This is why we are not using GitHub Pages: it cannot receive 
 
 ---
 
+## Hosting and domains (how it actually works)
+
+This trips up a lot of people, so here is the plain truth.
+
+**Hosting is free. Really.** Netlify (and GitHub Pages) host sites at no cost, with
+no time limit. You can keep every client site online forever and pay $0. That is
+why the site tells clients "hosting is included free" and why cancelling the Care
+Plan does NOT take a site offline. Do not charge a hosting fee to survive; you do
+not need one.
+
+**A custom .com is the only real cost, and it is small.** There is no legitimate
+free .com. A domain like `janedoe.com` costs about $10 to $15 per year from a
+registrar (Namecheap, Cloudflare, Porkbun). Two clean ways to handle it:
+- **Client owns it (recommended):** have them buy the domain in their own name
+  (~$15/yr), then you connect it in Netlify (Domain management → Add a domain,
+  HTTPS is automatic). They own it, you set it up, nobody argues later.
+- **You handle it:** you buy the domain and add ~$15/yr to their bill. Simpler for
+  them, but then it lives in your account.
+
+**Free option for the budget-conscious:** skip the .com and launch on a free
+address like `janedoe.netlify.app`. Looks slightly less polished, costs nothing.
+Good for students who want to be live today.
+
+**What the site promises clients:** hosting free, custom domain ~$15/yr that they
+own (or a free subdomain). If you want to package the domain differently (say,
+bundle "domain + setup" into a small annual fee), just tell me and I will reword
+the Launch card and FAQ.
+
+---
+
 ## 3. Nice-to-haves (whenever)
 
-- **Custom domain** (~$12/year): buy it right inside Netlify
-  (Domain management → Add a domain), HTTPS is automatic. foliolab.com,
-  foliolab.site, getfoliolab.com, whatever is free.
+- **Custom domain** (~$15/year): buy it right inside Netlify
+  (Domain management → Add a domain), HTTPS is automatic. See the section above
+  for who should own it.
 - **Screenshot thumbnails**: see `public/examples/README.txt`. Optional polish
   for the Styles page while live previews load.
 - **Meetings**: for the $75 resume tier and Signature strategy calls, replying by
@@ -126,7 +156,7 @@ deliver one. Easiest first.
 
 **Option A: an unguessable Netlify link (free, recommended to start).**
 1. Build the client's site as its own Netlify site (each client site is a separate
-   little project, separate from this Foliolab marketing site).
+   little project, separate from this FolioLabz marketing site).
 2. Netlify gives it a random subdomain like `luminous-otter-3fa19c.netlify.app`.
    That URL is effectively private: nobody finds it unless you send it.
 3. Add a "no-index" tag so search engines never list the preview. In that client

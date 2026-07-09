@@ -16,7 +16,7 @@ export default function Styles() {
           Pick a style. <span className="text-gradient">I take it from there.</span>
         </h1>
         <p className="mt-4 text-mist">
-          Ten directions, each one a real site you can click through. Your site will not be a copy, it will be yours. The style just tells me what you love.
+          These are ten quick examples, not finished sites, just to show you different looks and feels. Click through any of them. Your real site is built from scratch around you and goes much further.
         </p>
       </Reveal>
 
@@ -59,7 +59,7 @@ export default function Styles() {
             className="flex h-full min-h-[16rem] flex-col items-center justify-center rounded-2xl border border-dashed border-white/20 p-8 text-center transition-colors hover:border-violet"
           >
             <p className="font-display text-lg font-semibold">Torn between a few?</p>
-            <p className="mt-2 text-sm text-mist">Say so in the form and we will combine them.</p>
+            <p className="mt-2 text-sm text-mist">Say so in the form and I will combine them.</p>
             <span className="btn-ghost mt-5 text-sm">Start my build</span>
           </Link>
         </Reveal>

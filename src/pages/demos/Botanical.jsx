@@ -9,7 +9,7 @@ const ink = '#33372f'
 const offerings = [
   { name: 'One-on-one coaching', desc: 'Twelve weeks toward a calmer, stronger you.', price: 'from $90 / session' },
   { name: 'Group breathwork', desc: 'Small circles, big shifts. Wednesday evenings.', price: '$25 / class' },
-  { name: 'Corporate wellness', desc: 'Bring calm to your team. Half and full day.', price: 'let us talk' },
+  { name: 'Corporate wellness', desc: 'Bring calm to your team. Half and full day.', price: 'get in touch' },
 ]
 
 export default function Botanical() {
@@ -47,7 +47,7 @@ export default function Botanical() {
 
       <section id="work" className="mx-auto max-w-4xl px-6 pb-8">
         <Reveal>
-          <h2 className="text-center text-4xl italic">Ways we can work together</h2>
+          <h2 className="text-center text-4xl italic">Ways to work together</h2>
         </Reveal>
         <div className="mt-10 grid gap-5 sm:grid-cols-3">
           {offerings.map((o, i) => (
@@ -67,11 +67,11 @@ export default function Botanical() {
 
       <section id="contact" className="mx-auto max-w-3xl px-6 py-16 text-center">
         <Reveal>
-          <h2 className="text-3xl italic">Let us begin</h2>
+          <h2 className="text-3xl italic">Begin here</h2>
           <p className="mt-3" style={{ color: '#6d7266' }}>priya@example.com</p>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#a7ab9f', fontFamily: 'Inter, sans-serif' }}>
-          A Foliolab style demo. Priya is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. Priya is made up; yours is built around you.
         </p>
       </section>
 

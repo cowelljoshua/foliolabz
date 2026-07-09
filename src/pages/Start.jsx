@@ -23,7 +23,7 @@ const resumeSteps = ['about', 'resume', 'review']
 
 const stepTitles = {
   about: ['First, the basics', 'So I know who I am building for.'],
-  package: ['Your package', 'Change your mind anytime before we start.'],
+  package: ['Your package', 'Change your mind anytime before I start.'],
   style: ['Your style', 'This is the fun part.'],
   content: ['Your content', 'Rough is fine. I polish everything.'],
   files: ['Your files', 'Whatever you have. Missing something? Send it later.'],
@@ -245,7 +245,7 @@ export default function Start() {
         console.warn('DEV: simulating successful submit', e)
         navigate('/thanks', { state })
       } else {
-        setError(`Something went wrong sending your form. Email me directly at ${site.email} and we will sort it out.`)
+        setError(`Something went wrong sending your form. Email me directly at ${site.email} and I will sort it out.`)
       }
     } finally {
       setSending(false)
@@ -258,8 +258,7 @@ export default function Start() {
     return (
       <main className="mx-auto flex min-h-[80vh] max-w-3xl flex-col justify-center px-6 pt-28 pb-16">
         <Reveal className="text-center">
-          <h1 className="font-display text-4xl font-bold sm:text-5xl">What are we building?</h1>
-          <p className="mt-3 text-mist">Pick one to get started.</p>
+          <h1 className="font-display text-4xl font-bold sm:text-5xl">What can I build for you?</h1>
         </Reveal>
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           <Reveal delay={0.1}>

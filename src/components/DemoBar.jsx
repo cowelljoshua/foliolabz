@@ -10,8 +10,11 @@ export default function DemoBar({ styleId, styleName }) {
           ← All styles
         </Link>
         <span className="mx-1 hidden text-white/20 sm:inline">|</span>
-        <span className="hidden text-sm text-mist sm:inline">
-          Viewing <span className="font-semibold text-frost">{styleName}</span>
+        <span className="hidden items-center gap-2 text-sm text-mist sm:inline-flex">
+          <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-300">
+            Example
+          </span>
+          <span className="font-semibold text-frost">{styleName}</span>
         </span>
         <Link to={`/start?style=${styleId}`} className="btn-primary !px-4 !py-1.5 text-sm">
           I like this one

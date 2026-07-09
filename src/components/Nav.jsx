@@ -28,8 +28,8 @@ export default function Nav() {
         }`}
       >
         <Link to="/" className="font-display text-lg font-700 tracking-tight">
-          <span className="text-frost">folio</span>
-          <span className="text-gradient font-bold">lab</span>
+          <span className="text-frost">Folio</span>
+          <span className="text-gradient font-bold">Labz</span>
         </Link>
 
         <div className="hidden items-center gap-1 sm:flex">

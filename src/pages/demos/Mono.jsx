@@ -49,13 +49,13 @@ export default function Mono() {
       <section id="contact" className="mx-auto max-w-5xl px-6 py-12">
         <Reveal>
           <div className="flex flex-col gap-4 border-t-2 pt-8 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: ink }}>
-            <p className="text-3xl font-semibold tracking-tight">Let us design something quiet.</p>
+            <p className="text-3xl font-semibold tracking-tight">I design quiet spaces.</p>
             <a href="mailto:theo@example.com" className="text-lg font-medium underline underline-offset-4">
               theo@example.com
             </a>
           </div>
         </Reveal>
-        <p className="mt-14 text-xs text-[#aaa]">A Foliolab style demo. Theo is fictional, your site will not be.</p>
+        <p className="mt-14 text-xs text-[#aaa]">A FolioLabz style example, not a finished site. Theo is made up; yours is built around you.</p>
       </section>
 
       <DemoBar styleId="mono" styleName="Mono" />

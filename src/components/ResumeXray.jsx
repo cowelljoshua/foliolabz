@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { resumeService } from '../config/site.js'
+import { asset } from '../lib/asset.js'
 
 // Before/after resume demo. The bullets are a generic EXAMPLE (clearly labeled);
 // the real payoff is the button that opens Josh's actual resume.
@@ -11,10 +12,7 @@ export default function ResumeXray() {
   return (
     <div className="glass rounded-3xl p-6 sm:p-9">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h3 className="font-display text-xl font-semibold">See the difference a polish makes</h3>
-          <p className="mt-1 text-sm text-mist">Same experience, rewritten. Drag the toggle.</p>
-        </div>
+        <h3 className="font-display text-xl font-semibold">See the difference a polish makes</h3>
         <div className="flex items-center rounded-full border hairline p-1">
           {['Before', 'After'].map((label, i) => {
             const active = after === (i === 1)
@@ -98,11 +96,8 @@ export default function ResumeXray() {
 
       {/* The real CTA: Josh's actual resume */}
       <div className="mt-7 flex flex-col items-center justify-between gap-4 rounded-2xl border border-violet/40 bg-violet/[0.06] p-5 text-center sm:flex-row sm:text-left">
-        <div>
-          <p className="font-display font-semibold">Want proof I practice what I preach?</p>
-          <p className="mt-0.5 text-sm text-mist">Take a look at my own resume, the one I built with these exact rules.</p>
-        </div>
-        <a href={resumePdf} target="_blank" rel="noreferrer" className="btn-primary shrink-0 !py-2.5 text-sm">
+        <p className="font-display font-semibold">Want proof I practice what I preach?</p>
+        <a href={asset(resumePdf)} target="_blank" rel="noreferrer" className="btn-primary shrink-0 !py-2.5 text-sm">
           View my resume ↗
         </a>
       </div>

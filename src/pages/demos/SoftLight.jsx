@@ -94,7 +94,7 @@ export default function SoftLight() {
           <p className="mt-3" style={{ color: '#6b7573' }}>elena.brooks@example.com</p>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#a8b0ae' }}>
-          A Foliolab style demo. Elena is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. Elena is made up; yours is built around you.
         </p>
       </section>
 

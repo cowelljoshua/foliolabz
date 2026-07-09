@@ -78,7 +78,7 @@ export default function ClassicSlate() {
           <p className="mt-2 text-sm" style={{ color: '#5b6472' }}>New York · Open to 2026 analyst roles</p>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#9aa1ac' }}>
-          A Foliolab style demo. James is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. James is made up; yours is built around you.
         </p>
       </section>
 

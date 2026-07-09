@@ -88,7 +88,7 @@ export default function WarmStudio() {
           </a>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#a89579', fontFamily: 'Inter, sans-serif' }}>
-          A Foliolab style demo. Sofia is fictional, your site will not be.
+          A FolioLabz style example, not a finished site. Sofia is made up; yours is built around you.
         </p>
       </section>
 

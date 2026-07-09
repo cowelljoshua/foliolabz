@@ -6,7 +6,7 @@
 // ============================================================
 
 export const site = {
-  brand: "Foliolab",
+  brand: "FolioLabz",
   tagline: "Portfolio websites, built for you.",
 
   // CHANGE THIS to the email you want client submissions and questions to reach.
@@ -56,7 +56,8 @@ export const tiers = [
       "Looks perfect on phones, tablets, and laptops",
       "Contact and social buttons wherever you want them",
       "A resume download button for recruiters",
-      "Your web address hooked up and the site launched for you",
+      "Hosting included free, for as long as you want it online",
+      "Your custom web address set up for you (about $15/year, and it is yours), or launch free on a simple address",
     ],
     careMonthly: 25,
     stripeKey: "launch",
@@ -120,14 +121,14 @@ export const smartFeatures = [
 export const carePlan = {
   name: "Care Plan",
   monthly: 25, // Signature uses its own careMonthly (40)
-  blurb: "Keeps your site live and up to date.",
+  blurb: "Keeps your site fresh with edits whenever you need them.",
   editDefinition:
-    "This keeps your site online, secure, and current. Send changes whenever you need them, a new job, a new project, fresh photos, and I take care of the updates for you.",
+    "Send changes whenever you need them, a new job, a new project, fresh photos, a reworded section, and I make the updates for you, usually fast. No logging in, no fiddling with anything.",
   features: [
-    "Your site stays live, secure, and current",
-    "Send changes whenever you need them, I handle the updates",
-    "Priority turnaround, plus a discount on bigger redesigns",
-    "Cancel anytime",
+    "Send changes whenever you want, I handle the updates",
+    "Priority turnaround on every request",
+    "A discount on bigger redesigns and new pages",
+    "Cancel anytime, your site stays online either way",
   ],
 }
 
@@ -146,8 +147,8 @@ export const rush = {
 export const promises = {
   website: {
     title: "Love it before it launches",
-    detail: "Once I build your first version, you get a private preview link and up to 5 rounds of changes. Send as many tweaks as you like in each round. We keep going until it feels exactly right, then it goes live.",
-    short: "Private preview + 5 rounds of changes before launch.",
+    detail: "Once I build your first version, you get a private preview link and up to 3 rounds of changes. Send as many tweaks as you like in each round. I keep going until it feels exactly right, then it goes live.",
+    short: "Private preview and 3 rounds of changes before it goes live.",
   },
   resume: {
     title: "If it is not noticeably better, it is free",
@@ -161,8 +162,6 @@ export const promises = {
 export const resumeService = {
   heading: "Not ready for a website? Start with your resume.",
   humanLine: "Edited by a human.",
-  credibility:
-    "I reviewed hundreds of resumes and sat on the hiring side of interviews while leading a 60-engineer collegiate rocketry team. I know what gets read and what gets skipped.",
   tiers: [
     {
       id: "resume-polish",
@@ -299,19 +298,19 @@ export const demoStyles = [
 // ------------------------------------------------------------
 export const realSites = [
   {
-    id: "david",
-    name: "David Cowell",
-    field: "Engineering",
-    url: "https://davidcowell.com",
-    thumb: "/examples/david.png",
-    live: true,
-  },
-  {
     id: "josh",
     name: "Josh Cowell",
     field: "Engineering",
     url: "https://cowelljoshua.github.io",
     thumb: "/examples/josh.png",
+    live: true,
+  },
+  {
+    id: "david",
+    name: "David Cowell",
+    field: "Engineering",
+    url: "https://davidcowell.com",
+    thumb: "/examples/david.png",
     live: true,
   },
   {
@@ -356,11 +355,15 @@ export const faq = [
   },
   {
     q: "How do changes and edits work?",
-    a: "Two stages. While I am building, you get up to 5 rounds of changes to get your site exactly right before launch. After launch, an optional Care Plan keeps it current: send me changes whenever you need them and I make them for you.",
+    a: "Two stages. While I am building, you get up to 3 rounds of changes to get your site exactly right before launch. After launch, an optional Care Plan keeps it current: send me changes whenever you need them and I make them for you.",
   },
   {
     q: "How long does it take?",
     a: `Most sites are ready in ${site.delivery.standard}. Need it sooner? The rush option moves you to the front of the line for delivery in ${site.delivery.rush}.`,
+  },
+  {
+    q: "Do I pay for hosting or a domain?",
+    a: "Hosting is included free, for as long as you want your site online. A custom web address like yourname.com is about $15 a year, paid to the domain company, and you own it. Rather not? I can launch you free on a simpler address. Either way, I set it all up.",
   },
   {
     q: "Can I make changes myself?",
@@ -368,19 +371,10 @@ export const faq = [
   },
   {
     q: "What if I cancel the Care Plan?",
-    a: "The Care Plan is what keeps your site online and maintained, so it runs month to month. If you ever want to stop, just tell me and we will sort out the best next step together. Your content and design are always saved, so nothing is ever lost.",
+    a: "No problem, cancel anytime. Your site stays online (hosting is free), you just stop getting monthly edits from me. You can pick the plan back up whenever you want.",
   },
   {
     q: "What if I do not like the design?",
-    a: "You will. Before launch you get a private preview and up to 5 rounds of changes, so we shape it together until it feels like you. I do not stop at good enough.",
+    a: "You will. Before launch you get a private preview and up to 3 rounds of changes, so I can shape it until it feels like you. I do not stop at good enough.",
   },
-]
-
-// ------------------------------------------------------------
-// HOME PAGE STATS
-// ------------------------------------------------------------
-export const stats = [
-  { value: 3, suffix: "", label: "sites launched and live" },
-  { value: 60, suffix: "", label: "engineers led on a rocketry team" },
-  { value: 100, suffix: "%", label: "built by a human, start to finish" },
 ]
