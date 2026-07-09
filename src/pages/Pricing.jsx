@@ -242,6 +242,28 @@ export default function Pricing() {
         ))}
       </div>
 
+      <Reveal delay={0.2} className="mt-10">
+        <div className="star-border mx-auto max-w-3xl rounded-3xl">
+          <div className="flex flex-col items-center gap-4 rounded-3xl p-7 text-center sm:flex-row sm:gap-6 sm:p-8 sm:text-left">
+            <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-violet/15 text-violet">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                />
+                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div>
+              <p className="font-display text-xl font-bold">{promises.website.title}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-mist">{promises.website.detail}</p>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+
       <AnimatePresence>
         {openTier && <TierModal tier={openTier} care={care} onClose={() => setOpenTier(null)} />}
       </AnimatePresence>

@@ -7,7 +7,7 @@ import ShinyText from '../components/reactbits/ShinyText.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
 import StarBorder from '../components/reactbits/StarBorder.jsx'
 import Reveal from '../components/reactbits/Reveal.jsx'
-import { demoStyles, promises, resumeService } from '../config/site.js'
+import { demoStyles, resumeService } from '../config/site.js'
 
 const steps = [
   {
@@ -63,17 +63,6 @@ export default function Home() {
           </Reveal>
           <Reveal delay={1.3} className="mt-10">
             <ShinyText className="text-sm">Websites from $300 · Resume polish from $40</ShinyText>
-          </Reveal>
-          <Reveal delay={1.45} className="mt-8">
-            <div className="star-border mx-auto max-w-md rounded-2xl">
-              <div className="flex items-center gap-3 rounded-2xl px-5 py-3 text-left">
-                <span className="shrink-0 text-2xl">💜</span>
-                <p className="text-sm">
-                  <span className="font-semibold text-frost">{promises.website.title}.</span>{' '}
-                  <span className="text-mist">{promises.website.short}</span>
-                </p>
-              </div>
-            </div>
           </Reveal>
         </div>
       </section>

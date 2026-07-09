@@ -32,9 +32,9 @@ export const site = {
 // ------------------------------------------------------------
 export const stripeLinks = {
   launch: "",          // One-time $300
-  launchCare: "",      // $300 setup + $25/mo
+  launchCare: "",      // $300 setup + $10/mo
   pro: "",             // One-time $550
-  proCare: "",         // $550 setup + $25/mo
+  proCare: "",         // $550 setup + $10/mo
   resumePolish: "",    // One-time $40
   resumeMeeting: "",   // One-time $75
 }
@@ -59,7 +59,7 @@ export const tiers = [
       "Hosting included free, for as long as you want it online",
       "Your custom web address set up for you (about $15/year, and it is yours), or launch free on a simple address",
     ],
-    careMonthly: 25,
+    careMonthly: 10,
     stripeKey: "launch",
     stripeCareKey: "launchCare",
     popular: false,
@@ -70,7 +70,7 @@ export const tiers = [
     price: 550,
     priceLabel: "$550",
     blurb: "For people who want to stand out.",
-    headline: ["Up to 7 pages", "Photo and project gallery", "Visitor messages land in your inbox"],
+    headline: ["Up to 7 pages", "Photo and project gallery", "1 personal strategy meeting"],
     full: [
       "Everything in Launch",
       "Up to 7 pages",
@@ -78,8 +78,9 @@ export const tiers = [
       "A working contact form: visitor messages land straight in your email",
       "A testimonials section that builds instant trust",
       "Extra animation and polish throughout",
+      "1 personal 30-minute strategy meeting with me",
     ],
-    careMonthly: 25,
+    careMonthly: 10,
     stripeKey: "pro",
     stripeCareKey: "proCare",
     popular: true,
@@ -99,7 +100,7 @@ export const tiers = [
       "30 days of post-launch tweaks included",
       "Your exact quote confirmed within 24 hours of your form",
     ],
-    careMonthly: 40,
+    careMonthly: 15,
     stripeKey: "",
     stripeCareKey: "",
     popular: false,
@@ -120,7 +121,7 @@ export const smartFeatures = [
 // ------------------------------------------------------------
 export const carePlan = {
   name: "Care Plan",
-  monthly: 25, // Signature uses its own careMonthly (40)
+  monthly: 10, // Signature uses its own careMonthly (15)
   blurb: "Keeps your site fresh with edits whenever you need them.",
   editDefinition:
     "Send changes whenever you need them, a new job, a new project, fresh photos, a reworded section, and I make the updates for you, usually fast. No logging in, no fiddling with anything.",

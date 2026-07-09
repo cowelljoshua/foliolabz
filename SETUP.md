@@ -35,9 +35,9 @@ In the Stripe dashboard: **Payment Links → + New**. For each one below, click
 | # | Link name | How to set it up |
 |---|-----------|------------------|
 | 1 | Launch | Product "Website: Launch", one-time price **$300** |
-| 2 | Launch + Care | Product "Care Plan (Launch)", **recurring $25/month**. Then on the same link click **Add another product** and attach a one-time **$300** "Launch setup" product. One checkout, both charges. |
+| 2 | Launch + Care | Product "Care Plan (Launch)", **recurring $10/month**. Then on the same link click **Add another product** and attach a one-time **$300** "Launch setup" product. One checkout, both charges. |
 | 3 | Pro | Product "Website: Pro", one-time **$550** |
-| 4 | Pro + Care | Recurring **$25/month** plus one-time **$550** setup, same trick as #2 |
+| 4 | Pro + Care | Recurring **$10/month** plus one-time **$550** setup, same trick as #2 |
 | 5 | Resume Polish | One-time **$40** |
 | 6 | Polish + Meeting | One-time **$75** |
 
