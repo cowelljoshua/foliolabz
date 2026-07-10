@@ -22,9 +22,7 @@
       <input type="text" name="phone" autocomplete="tel" />
       <input type="text" name="profession" autocomplete="organization-title" />
       <input type="text" name="package" autocomplete="off" />
-      <input type="text" name="care_plan" autocomplete="off" />
       <input type="text" name="rush" autocomplete="off" />
-      <input type="text" name="smart_features" autocomplete="off" />
       <input type="text" name="style_pick" autocomplete="off" />
       <input type="text" name="palette" autocomplete="off" />
       <input type="text" name="brand_inspo" autocomplete="off" />
@@ -54,6 +52,19 @@
       <textarea name="extra_notes" autocomplete="off"></textarea>
       <textarea name="summary" autocomplete="off"></textarea>
       <input type="file" name="resume_file" />
+    </form>
+
+    <!-- Existing-client portal requests (domain setup + edit requests). -->
+    <form name="client-request" netlify netlify-honeypot="bot-field" hidden autocomplete="off">
+      <input type="text" name="bot-field" autocomplete="off" />
+      <input type="text" name="name" autocomplete="name" />
+      <input type="email" name="email" autocomplete="email" />
+      <input type="text" name="request_type" autocomplete="off" />
+      <input type="text" name="domain" autocomplete="off" />
+      <textarea name="domain_notes" autocomplete="off"></textarea>
+      <input type="text" name="edit_type" autocomplete="off" />
+      <textarea name="details" autocomplete="off"></textarea>
+      <textarea name="summary" autocomplete="off"></textarea>
     </form>
 
     <script type="module" src="/src/main.jsx"></script>

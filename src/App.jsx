@@ -7,6 +7,7 @@ import Styles from './pages/Styles.jsx'
 import Pricing from './pages/Pricing.jsx'
 import Start from './pages/Start.jsx'
 import Thanks from './pages/Thanks.jsx'
+import Portal from './pages/Portal.jsx'
 import Midnight from './pages/demos/Midnight.jsx'
 import SoftLight from './pages/demos/SoftLight.jsx'
 import Editorial from './pages/demos/Editorial.jsx'
@@ -54,6 +55,7 @@ export default function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/start" element={<Start />} />
           <Route path="/thanks" element={<Thanks />} />
+          <Route path="/portal" element={<Portal />} />
         </Route>
         {/* Full-screen style demos (immersive, no site nav) */}
         <Route path="/styles/midnight" element={<Midnight />} />

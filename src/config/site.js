@@ -12,7 +12,7 @@ export const site = {
   // CHANGE THIS to the email you want client submissions and questions to reach.
   // (Netlify form notifications are configured separately in the Netlify dashboard,
   // this one is used for the mailto links on the site.)
-  email: "joshuacowell2005@gmail.com",
+  email: "foliolabz@gmail.com",
 
   github: "https://github.com/cowelljoshua",
 
@@ -26,17 +26,20 @@ export const site = {
 // ------------------------------------------------------------
 // STRIPE PAYMENT LINKS
 // Paste your Payment Link URLs here after creating them in Stripe
-// (see SETUP.md, it walks you through all six).
+// (see SETUP.md, it walks you through them).
 // Leave a link as "" and its Pay button simply hides; the
 // "Start my build" flow keeps working either way.
 // ------------------------------------------------------------
 export const stripeLinks = {
-  launch: "",          // One-time $300
-  launchCare: "",      // $300 setup + $10/mo
-  pro: "",             // One-time $550
-  proCare: "",         // $550 setup + $10/mo
-  resumePolish: "",    // One-time $40
-  resumeMeeting: "",   // One-time $75
+  deposit: "https://buy.stripe.com/00w4gs4Aw7CT6G0fly7Re00",         // $50 deposit that starts any website build
+  launchBalance: "https://buy.stripe.com/7sY14gd72f5l9Sc3CQ7Re01",   // $250 balance (Launch $300 minus the $50 deposit)
+  proBalance: "https://buy.stripe.com/bJe8wI0kg4qH3tOc9m7Re02",      // $500 balance (Pro $550 minus the $50 deposit)
+  domainYearly: "https://buy.stripe.com/9B6bIUc2Yf5l9Sc7T67Re03",    // $20/yr RECURRING, custom .com/.net for a client
+  domainMonthly: "https://buy.stripe.com/cNifZaeb6aP51lGgpC7Re04",   // $4/mo RECURRING, custom .com/.net for a client
+  editWording: "https://buy.stripe.com/6oU7sE2so3mDd4oehu7Re05",     // $10 wording edits (as many as they want in one request)
+  editDesign: "https://buy.stripe.com/7sY7sEgje6yP5BW8Xa7Re06",      // $40 design change
+  resumePolish: "https://buy.stripe.com/4gMcMY3wsaP5d4o2yM7Re07",    // One-time $40
+  resumeMeeting: "https://buy.stripe.com/dRmfZa5EA5uL8O84GU7Re08",   // "Resume Polish Pro" in Stripe, one-time $75
 }
 
 // ------------------------------------------------------------
@@ -57,11 +60,8 @@ export const tiers = [
       "Contact and social buttons wherever you want them",
       "A resume download button for recruiters",
       "Hosting included free, for as long as you want it online",
-      "Your custom web address set up for you (about $15/year, and it is yours), or launch free on a simple address",
+      "Launch free on a clean web address, or add your own .com for $4/mo (or $20/yr) and I handle it",
     ],
-    careMonthly: 10,
-    stripeKey: "launch",
-    stripeCareKey: "launchCare",
     popular: false,
   },
   {
@@ -80,58 +80,84 @@ export const tiers = [
       "Extra animation and polish throughout",
       "1 personal 30-minute strategy meeting with me",
     ],
-    careMonthly: 10,
-    stripeKey: "pro",
-    stripeCareKey: "proCare",
     popular: true,
   },
+]
+
+// ------------------------------------------------------------
+// HOW PAYMENT WORKS (deposit first, balance at launch)
+// ------------------------------------------------------------
+export const deposit = {
+  amount: 50,
+  label: "$50 deposit to start",
+  detail:
+    "You start with a $50 deposit to lock in your spot. The rest of your package is due only once your site is live and you love it. Nothing else is charged by the form.",
+}
+
+// ------------------------------------------------------------
+// WEB ADDRESSES / DOMAINS (free option vs a custom .com)
+// ------------------------------------------------------------
+export const hosting = {
+  free: {
+    title: "Free web address",
+    example: "yourname.netlify.app",
+    detail: "Go live at no cost on a clean address like yourname.netlify.app. Hosting stays free for as long as you want.",
+  },
+  custom: {
+    title: "Your own .com or .net",
+    monthly: "$4/mo",
+    yearly: "$20/yr",
+    detail:
+      "Want yourname.com instead? It is $4/mo, or $20/yr if you would rather pay once and save. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
+  },
+}
+
+// ------------------------------------------------------------
+// CLIENT PORTAL (self-service for existing clients)
+// A no-login page. Clients enter name + email, then can pay a
+// balance, set up a custom domain, or request an edit. Every
+// action emails you and shows the matching Stripe pay button.
+// ------------------------------------------------------------
+export const portal = {
+  heading: "Client portal",
+  sub: "Already a client? Pick up your project right here.",
+  gateTitle: "Let's find your project",
+  gateNote:
+    "No password needed. Your name and email just make sure everything reaches me and gets tagged to the right project.",
+}
+
+// Balance still owed after the $50 deposit, by package.
+export const balances = [
+  { pkg: "launch", name: "Launch", total: "$300", balanceLabel: "$250", stripeKey: "launchBalance" },
+  { pkg: "pro", name: "Pro", total: "$550", balanceLabel: "$500", stripeKey: "proBalance" },
+]
+
+// Custom domain, handled by you. Client picks monthly or yearly billing.
+export const domainOffer = {
+  detail:
+    "Trade your free address for your own .com or .net. I buy it, connect it, and keep it pointed at your site. Pay monthly or yearly, cancel anytime.",
+  monthly: { label: "$4/mo", stripeKey: "domainMonthly" },
+  yearly: { label: "$20/yr", stripeKey: "domainYearly" },
+}
+
+// Post-launch edit requests, priced flat.
+export const edits = [
   {
-    id: "signature",
-    name: "Signature",
-    price: 900,
-    priceLabel: "from $900",
-    customQuote: true,
-    blurb: "If you can describe it, I can build it.",
-    headline: ["Everything in Pro", "Smart features you pick", "3 personal strategy meetings"],
-    full: [
-      "Everything in Pro",
-      "Smart features, priced by what you pick (see below)",
-      "3 personal 30-minute strategy meetings with me",
-      "30 days of post-launch tweaks included",
-      "Your exact quote confirmed within 24 hours of your form",
-    ],
-    careMonthly: 15,
-    stripeKey: "",
-    stripeCareKey: "",
-    popular: false,
+    id: "wording",
+    name: "Wording edits",
+    priceLabel: "$10",
+    blurb:
+      "Fix or reword any text on your site. Send as many wording changes as you want in one go, it is all one $10 request.",
+    stripeKey: "editWording",
+  },
+  {
+    id: "design",
+    name: "Design change",
+    priceLabel: "$40",
+    blurb: "Change the look: colors, fonts, layout, or a whole new section.",
+    stripeKey: "editDesign",
   },
 ]
-
-// Smart features shown inside the Signature card. Ranges keep quotes honest.
-export const smartFeatures = [
-  { id: "booking", label: "Online booking calendar that fills itself in", range: "+$100 to $200" },
-  { id: "uploads", label: "Visitors can send you files through your site", range: "+$75 to $150" },
-  { id: "newsletter", label: "Newsletter signup that grows your audience", range: "+$75" },
-  { id: "private", label: "Private pages only your clients can see", range: "+$100 to $250" },
-  { id: "other", label: "Something else? Describe it and I will quote it", range: "custom" },
-]
-
-// ------------------------------------------------------------
-// CARE PLAN (the monthly option that keeps a site online + maintained)
-// ------------------------------------------------------------
-export const carePlan = {
-  name: "Care Plan",
-  monthly: 10, // Signature uses its own careMonthly (15)
-  blurb: "Keeps your site fresh with edits whenever you need them.",
-  editDefinition:
-    "Send changes whenever you need them, a new job, a new project, fresh photos, a reworded section, and I make the updates for you, usually fast. No logging in, no fiddling with anything.",
-  features: [
-    "Send changes whenever you want, I handle the updates",
-    "Priority turnaround on every request",
-    "A discount on bigger redesigns and new pages",
-    "Cancel anytime, your site stays online either way",
-  ],
-}
 
 // ------------------------------------------------------------
 // RUSH (the only add-on)
@@ -175,7 +201,7 @@ export const resumeService = {
     },
     {
       id: "resume-meeting",
-      name: "Polish + Strategy Meeting",
+      name: "Resume Polish Pro",
       price: 75,
       priceLabel: "$75",
       blurb: "The polish, plus 30 minutes with me.",
@@ -183,21 +209,70 @@ export const resumeService = {
       stripeKey: "resumeMeeting",
     },
   ],
-  // The before/after demo on the pricing page.
-  xray: {
-    before: [
-      "Responsible for helping with test procedures for the rocket team",
-      "Worked on various projects with other students",
-      "Good communication skills and hard worker",
-    ],
-    after: [
-      "Wrote and ran 14 test procedures for a 3,000 lbf static fire campaign, zero failed reviews",
-      "Led a 6-student propulsion sub-team to a first-place finish out of 41 schools",
-      "Presented monthly readiness reviews to faculty and industry judges",
-    ],
+  // A full before/after resume shown on the pricing page. Same person,
+  // same facts, rewritten. This is a realistic example, not a highlight reel.
+  compare: {
+    before: {
+      name: "Jordan Miller",
+      title: "Mechanical Engineering Student",
+      contact: "jordan.miller@email.com · (555) 019-4432 · Lynchburg, VA",
+      summary:
+        "Hard-working engineering student looking for an internship where I can use my skills and learn more.",
+      experience: [
+        {
+          role: "Member, Rocket Team",
+          org: "University Propulsion Club",
+          date: "2023 – Present",
+          bullets: [
+            "Responsible for helping with test procedures for the rocket team",
+            "Worked on various projects with other students",
+            "Attended weekly meetings and helped out when needed",
+          ],
+        },
+        {
+          role: "Server",
+          org: "Downtown Grill",
+          date: "2022 – 2023",
+          bullets: [
+            "Took orders and served food to customers",
+            "Good communication skills and a hard worker",
+          ],
+        },
+      ],
+      skills: ["SolidWorks", "Microsoft Office", "Teamwork", "Communication"],
+    },
+    after: {
+      name: "Jordan Miller",
+      title: "Mechanical Engineering Student · Propulsion & Test",
+      contact: "jordan.miller@email.com · (555) 019-4432 · Lynchburg, VA · linkedin.com/in/jordanmiller",
+      summary:
+        "Mechanical engineering student with hands-on propulsion test experience, targeting a Summer 2026 engineering internship. Led a 6-person sub-team to a first-place national finish.",
+      experience: [
+        {
+          role: "Propulsion Test Lead",
+          org: "University Propulsion Club",
+          date: "2023 – Present",
+          bullets: [
+            "Wrote and ran 14 test procedures for a 3,000 lbf static-fire campaign with zero failed safety reviews",
+            "Led a 6-student sub-team to a first-place finish out of 41 schools at national competition",
+            "Presented monthly readiness reviews to faculty and industry judges",
+          ],
+        },
+        {
+          role: "Server",
+          org: "Downtown Grill",
+          date: "2022 – 2023",
+          bullets: [
+            "Trained 4 new hires and ran high-volume shifts of 120+ guests while keeping a 98% satisfaction score",
+          ],
+        },
+      ],
+      skills: ["SolidWorks", "GD&T", "MATLAB", "Test procedure design", "Data analysis", "Team leadership"],
+    },
     lessons: [
-      "Numbers beat adjectives",
-      "Lead with the result, not the duty",
+      "Lead with results and real numbers",
+      "Turn duties into achievements",
+      "Add a focused headline and summary",
       "Cut the filler nobody reads",
     ],
   },
@@ -355,8 +430,12 @@ export const faq = [
     a: "One form. You tell me about yourself, pick a style, and attach your files. I handle the design, the build, the web address, and the launch. You review a private preview and request changes before it goes live.",
   },
   {
+    q: "When do I pay, and how much?",
+    a: "You start with a $50 deposit to lock in your spot. The rest of your package is due only once your site is live and you love it. Nothing else is charged by the form.",
+  },
+  {
     q: "How do changes and edits work?",
-    a: "Two stages. While I am building, you get up to 3 rounds of changes to get your site exactly right before launch. After launch, an optional Care Plan keeps it current: send me changes whenever you need them and I make them for you.",
+    a: "While I am building, you get up to 3 rounds of changes to get your site exactly right before launch. Send as many tweaks as you like in each round. I keep going until it feels right, then it goes live.",
   },
   {
     q: "How long does it take?",
@@ -364,15 +443,15 @@ export const faq = [
   },
   {
     q: "Do I pay for hosting or a domain?",
-    a: "Hosting is included free, for as long as you want your site online. A custom web address like yourname.com is about $15 a year, paid to the domain company, and you own it. Rather not? I can launch you free on a simpler address. Either way, I set it all up.",
+    a: "Hosting is included free, for as long as you want your site online, and you can launch free on a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $4 a month, or $20 a year if you would rather pay once. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
   },
   {
     q: "Can I make changes myself?",
-    a: "Every change runs through me, so you never have to log in, wrestle with code, or learn a design tool. Want something updated? Send a quick note and it is handled, usually fast. You decide what is on your site; I do the technical part for you.",
+    a: "Every change runs through me, so you never have to log in, wrestle with code, or learn a design tool. Before launch, just tell me what to change. After launch, send it through the client portal and I will handle it for you.",
   },
   {
-    q: "What if I cancel the Care Plan?",
-    a: "No problem, cancel anytime. Your site stays online (hosting is free), you just stop getting monthly edits from me. You can pick the plan back up whenever you want.",
+    q: "What do changes cost after launch?",
+    a: "Wording edits are $10, and you can send as many wording changes as you want in one go, it is all one request. A design change (colors, fonts, layout, or a new section) is $40. You request either one from the client portal, no back-and-forth needed.",
   },
   {
     q: "What if I do not like the design?",

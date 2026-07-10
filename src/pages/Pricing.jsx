@@ -8,8 +8,8 @@ import RushSwitch from '../components/RushSwitch.jsx'
 import ResumeXray from '../components/ResumeXray.jsx'
 import {
   tiers,
-  carePlan,
-  smartFeatures,
+  deposit,
+  hosting,
   rush,
   promises,
   resumeService,
@@ -17,19 +17,13 @@ import {
   faq,
 } from '../config/site.js'
 
-function startLink(tierId, care, rushOn) {
-  return `/start?package=${tierId}${care ? '&care=1' : ''}${rushOn ? '&rush=1' : ''}`
-}
-
-function payUrl(tier, care) {
-  const key = care ? tier.stripeCareKey : tier.stripeKey
-  return key ? stripeLinks[key] : ''
+function startLink(tierId, rushOn) {
+  return `/start?package=${tierId}${rushOn ? '&rush=1' : ''}`
 }
 
 /* ---------------- Tier card + expanded panel ---------------- */
 
-function TierCard({ tier, care, onOpen }) {
-  const monthly = care ? tier.careMonthly : 0
+function TierCard({ tier, onOpen }) {
   return (
     <SpotlightCard
       className={`h-full ${tier.popular ? 'border-violet/60' : ''}`}
@@ -42,10 +36,8 @@ function TierCard({ tier, care, onOpen }) {
           </span>
         )}
         <h3 className="font-display text-xl font-semibold">{tier.name}</h3>
-        <p className="font-display mt-2 text-4xl font-bold">
-          {tier.priceLabel}
-          {monthly > 0 && <span className="text-lg font-semibold text-mist"> + ${monthly}/mo</span>}
-        </p>
+        <p className="font-display mt-2 text-4xl font-bold">{tier.priceLabel}</p>
+        <p className="mt-1 text-xs font-semibold text-cyan">${deposit.amount} deposit to start</p>
         <p className="mt-2 text-sm text-mist">{tier.blurb}</p>
         <ul className="mt-5 space-y-2">
           {tier.headline.map((f) => (
@@ -60,11 +52,9 @@ function TierCard({ tier, care, onOpen }) {
   )
 }
 
-function TierModal({ tier, care, onClose }) {
+function TierModal({ tier, onClose }) {
   const [rushOn, setRushOn] = useState(false)
-  const pay = payUrl(tier, care)
-  const showPay = pay && !tier.customQuote && !rushOn
-  const monthly = care ? tier.careMonthly : 0
+  const pay = stripeLinks.deposit
 
   return (
     <motion.div
@@ -85,10 +75,8 @@ function TierModal({ tier, care, onClose }) {
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-display text-2xl font-bold">{tier.name}</h3>
-            <p className="font-display mt-1 text-3xl font-bold text-gradient">
-              {tier.priceLabel}
-              {monthly > 0 && <span className="text-lg text-mist"> + ${monthly}/mo</span>}
-            </p>
+            <p className="font-display mt-1 text-3xl font-bold text-gradient">{tier.priceLabel}</p>
+            <p className="mt-1 text-xs font-semibold text-cyan">${deposit.amount} deposit to start</p>
           </div>
           <button onClick={onClose} className="rounded-full p-2 text-mist hover:bg-white/10 hover:text-frost" aria-label="Close">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -105,57 +93,27 @@ function TierModal({ tier, care, onClose }) {
           ))}
         </ul>
 
-        {tier.customQuote && (
-          <div className="mt-6 rounded-2xl border hairline bg-white/[0.03] p-5">
-            <p className="font-display text-sm font-semibold">Smart features and what they add</p>
-            <ul className="mt-3 space-y-2">
-              {smartFeatures.map((s) => (
-                <li key={s.id} className="flex items-baseline justify-between gap-3 text-sm">
-                  <span className="text-mist">{s.label}</span>
-                  <span className="shrink-0 font-semibold text-cyan">{s.range}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-3 text-xs text-mist">
-              Pick yours in the form. I confirm your exact quote within 24 hours.
-            </p>
-          </div>
-        )}
-
-        {care && (
-          <div className="mt-6 rounded-2xl border hairline bg-white/[0.03] p-5">
-            <p className="font-display text-sm font-semibold">What your ${tier.careMonthly}/mo Care Plan covers</p>
-            <p className="mt-2 text-sm text-mist">{carePlan.editDefinition}</p>
-            <ul className="mt-3 space-y-1.5">
-              {carePlan.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm text-mist">
-                  <span className="mt-0.5 text-mint">✓</span> {f}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div className="mt-6 rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-5">
+          <p className="font-display text-sm font-semibold text-frost">How payment works</p>
+          <p className="mt-2 text-sm leading-relaxed text-mist">{deposit.detail}</p>
+        </div>
 
         <div className="mt-6">
           <RushSwitch on={rushOn} onChange={setRushOn} />
         </div>
 
         <div className="mt-7 flex flex-col gap-3">
-          <Link to={startLink(tier.id, care, rushOn)} className="btn-primary justify-center">
+          <Link to={startLink(tier.id, rushOn)} className="btn-primary justify-center">
             Start my build
           </Link>
-          {showPay && (
+          {pay && (
             <a href={pay} target="_blank" rel="noreferrer" className="btn-ghost justify-center">
-              Pay now with card
+              Pay ${deposit.amount} deposit
             </a>
           )}
-          {(tier.customQuote || rushOn) && (
-            <p className="text-center text-xs text-mist">
-              {tier.customQuote
-                ? 'Custom builds are paid after I confirm your quote. Form first, payment second.'
-                : 'Rush orders are paid after I confirm your total. Form first, payment second.'}
-            </p>
-          )}
+          <p className="text-center text-xs text-mist">
+            The rest of your {tier.priceLabel} is due only when your site is live{rushOn ? ', rush add-on included in that balance' : ''}.
+          </p>
         </div>
       </motion.div>
     </motion.div>
@@ -199,7 +157,6 @@ function Faq() {
 /* ---------------- Page ---------------- */
 
 export default function Pricing() {
-  const [care, setCare] = useState(true)
   const [openTier, setOpenTier] = useState(null)
 
   return (
@@ -208,38 +165,49 @@ export default function Pricing() {
         <h1 className="font-display text-4xl font-bold sm:text-5xl">
           Simple pricing. <span className="text-gradient">Zero surprises.</span>
         </h1>
-      </Reveal>
-
-      {/* Care toggle */}
-      <Reveal className="mt-10 flex justify-center">
-        <div className="glass flex items-center rounded-full p-1">
-          <button
-            onClick={() => setCare(false)}
-            className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors ${!care ? 'bg-white/15 text-frost' : 'text-mist'}`}
-          >
-            One-time build
-          </button>
-          <button
-            onClick={() => setCare(true)}
-            className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors ${care ? 'bg-white/15 text-frost' : 'text-mist'}`}
-          >
-            Build + Care Plan
-          </button>
-        </div>
-      </Reveal>
-      <Reveal delay={0.1} className="mt-3 text-center">
-        <p className="text-xs text-mist">
-          {care ? `${carePlan.blurb} Cancel anytime, your site stays online either way.` : 'Just the build. Hosting is included free. You can add the Care Plan later.'}
+        <p className="mx-auto mt-4 max-w-xl text-mist">
+          Start with a ${deposit.amount} deposit. You pay the rest only once your site is live and you love it.
         </p>
       </Reveal>
 
       {/* Tiers */}
-      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+      <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
         {tiers.map((t, i) => (
           <Reveal key={t.id} delay={i * 0.1}>
-            <TierCard tier={t} care={care} onOpen={() => setOpenTier(t)} />
+            <TierCard tier={t} onOpen={() => setOpenTier(t)} />
           </Reveal>
         ))}
+      </div>
+
+      {/* How payment + web address work */}
+      <div className="mx-auto mt-8 grid max-w-3xl gap-6 sm:grid-cols-2">
+        <Reveal>
+          <SpotlightCard className="h-full p-7" spotColor="rgba(34,211,238,0.14)">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan/15 text-cyan">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
+                <path d="M3 10h18" stroke="currentColor" strokeWidth="1.6" />
+              </svg>
+            </span>
+            <h3 className="font-display mt-4 text-lg font-semibold">{deposit.label}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-mist">{deposit.detail}</p>
+          </SpotlightCard>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <SpotlightCard className="h-full p-7" spotColor="rgba(124,92,255,0.14)">
+            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet/15 text-violet">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+                <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" strokeWidth="1.4" />
+              </svg>
+            </span>
+            <h3 className="font-display mt-4 text-lg font-semibold">Your web address, sorted</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-mist">
+              Go live free on a clean address like <span className="text-frost">{hosting.free.example}</span>. Want your own .com or .net?
+              It runs {hosting.custom.monthly} or {hosting.custom.yearly} and I set it up and bill it through your account, so you never touch a domain company.
+            </p>
+          </SpotlightCard>
+        </Reveal>
       </div>
 
       <Reveal delay={0.2} className="mt-10">
@@ -265,7 +233,7 @@ export default function Pricing() {
       </Reveal>
 
       <AnimatePresence>
-        {openTier && <TierModal tier={openTier} care={care} onClose={() => setOpenTier(null)} />}
+        {openTier && <TierModal tier={openTier} onClose={() => setOpenTier(null)} />}
       </AnimatePresence>
 
       {/* RESUME POLISH */}

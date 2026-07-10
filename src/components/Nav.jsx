@@ -4,6 +4,7 @@ import { Link, NavLink, useLocation } from 'react-router-dom'
 const links = [
   { to: '/styles', label: 'Styles' },
   { to: '/pricing', label: 'Pricing' },
+  { to: '/portal', label: 'Clients' },
 ]
 
 export default function Nav() {
@@ -23,11 +24,11 @@ export default function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
       <nav
-        className={`glass flex w-full max-w-5xl items-center justify-between rounded-full px-5 py-2.5 transition-shadow duration-300 ${
+        className={`glass flex items-center gap-6 rounded-full px-5 py-2.5 transition-shadow duration-300 sm:gap-10 ${
           scrolled ? 'shadow-[0_10px_40px_-12px_rgba(124,92,255,0.35)]' : ''
         }`}
       >
-        <Link to="/" className="font-display text-lg font-700 tracking-tight">
+        <Link to="/" className="font-display text-lg font-700 tracking-tight shrink-0">
           <span className="text-frost">Folio</span>
           <span className="text-gradient font-bold">Labz</span>
         </Link>

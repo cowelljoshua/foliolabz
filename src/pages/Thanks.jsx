@@ -1,14 +1,12 @@
 import { Link, useLocation } from 'react-router-dom'
 import Aurora from '../components/reactbits/Aurora.jsx'
 import Reveal from '../components/reactbits/Reveal.jsx'
-import { site, stripeLinks, tiers, resumeService } from '../config/site.js'
+import { site, stripeLinks, tiers, resumeService, deposit } from '../config/site.js'
 
 export default function Thanks() {
   const { state } = useLocation()
   const track = state?.track
   const packageId = state?.packageId
-  const care = state?.care
-  const rushOn = state?.rush
   const firstName = state?.name?.split(' ')[0]
 
   // Work out whether we can offer instant payment.
@@ -20,12 +18,9 @@ export default function Thanks() {
     payNote = t ? `${t.name}, ${t.priceLabel}` : ''
   } else if (track === 'website') {
     const t = tiers.find((x) => x.id === packageId)
-    if (t && !t.customQuote && !rushOn) {
-      payUrl = stripeLinks[care ? t.stripeCareKey : t.stripeKey]
-      payNote = t ? `${t.name}, ${t.priceLabel}${care ? ` + $${t.careMonthly}/mo` : ''}` : ''
-    }
+    payUrl = stripeLinks.deposit
+    payNote = t ? `$${deposit.amount} deposit for ${t.name}` : `$${deposit.amount} deposit`
   }
-  const customTotal = track === 'website' && (packageId === 'signature' || rushOn)
 
   const steps =
     track === 'resume'
@@ -36,8 +31,8 @@ export default function Thanks() {
         ]
       : [
           ['I read your brief', 'Personally. Usually the same day.'],
-          [customTotal ? 'I confirm your exact total' : 'Payment', customTotal ? 'You get a reply within 24 hours with your quote and payment link.' : 'Pay online whenever you are ready.'],
-          ['Your preview link arrives', 'Then up to 5 rounds of changes until you love it.'],
+          [`You put down a $${deposit.amount} deposit`, 'It locks in your spot. The rest is due only when your site is live.'],
+          ['Your preview link arrives', 'Then rounds of changes until you love it, and you pay the balance at launch.'],
         ]
 
   return (
@@ -72,16 +67,16 @@ export default function Thanks() {
           {payUrl ? (
             <>
               <a href={payUrl} target="_blank" rel="noreferrer" className="btn-primary">
-                Pay now: {payNote}
+                {track === 'website' ? `Pay ${payNote}` : `Pay now: ${payNote}`}
               </a>
-              <p className="mt-3 text-xs text-mist">Prefer to wait? No problem, I will email you a payment link too.</p>
+              <p className="mt-3 text-xs text-mist">
+                {track === 'website'
+                  ? 'The rest is due only when your site is live. Prefer to wait on the deposit? I will email you a link too.'
+                  : 'Prefer to wait? No problem, I will email you a payment link too.'}
+              </p>
             </>
           ) : (
-            <p className="text-sm text-mist">
-              {customTotal
-                ? 'Since your build has custom pieces, I will email your exact total and a payment link within 24 hours.'
-                : `Questions in the meantime? ${site.email}`}
-            </p>
+            <p className="text-sm text-mist">Questions in the meantime? {site.email}</p>
           )}
         </Reveal>
 

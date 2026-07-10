@@ -7,8 +7,7 @@ import FileDrop from '../components/FileDrop.jsx'
 import {
   site,
   tiers,
-  carePlan,
-  smartFeatures,
+  deposit,
   demoStyles,
   palettes,
   brandChips,
@@ -59,26 +58,6 @@ function Chip({ active, onClick, children }) {
   )
 }
 
-function Toggle({ on, onChange, label, sub }) {
-  return (
-    <button
-      type="button"
-      onClick={() => onChange(!on)}
-      className={`flex w-full items-center justify-between rounded-2xl border p-4 text-left transition-colors ${
-        on ? 'border-violet/60 bg-violet/10' : 'hairline bg-white/[0.03] hover:border-white/25'
-      }`}
-    >
-      <span>
-        <span className="font-display block text-sm font-semibold">{label}</span>
-        <span className="mt-0.5 block text-xs text-mist">{sub}</span>
-      </span>
-      <span className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? 'bg-violet' : 'bg-white/15'}`}>
-        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all ${on ? 'left-[1.4rem]' : 'left-0.5'}`} />
-      </span>
-    </button>
-  )
-}
-
 /* ---------- the wizard ---------- */
 
 export default function Start() {
@@ -99,10 +78,8 @@ export default function Start() {
     email: '',
     phone: '',
     profession: '',
-    package: ['launch', 'pro', 'signature'].includes(paramPackage) ? paramPackage : '',
-    care: params.get('care') === '1',
+    package: ['launch', 'pro'].includes(paramPackage) ? paramPackage : '',
     rush: params.get('rush') === '1',
-    smart: [],
     style: demoStyles.some((d) => d.id === params.get('style')) ? params.get('style') : '',
     palette: '',
     brands: [],
@@ -164,10 +141,9 @@ export default function Start() {
       L.push(`Profession: ${form.profession || 'not given'}`)
       L.push('')
       L.push('PACKAGE')
-      L.push(`Tier: ${tier?.name} (${tier?.priceLabel})${form.care ? ` + Care Plan $${tier?.careMonthly}/mo` : ''}`)
+      L.push(`Tier: ${tier?.name} (${tier?.priceLabel})`)
       L.push(`Rush: ${form.rush ? 'YES (+$75, 1 week)' : 'no, standard'}`)
-      if (form.package === 'signature' && form.smart.length)
-        L.push(`Smart features: ${form.smart.map((id) => smartFeatures.find((s) => s.id === id)?.label).join('; ')}`)
+      L.push(`Payment: $${deposit.amount} deposit to start, balance due at launch`)
       L.push('')
       L.push('STYLE')
       L.push(`Style pick: ${demoStyles.find((d) => d.id === form.style)?.name || 'undecided'}`)
@@ -209,9 +185,7 @@ export default function Start() {
       fd.append('phone', form.phone)
       fd.append('profession', form.profession)
       fd.append('package', form.package)
-      fd.append('care_plan', form.care ? 'yes' : 'no')
       fd.append('rush', form.rush ? 'yes' : 'no')
-      fd.append('smart_features', form.smart.join(', '))
       fd.append('style_pick', form.style)
       fd.append('palette', form.palette)
       fd.append('brand_inspo', form.brands.join(', '))
@@ -230,7 +204,6 @@ export default function Start() {
     const state = {
       track,
       packageId: track === 'resume' ? form.resumePkg : form.package,
-      care: form.care,
       rush: form.rush,
       name: form.name,
     }
@@ -376,33 +349,11 @@ export default function Start() {
                   ))}
                 </div>
 
-                {form.package === 'signature' && (
-                  <div className="rounded-2xl border hairline bg-white/[0.03] p-5">
-                    <p className="text-sm font-medium">Which smart features sound like you?</p>
-                    <div className="mt-3 space-y-2">
-                      {smartFeatures.map((s) => (
-                        <button
-                          key={s.id}
-                          type="button"
-                          onClick={() => toggleIn('smart', s.id)}
-                          className={`flex w-full items-baseline justify-between gap-3 rounded-xl border px-4 py-2.5 text-left text-sm transition-colors ${
-                            form.smart.includes(s.id) ? 'border-cyan bg-cyan/10' : 'border-white/10 hover:border-white/25'
-                          }`}
-                        >
-                          <span className="text-mist">{s.label}</span>
-                          <span className="shrink-0 text-xs font-semibold text-cyan">{s.range}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-5">
+                  <p className="font-display text-sm font-semibold text-frost">{deposit.label}</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-mist">{deposit.detail}</p>
+                </div>
 
-                <Toggle
-                  on={form.care}
-                  onChange={(v) => set('care', v)}
-                  label={`Add the Care Plan, $${tier?.careMonthly ?? carePlan.monthly}/mo`}
-                  sub={carePlan.editDefinition}
-                />
                 <RushSwitch on={form.rush} onChange={(v) => set('rush', v)} />
               </>
             )}

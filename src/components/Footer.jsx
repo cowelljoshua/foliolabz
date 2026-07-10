@@ -17,6 +17,7 @@ export default function Footer() {
         <div className="flex items-center gap-5 text-sm text-mist">
           <Link to="/styles" className="hover:text-frost">Styles</Link>
           <Link to="/pricing" className="hover:text-frost">Pricing</Link>
+          <Link to="/portal" className="hover:text-frost">Client portal</Link>
           <a href={`mailto:${site.email}`} className="hover:text-frost">{site.email}</a>
         </div>
       </div>
