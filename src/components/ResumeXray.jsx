@@ -9,7 +9,6 @@ export default function ResumeXray() {
       <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
         <div>
           <h3 className="font-display text-xl font-semibold sm:text-2xl">Want proof I practice what I preach?</h3>
-          <p className="mt-1.5 text-sm text-mist">Here is my own resume, polished the same way yours will be.</p>
         </div>
         <a href={asset(resumePdf)} target="_blank" rel="noreferrer" className="btn-primary shrink-0 !py-2.5 text-sm">
           View my resume ↗
