@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import Aurora from '../components/reactbits/Aurora.jsx'
 import SplitText from '../components/reactbits/SplitText.jsx'
-import BlurText from '../components/reactbits/BlurText.jsx'
 import ShinyText from '../components/reactbits/ShinyText.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
 import StarBorder from '../components/reactbits/StarBorder.jsx'
@@ -13,17 +12,14 @@ const steps = [
   {
     n: '01',
     title: 'You fill out one form',
-    body: 'Your info, your style pick, your files. Ten minutes, tops.',
   },
   {
     n: '02',
     title: 'I design, build, and launch',
-    body: 'Custom design, your own web address, live on the internet. All handled.',
   },
   {
     n: '03',
     title: 'You send edits, I make them',
-    body: 'New job? New project? One email and your site stays current.',
   },
 ]
 
@@ -34,12 +30,6 @@ export default function Home() {
       <section className="relative flex min-h-[92vh] items-center justify-center overflow-hidden">
         <Aurora />
         <div className="relative z-10 mx-auto max-w-4xl px-6 pt-24 text-center">
-          <Reveal>
-            <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-mist">
-              <span className="h-2 w-2 animate-pulse-soft rounded-full bg-mint" />
-              Taking new clients
-            </span>
-          </Reveal>
           <h1 className="font-display mt-6 text-5xl font-bold leading-[1.05] tracking-tight sm:text-7xl">
             <SplitText text="A portfolio that" as="span" className="block" />
             <motion.span
@@ -51,12 +41,6 @@ export default function Home() {
               gets you hired.
             </motion.span>
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-lg text-mist">
-            <BlurText
-              text="You never touch code. Pick a style, fill out one form, and your website gets built, launched, and kept fresh for you."
-              delay={0.8}
-            />
-          </p>
           <Reveal delay={1.1} className="mt-9 flex flex-wrap items-center justify-center gap-4">
             <Link to="/styles" className="btn-primary">Pick your style</Link>
             <Link to="/pricing" className="btn-ghost">See pricing</Link>
@@ -80,7 +64,6 @@ export default function Home() {
               <SpotlightCard className="h-full p-7">
                 <span className="font-display text-sm font-semibold text-gradient">{s.n}</span>
                 <h3 className="font-display mt-3 text-xl font-semibold">{s.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-mist">{s.body}</p>
               </SpotlightCard>
             </Reveal>
           ))}
@@ -123,8 +106,7 @@ export default function Home() {
       <section className="mx-auto max-w-5xl px-6 py-20">
         <Reveal className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">Ten styles. Yours to explore.</h2>
-            <p className="mt-3 text-mist">Every one is a real site you can click through. Scroll to see them all, then pick your favorite.</p>
+            <h2 className="font-display text-3xl font-bold sm:text-4xl">Pick which style fits you best</h2>
           </div>
           <Link to="/styles" className="btn-ghost shrink-0">Explore all styles</Link>
         </Reveal>
@@ -175,7 +157,7 @@ export default function Home() {
                 Your work deserves a <span className="text-gradient">better first impression.</span>
               </h2>
               <p className="mx-auto mt-4 max-w-md text-mist">
-                Ten minutes of your time. One form. A website that works as hard as you do.
+                Ten minutes of your time. One form.
               </p>
               <Link to="/start" className="btn-primary mt-8">Start my build</Link>
             </div>
