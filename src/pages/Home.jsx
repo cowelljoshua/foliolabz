@@ -87,6 +87,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* FOLIOLABZ STORY */}
+      <section className="mx-auto max-w-5xl px-6 py-20">
+        <Reveal>
+          <h2 className="font-display text-center text-3xl font-bold sm:text-4xl">
+            The FolioLabz story
+          </h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <SpotlightCard className="mt-12 p-8 sm:p-12">
+            <div className="mx-auto max-w-2xl space-y-5 text-base leading-relaxed text-mist sm:text-lg">
+              <p>
+                Time and time again, interviewers would ask to see my portfolio.
+              </p>
+              <p>
+                And every time, I was sending over some thrown-together mix of folders, screenshots, and project links that did not really show my work well.
+              </p>
+              <p>
+                About a year ago, I finally built my own portfolio website. After that, I started helping other people build theirs too, which eventually led me to create{' '}
+                <span className="text-gradient font-semibold">FolioLabz</span>.
+              </p>
+              <p className="text-frost">
+                It is hard to show your personality, creativity, and what you are actually capable of before you ever get an interview. A portfolio gives employers a better sense of who you are, while also giving you one easy link to share and a real leg up when applying.
+              </p>
+            </div>
+            <div className="mx-auto mt-8 max-w-2xl border-t hairline pt-6 text-center">
+              <p className="font-display font-semibold">Josh Cowell</p>
+              <p className="mt-0.5 text-sm text-mist">Founder, FolioLabz</p>
+            </div>
+          </SpotlightCard>
+        </Reveal>
+      </section>
+
       {/* STYLE TEASER */}
       <section className="mx-auto max-w-5xl px-6 py-20">
         <Reveal className="flex flex-wrap items-end justify-between gap-4">
