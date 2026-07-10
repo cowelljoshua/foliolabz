@@ -13,7 +13,6 @@ import {
   rush,
   promises,
   resumeService,
-  stripeLinks,
   faq,
 } from '../config/site.js'
 
@@ -54,7 +53,6 @@ function TierCard({ tier, onOpen }) {
 
 function TierModal({ tier, onClose }) {
   const [rushOn, setRushOn] = useState(false)
-  const pay = stripeLinks.deposit
 
   return (
     <motion.div
@@ -106,11 +104,6 @@ function TierModal({ tier, onClose }) {
           <Link to={startLink(tier.id, rushOn)} className="btn-primary justify-center">
             Start my build
           </Link>
-          {pay && (
-            <a href={pay} target="_blank" rel="noreferrer" className="btn-ghost justify-center">
-              Pay ${deposit.amount} deposit
-            </a>
-          )}
           <p className="text-center text-xs text-mist">
             The rest of your {tier.priceLabel} is due only when your site is live{rushOn ? ', rush add-on included in that balance' : ''}.
           </p>
@@ -244,38 +237,30 @@ export default function Pricing() {
         </Reveal>
 
         <div className="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2">
-          {resumeService.tiers.map((t, i) => {
-            const pay = stripeLinks[t.stripeKey]
-            return (
-              <Reveal key={t.id} delay={i * 0.1}>
-                <SpotlightCard className="h-full p-7" spotColor="rgba(74,222,128,0.12)">
-                  <h3 className="font-display text-lg font-semibold">{t.name}</h3>
-                  <p className="font-display mt-1 text-3xl font-bold">{t.priceLabel}</p>
-                  <p className="mt-1.5 text-sm text-mist">{t.blurb}</p>
-                  <ul className="mt-4 space-y-2">
-                    {t.full.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-mist">
-                        <span className="mt-0.5 text-mint">✓</span> {f}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="mt-6 flex flex-col gap-2.5">
-                    <Link to={`/start?track=resume&package=${t.id}`} className="btn-primary justify-center !py-2.5 text-sm">
-                      {i === 0 ? 'Polish my resume' : 'Polish + meet with me'}
-                    </Link>
-                    {pay && (
-                      <a href={pay} target="_blank" rel="noreferrer" className="btn-ghost justify-center !py-2.5 text-sm">
-                        Pay now with card
-                      </a>
-                    )}
-                  </div>
-                  <p className="mt-4 text-center text-xs font-semibold text-mint">
-                    {promises.resume.title}
-                  </p>
-                </SpotlightCard>
-              </Reveal>
-            )
-          })}
+          {resumeService.tiers.map((t, i) => (
+            <Reveal key={t.id} delay={i * 0.1}>
+              <SpotlightCard className="h-full p-7" spotColor="rgba(74,222,128,0.12)">
+                <h3 className="font-display text-lg font-semibold">{t.name}</h3>
+                <p className="font-display mt-1 text-3xl font-bold">{t.priceLabel}</p>
+                <p className="mt-1.5 text-sm text-mist">{t.blurb}</p>
+                <ul className="mt-4 space-y-2">
+                  {t.full.map((f) => (
+                    <li key={f} className="flex items-start gap-2 text-sm text-mist">
+                      <span className="mt-0.5 text-mint">✓</span> {f}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-6 flex flex-col gap-2.5">
+                  <Link to={`/start?track=resume&package=${t.id}`} className="btn-primary justify-center !py-2.5 text-sm">
+                    {i === 0 ? 'Polish my resume' : 'Polish + meet with me'}
+                  </Link>
+                </div>
+                <p className="mt-4 text-center text-xs font-semibold text-mint">
+                  {promises.resume.title}
+                </p>
+              </SpotlightCard>
+            </Reveal>
+          ))}
         </div>
 
         {/* Resume X-ray */}

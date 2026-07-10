@@ -1,7 +1,7 @@
 Drop screenshot thumbnails of the real client sites in here:
 
   david.png     (davidcowell.com)
-  josh.png      (cowelljoshua.github.io)
+  josh.png      (joshuacowell.com)
   caroline.png  (Caroline's site, once it is live)
 
 They show for a moment while the live previews load on the Styles page.

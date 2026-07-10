@@ -11,11 +11,17 @@ import {
   demoStyles,
   palettes,
   brandChips,
-  sectionOptions,
+  pageOptions,
+  pageLimits,
   resumeService,
 } from '../config/site.js'
 
 const MAX_TOTAL_BYTES = 8 * 1024 * 1024 // stay under Netlify's upload ceiling
+const MAX_PROJECTS = 6
+const MAX_IMAGES_PER_PROJECT = 3
+const PROJECTS_PAGE = 'Projects / Work'
+
+const emptyProject = () => ({ title: '', description: '', link: '', images: [] })
 
 const websiteSteps = ['about', 'package', 'style', 'content', 'files', 'review']
 const resumeSteps = ['about', 'resume', 'review']
@@ -85,7 +91,7 @@ export default function Start() {
     brands: [],
     emulate: '',
     bio: '',
-    sections: [],
+    pages: [],
     socials: '',
     notes: '',
     headshot: [],
@@ -107,8 +113,34 @@ export default function Start() {
   const steps = track === 'resume' ? resumeSteps : websiteSteps
   const step = steps[stepIdx]
   const tier = tiers.find((t) => t.id === form.package)
+  const pageLimit = pageLimits[form.package] || pageLimits.launch
 
-  const allFiles = [...form.headshot, ...form.resumeFile, ...form.logoFile, ...form.projects]
+  const togglePage = (page) =>
+    setForm((f) => {
+      if (f.pages.includes(page)) {
+        const pages = f.pages.filter((p) => p !== page)
+        const projects = page === PROJECTS_PAGE ? [] : f.projects
+        return { ...f, pages, projects }
+      }
+      if (f.pages.length >= pageLimit) return f
+      const pages = [...f.pages, page]
+      const projects = page === PROJECTS_PAGE && f.projects.length === 0 ? [emptyProject()] : f.projects
+      return { ...f, pages, projects }
+    })
+
+  const addProject = () =>
+    setForm((f) => (f.projects.length >= MAX_PROJECTS ? f : { ...f, projects: [...f.projects, emptyProject()] }))
+  const removeProject = (idx) =>
+    setForm((f) => ({ ...f, projects: f.projects.filter((_, i) => i !== idx) }))
+  const updateProject = (idx, key, value) =>
+    setForm((f) => ({
+      ...f,
+      projects: f.projects.map((p, i) => (i === idx ? { ...p, [key]: value } : p)),
+    }))
+
+  const wantsProjects = form.pages.includes(PROJECTS_PAGE)
+  const projectImages = form.projects.flatMap((p) => p.images)
+  const allFiles = [...form.headshot, ...form.resumeFile, ...form.logoFile, ...projectImages]
   const totalBytes = allFiles.reduce((s, f) => s + f.size, 0)
   const overLimit = totalBytes > MAX_TOTAL_BYTES
 
@@ -152,12 +184,22 @@ export default function Start() {
       if (form.emulate) L.push(`Sites to emulate: ${form.emulate}`)
       L.push('')
       L.push('CONTENT')
-      if (form.sections.length) L.push(`Sections wanted: ${form.sections.join(', ')}`)
+      if (form.pages.length) L.push(`Pages wanted (${form.pages.length}/${pageLimit}): ${form.pages.join(', ')}`)
       if (form.socials) L.push(`Links: ${form.socials}`)
       if (form.bio) L.push(`Bio: ${form.bio}`)
       if (form.notes) L.push(`Notes: ${form.notes}`)
+      if (wantsProjects && form.projects.length) {
+        L.push('')
+        L.push('PROJECTS')
+        form.projects.forEach((p, i) => {
+          L.push(`${i + 1}. ${p.title || 'Untitled project'}`)
+          if (p.description) L.push(`   ${p.description}`)
+          if (p.link) L.push(`   Link: ${p.link}`)
+          L.push(`   Images: ${p.images.length ? p.images.map((f) => f.name).join(', ') : 'none attached'}`)
+        })
+      }
       L.push('')
-      L.push(`FILES: ${allFiles.length ? allFiles.map((f) => f.name).join(', ') : 'none attached'}`)
+      L.push(`OTHER FILES: ${[...form.headshot, ...form.resumeFile, ...form.logoFile].length ? [...form.headshot, ...form.resumeFile, ...form.logoFile].map((f) => f.name).join(', ') : 'none attached'}`)
     }
     return L.join('\n')
   }
@@ -191,13 +233,18 @@ export default function Start() {
       fd.append('brand_inspo', form.brands.join(', '))
       fd.append('emulate_links', form.emulate)
       fd.append('bio', form.bio)
-      fd.append('sections', form.sections.join(', '))
+      fd.append('pages', form.pages.join(', '))
       fd.append('socials', form.socials)
       fd.append('extra_notes', form.notes)
       if (form.headshot[0]) fd.append('headshot', form.headshot[0])
       if (form.resumeFile[0]) fd.append('resume_file', form.resumeFile[0])
       if (form.logoFile[0]) fd.append('logo_file', form.logoFile[0])
-      form.projects.slice(0, 4).forEach((f, i) => fd.append(`project_${i + 1}`, f))
+      form.projects.slice(0, MAX_PROJECTS).forEach((p, i) => {
+        fd.append(`project_${i + 1}_title`, p.title)
+        fd.append(`project_${i + 1}_description`, p.description)
+        fd.append(`project_${i + 1}_link`, p.link)
+        p.images.slice(0, MAX_IMAGES_PER_PROJECT).forEach((img, j) => fd.append(`project_${i + 1}_image_${j + 1}`, img))
+      })
     }
     fd.append('summary', buildSummary())
 
@@ -442,15 +489,99 @@ export default function Start() {
                   />
                 </Field>
                 <div>
-                  <p className="mb-2 text-sm font-medium">Sections you want on the site</p>
+                  <p className="mb-2 text-sm font-medium">
+                    Pages you want on the site <span className="text-xs font-normal text-mist/60">{form.pages.length}/{pageLimit} picked</span>
+                  </p>
                   <div className="flex flex-wrap gap-2">
-                    {sectionOptions.map((s) => (
-                      <Chip key={s} active={form.sections.includes(s)} onClick={() => toggleIn('sections', s)}>
-                        {s}
-                      </Chip>
-                    ))}
+                    {pageOptions.map((s) => {
+                      const active = form.pages.includes(s)
+                      const disabled = !active && form.pages.length >= pageLimit
+                      return (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => togglePage(s)}
+                          disabled={disabled}
+                          className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
+                            active
+                              ? 'border-violet bg-violet/20 text-frost'
+                              : disabled
+                                ? 'cursor-not-allowed border-white/10 text-mist/40'
+                                : 'border-white/15 text-mist hover:border-white/30'
+                          }`}
+                        >
+                          {s}
+                        </button>
+                      )
+                    })}
                   </div>
+                  {form.pages.length >= pageLimit && (
+                    <p className="mt-1.5 text-xs text-mist/60">
+                      {tier?.name || 'Launch'} tops out at {pageLimit} pages. {form.package === 'launch' ? 'Go Pro for up to 7.' : ''}
+                    </p>
+                  )}
                 </div>
+
+                {wantsProjects && (
+                  <div>
+                    <p className="mb-2 text-sm font-medium">Your projects</p>
+                    <div className="space-y-4">
+                      {form.projects.map((p, i) => (
+                        <div key={i} className="rounded-2xl border hairline bg-white/[0.03] p-4">
+                          <div className="flex items-start justify-between gap-3">
+                            <p className="text-xs font-semibold uppercase tracking-wide text-mist">Project {i + 1}</p>
+                            {form.projects.length > 1 && (
+                              <button type="button" onClick={() => removeProject(i)} className="text-xs text-mist hover:text-frost">
+                                Remove
+                              </button>
+                            )}
+                          </div>
+                          <div className="mt-3 space-y-3">
+                            <Field label="Title">
+                              <input
+                                className="field-input"
+                                value={p.title}
+                                onChange={(e) => updateProject(i, 'title', e.target.value)}
+                                placeholder="e.g. Senior design capstone"
+                              />
+                            </Field>
+                            <Field label="What was it?" optional>
+                              <textarea
+                                className="field-input min-h-20"
+                                value={p.description}
+                                onChange={(e) => updateProject(i, 'description', e.target.value)}
+                                placeholder="What you built, your role, the result."
+                              />
+                            </Field>
+                            <Field label="Link" optional>
+                              <input
+                                className="field-input"
+                                value={p.link}
+                                onChange={(e) => updateProject(i, 'link', e.target.value)}
+                                placeholder="Live demo, GitHub, write-up…"
+                              />
+                            </Field>
+                            <FileDrop
+                              label="Photos"
+                              hint={`Up to ${MAX_IMAGES_PER_PROJECT} images of this project`}
+                              files={p.images}
+                              onChange={(v) => updateProject(i, 'images', v)}
+                              multiple
+                              max={MAX_IMAGES_PER_PROJECT}
+                              accept="image/*"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    {form.projects.length < MAX_PROJECTS && (
+                      <button type="button" onClick={addProject} className="btn-ghost mt-3 !px-4 !py-2 text-sm">
+                        + Add another project
+                      </button>
+                    )}
+                  </div>
+                )}
+
                 <Field label="Your links" optional>
                   <input className="field-input" value={form.socials} onChange={(e) => set('socials', e.target.value)} placeholder="LinkedIn, GitHub, Instagram…" />
                 </Field>
@@ -466,7 +597,6 @@ export default function Start() {
                 <FileDrop label="Headshot" hint="A photo of you, if you want one on the site" files={form.headshot} onChange={(v) => set('headshot', v)} accept="image/*" />
                 <FileDrop label="Resume" hint="PDF or Word" files={form.resumeFile} onChange={(v) => set('resumeFile', v)} accept=".pdf,.doc,.docx" />
                 <FileDrop label="Logo" hint="If you have one" files={form.logoFile} onChange={(v) => set('logoFile', v)} />
-                <FileDrop label="Project photos" hint="Up to 4 images of your work" files={form.projects} onChange={(v) => set('projects', v)} multiple max={4} accept="image/*" />
                 <p className={`text-xs ${overLimit ? 'font-semibold text-[#ff6b6b]' : 'text-mist/70'}`}>
                   {overLimit
                     ? `That is ${(totalBytes / 1024 / 1024).toFixed(1)} MB total. Keep it under 8 MB here and email me the rest after submitting.`

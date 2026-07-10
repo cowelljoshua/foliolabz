@@ -209,73 +209,6 @@ export const resumeService = {
       stripeKey: "resumeMeeting",
     },
   ],
-  // A full before/after resume shown on the pricing page. Same person,
-  // same facts, rewritten. This is a realistic example, not a highlight reel.
-  compare: {
-    before: {
-      name: "Jordan Miller",
-      title: "Mechanical Engineering Student",
-      contact: "jordan.miller@email.com · (555) 019-4432 · Lynchburg, VA",
-      summary:
-        "Hard-working engineering student looking for an internship where I can use my skills and learn more.",
-      experience: [
-        {
-          role: "Member, Rocket Team",
-          org: "University Propulsion Club",
-          date: "2023 – Present",
-          bullets: [
-            "Responsible for helping with test procedures for the rocket team",
-            "Worked on various projects with other students",
-            "Attended weekly meetings and helped out when needed",
-          ],
-        },
-        {
-          role: "Server",
-          org: "Downtown Grill",
-          date: "2022 – 2023",
-          bullets: [
-            "Took orders and served food to customers",
-            "Good communication skills and a hard worker",
-          ],
-        },
-      ],
-      skills: ["SolidWorks", "Microsoft Office", "Teamwork", "Communication"],
-    },
-    after: {
-      name: "Jordan Miller",
-      title: "Mechanical Engineering Student · Propulsion & Test",
-      contact: "jordan.miller@email.com · (555) 019-4432 · Lynchburg, VA · linkedin.com/in/jordanmiller",
-      summary:
-        "Mechanical engineering student with hands-on propulsion test experience, targeting a Summer 2026 engineering internship. Led a 6-person sub-team to a first-place national finish.",
-      experience: [
-        {
-          role: "Propulsion Test Lead",
-          org: "University Propulsion Club",
-          date: "2023 – Present",
-          bullets: [
-            "Wrote and ran 14 test procedures for a 3,000 lbf static-fire campaign with zero failed safety reviews",
-            "Led a 6-student sub-team to a first-place finish out of 41 schools at national competition",
-            "Presented monthly readiness reviews to faculty and industry judges",
-          ],
-        },
-        {
-          role: "Server",
-          org: "Downtown Grill",
-          date: "2022 – 2023",
-          bullets: [
-            "Trained 4 new hires and ran high-volume shifts of 120+ guests while keeping a 98% satisfaction score",
-          ],
-        },
-      ],
-      skills: ["SolidWorks", "GD&T", "MATLAB", "Test procedure design", "Data analysis", "Team leadership"],
-    },
-    lessons: [
-      "Lead with results and real numbers",
-      "Turn duties into achievements",
-      "Add a focused headline and summary",
-      "Cut the filler nobody reads",
-    ],
-  },
   resumePdf: "/josh-resume.pdf",
 }
 
@@ -377,7 +310,7 @@ export const realSites = [
     id: "josh",
     name: "Josh Cowell",
     field: "Engineering",
-    url: "https://cowelljoshua.github.io",
+    url: "https://joshuacowell.com",
     thumb: "/examples/josh.png",
     live: true,
   },
@@ -417,9 +350,12 @@ export const brandChips = [
   "Apple", "Nike", "Stripe", "Notion", "Airbnb", "Tesla", "Spotify", "Patagonia", "Rolex", "National Geographic",
 ]
 
-export const sectionOptions = [
+export const pageOptions = [
   "About me", "Projects / Work", "Resume", "Photo gallery", "Testimonials", "Experience timeline", "Contact", "Blog / Writing",
 ]
+
+// How many pages each package can pick from the list above.
+export const pageLimits = { launch: 4, pro: 7 }
 
 // ------------------------------------------------------------
 // FAQ
