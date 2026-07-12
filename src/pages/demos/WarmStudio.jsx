@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const cream = '#f3e9dc'
 const clay = '#b4552d'
@@ -24,8 +25,9 @@ const services = [
 export default function WarmStudio() {
   return (
     <div className="min-h-screen pb-28" style={{ background: cream, color: espresso, fontFamily: '"Fraunces", Georgia, serif' }}>
+      <DemoTopNav brand="Sofia Reyes" tone="light" accent={clay} links={[{ href: '#work', label: 'Portfolio' }, { href: '#about', label: 'About' }, { href: '#contact', label: 'Bookings' }]} />
       {/* Hero */}
-      <header className="mx-auto max-w-5xl px-6 pb-10 pt-24 text-center">
+      <header id="top" className="mx-auto max-w-5xl px-6 pb-10 pt-24 text-center">
         <Reveal>
           <p className="text-sm font-semibold uppercase tracking-[0.3em]" style={{ color: clay, fontFamily: 'Inter, sans-serif' }}>
             Photographer
@@ -37,8 +39,14 @@ export default function WarmStudio() {
         </Reveal>
       </header>
 
+      <DemoStatStrip color={clay} border="#dccbb4" stats={[
+        { value: '140+', label: 'stories photographed' },
+        { value: '9 yrs', label: 'behind the camera' },
+        { value: '48 hr', label: 'sneak-peek delivery' },
+      ]} />
+
       {/* Gallery */}
-      <section className="mx-auto max-w-5xl columns-2 gap-4 px-6 sm:columns-3">
+      <section id="work" className="mx-auto max-w-5xl columns-2 gap-4 px-6 pt-20 sm:columns-3">
         {shots.map((s, i) => (
           <Reveal key={s.label} delay={i * 0.06} className="mb-4 break-inside-avoid">
             <figure className="group cursor-pointer overflow-hidden rounded-xl">
@@ -53,6 +61,18 @@ export default function WarmStudio() {
           </Reveal>
         ))}
       </section>
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?auto=format&fit=crop&w=1400&q=85"
+        alt="Photographer holding a camera in warm natural light"
+        eyebrow="Behind the lens"
+        title="Your day should feel like your day."
+        body="I give just enough direction to help you feel natural, then leave room for the unscripted moments that become the photographs you keep forever."
+        bullets={['A relaxed planning call before every session', 'True-to-life color with warm, film-inspired texture', 'Private galleries designed for sharing and printing']}
+        accent={clay}
+        panel="#ead9c5"
+        reverse
+      />
 
       {/* Services */}
       <section className="mx-auto max-w-3xl px-6 py-16">
@@ -77,7 +97,7 @@ export default function WarmStudio() {
       </section>
 
       {/* Contact */}
-      <section className="px-6 pb-16 text-center">
+      <section id="contact" className="px-6 pb-16 text-center">
         <Reveal>
           <a
             href="mailto:sofia@example.com"

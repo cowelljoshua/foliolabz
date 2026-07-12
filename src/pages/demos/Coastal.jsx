@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const sky = '#eef6f8'
 const ocean = '#2a7f9e'
@@ -7,22 +8,22 @@ const sand = '#f2b134'
 const ink = '#274652'
 
 const highlights = [
-  { icon: '📚', title: '8 years in the classroom', body: 'Fourth and fifth grade, with a knack for the kids everyone else gave up on.' },
-  { icon: '🏆', title: 'Teacher of the Year, 2024', body: 'District-wide, nominated by parents and colleagues.' },
-  { icon: '🌊', title: 'Founder, Tide Pool Club', body: 'A hands-on science program now running in six schools.' },
+  { icon: '01', title: '8 years in the classroom', body: 'Fourth and fifth grade, with a knack for the kids everyone else gave up on.' },
+  { icon: '02', title: 'Teacher of the Year, 2024', body: 'District-wide, nominated by parents and colleagues.' },
+  { icon: '03', title: 'Founder, Tide Pool Club', body: 'A hands-on science program now running in six schools.' },
 ]
-
 export default function Coastal() {
   return (
     <div className="min-h-screen pb-28" style={{ background: sky, color: ink, fontFamily: 'Inter, sans-serif' }}>
+      <DemoTopNav brand="Hannah Reed" tone="light" accent={ocean} links={[{ href: '#about', label: 'About' }, { href: '#work', label: 'Classroom' }, { href: '#contact', label: 'Contact' }]} />
       {/* Wave hero */}
-      <header className="relative overflow-hidden px-6 pt-24 pb-10 text-center">
+      <header id="top" className="relative overflow-hidden px-6 pt-24 pb-10 text-center">
         <Reveal>
           <div
             className="mx-auto flex h-24 w-24 items-center justify-center rounded-full text-4xl shadow-lg"
             style={{ background: 'white' }}
           >
-            🐚
+            HR
           </div>
           <p className="mt-6 text-sm font-bold uppercase tracking-[0.25em]" style={{ color: ocean }}>
             Elementary Teacher
@@ -53,7 +54,27 @@ export default function Coastal() {
         </svg>
       </header>
 
-      <section id="about" className="bg-white px-6 py-16">
+      <div className="bg-white pt-16">
+        <DemoStatStrip color={ocean} border="rgba(42,127,158,0.2)" stats={[
+          { value: '8 yrs', label: 'in the classroom' },
+          { value: '6', label: 'schools using Tide Pool Club' },
+          { value: '2024', label: 'district Teacher of the Year' },
+        ]} />
+      </div>
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1400&q=85"
+        alt="Bright classroom prepared for collaborative learning"
+        eyebrow="Inside my classroom"
+        title="Curiosity is the curriculum underneath the curriculum."
+        body="I build a room where students feel safe asking the second question, trying the strange idea, and showing their work before it feels perfect."
+        bullets={['Project-based units tied to real local questions', 'Family communication that is warm and consistent', 'Classroom systems designed for confidence and belonging']}
+        accent={ocean}
+        panel="#ffffff"
+        reverse
+      />
+
+      <section id="work" className="bg-white px-6 py-16">
         <div className="mx-auto max-w-4xl">
           <Reveal>
             <h2 className="text-center text-3xl font-extrabold">A few things about me</h2>

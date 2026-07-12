@@ -108,7 +108,7 @@ export const hosting = {
     monthly: "$4/mo",
     yearly: "$20/yr",
     detail:
-      "Want yourname.com instead? It is $4/mo, or $20/yr if you would rather pay once and save. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
+      "Want yourname.com instead? It is $4/mo, or $20/yr. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
   },
 }
 
@@ -174,7 +174,7 @@ export const rush = {
 export const promises = {
   website: {
     title: "Love it before it launches",
-    detail: "Once I build your first version, you get a private preview link and up to 3 rounds of changes. Send as many tweaks as you like in each round. I keep going until it feels exactly right, then it goes live.",
+    detail: "Once I build your first version, you get a private preview link and up to 3 rounds of changes. Send as many tweaks as you like in each round, then it goes live.",
     short: "Private preview and 3 rounds of changes before it goes live.",
   },
   resume: {
@@ -326,9 +326,9 @@ export const realSites = [
     id: "caroline",
     name: "Caroline",
     field: "Nursing",
-    url: "", // paste the live URL here when it is up, then set live: true
+    url: "https://carolinethomas.netlify.app/",
     thumb: "/examples/caroline.png",
-    live: false,
+    live: true,
   },
 ]
 
@@ -371,7 +371,7 @@ export const faq = [
   },
   {
     q: "How do changes and edits work?",
-    a: "While I am building, you get up to 3 rounds of changes to get your site exactly right before launch. Send as many tweaks as you like in each round. I keep going until it feels right, then it goes live.",
+    a: "While I am building, you get up to 3 rounds of changes to get your site exactly right before launch. Send as many tweaks as you like in each round, then it goes live.",
   },
   {
     q: "How long does it take?",
@@ -379,7 +379,7 @@ export const faq = [
   },
   {
     q: "Do I pay for hosting or a domain?",
-    a: "Hosting is included free, for as long as you want your site online, and you can launch free on a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $4 a month, or $20 a year if you would rather pay once. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
+    a: "Hosting is included free, for as long as you want your site online, and you can launch free on a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $4 a month, or $20 a year. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
   },
   {
     q: "Can I make changes myself?",
@@ -391,6 +391,6 @@ export const faq = [
   },
   {
     q: "What if I do not like the design?",
-    a: "You will. Before launch you get a private preview and up to 3 rounds of changes, so I can shape it until it feels like you. I do not stop at good enough.",
+    a: "Before launch, you get a private preview and up to 3 rounds of changes, so we can shape it until it feels like you.",
   },
 ]

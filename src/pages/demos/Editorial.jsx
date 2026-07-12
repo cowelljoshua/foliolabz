@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const red = '#e63946'
 const paper = '#f5f0e8'
@@ -14,12 +15,13 @@ const campaigns = [
 export default function Editorial() {
   return (
     <div className="min-h-screen pb-28" style={{ background: paper, color: ink, fontFamily: '"Fraunces", Georgia, serif' }}>
+      <DemoTopNav brand="DP / Strategy" tone="light" accent={red} links={[{ href: '#work', label: 'Campaigns' }, { href: '#about', label: 'Method' }, { href: '#contact', label: 'Contact' }]} />
       {/* Hero */}
-      <header className="border-b-4 px-6 pb-12 pt-20" style={{ borderColor: ink }}>
+      <header id="top" className="border-b-4 px-6 pb-12 pt-20" style={{ borderColor: ink }}>
         <div className="mx-auto max-w-5xl">
           <Reveal>
             <p className="text-sm font-semibold uppercase tracking-[0.3em]" style={{ fontFamily: 'Inter, sans-serif', color: red }}>
-              Marketing · Strategy · Story
+              Marketing &middot; Strategy &middot; Story
             </p>
             <h1 className="mt-4 text-[17vw] font-semibold leading-[0.9] tracking-tight sm:text-[7.5rem]">
               Devon
@@ -41,6 +43,23 @@ export default function Editorial() {
           </Reveal>
         </div>
       </header>
+
+      <DemoStatStrip color={red} border="#d8d2c6" stats={[
+        { value: '2.1M', label: 'organic campaign views' },
+        { value: '$92K', label: 'raised in a single day' },
+        { value: '+40%', label: 'semester-over-semester sales' },
+      ]} />
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=1400&q=85"
+        alt="Creative team discussing a campaign around a table"
+        eyebrow="The method"
+        title="Find the sharpest truth. Build the campaign around it."
+        body="Good marketing is not louder decoration. It is a clear point of view, expressed consistently enough that the right people remember it and act."
+        bullets={['Audience insight before channel planning', 'One campaign idea that survives every format', 'Reporting that connects attention to outcomes']}
+        accent={red}
+        panel="#ebe4d8"
+      />
 
       {/* Campaigns */}
       <section id="work" className="mx-auto max-w-5xl px-6 py-14">
@@ -65,14 +84,12 @@ export default function Editorial() {
       {/* Quote */}
       <section className="px-6 py-10">
         <Reveal className="mx-auto max-w-3xl text-center">
-          <p className="text-3xl italic leading-snug sm:text-4xl">
-            “Attention is earned in the first line. Everything else is follow-through.”
-          </p>
+          <p className="text-3xl italic leading-snug sm:text-4xl">&ldquo;Attention is earned in the first line. Everything else is follow-through.&rdquo;</p>
         </Reveal>
       </section>
 
       {/* Contact */}
-      <section className="px-6 py-14 text-center">
+      <section id="contact" className="px-6 py-14 text-center">
         <Reveal>
           <a
             href="mailto:devon.price@example.com"

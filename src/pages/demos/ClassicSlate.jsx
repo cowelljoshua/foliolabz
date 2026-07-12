@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const slate = '#1e293b'
 const gold = '#996515'
@@ -8,17 +9,18 @@ const paper = '#f4f4f6'
 const experience = [
   { role: 'Investment Banking Summer Analyst', firm: 'Meridian Capital', years: '2025', note: 'M&A coverage. Built models for two closed deals totaling $340M.' },
   { role: 'Finance Club President', firm: 'University Investment Society', years: '2024 to 2026', note: 'Grew the student fund from $80k to $210k AUM.' },
-  { role: 'B.S. Finance, minor in CS', firm: 'Commonwealth University', years: '2022 to 2026', note: 'GPA 3.9. Dean’s list every semester.' },
+  { role: 'B.S. Finance, minor in CS', firm: 'Commonwealth University', years: '2022 to 2026', note: 'GPA 3.9. Dean&rsquo;s list every semester.' },
 ]
 
 export default function ClassicSlate() {
   return (
     <div className="min-h-screen pb-28" style={{ background: paper, color: slate, fontFamily: 'Inter, sans-serif' }}>
+      <DemoTopNav brand="James Whitfield" tone="light" accent={gold} links={[{ href: '#experience', label: 'Experience' }, { href: '#about', label: 'Profile' }, { href: '#contact', label: 'Contact' }]} />
       {/* Hero */}
-      <header className="mx-auto max-w-3xl px-6 pt-28 text-center">
+      <header id="top" className="mx-auto max-w-3xl px-6 pt-28 text-center">
         <Reveal>
           <p className="text-xs font-semibold uppercase tracking-[0.35em]" style={{ color: gold }}>
-            Finance · Class of 2026
+            Finance &middot; Class of 2026
           </p>
           <h1 className="mt-5 text-6xl tracking-tight" style={{ fontFamily: '"DM Serif Display", Georgia, serif' }}>
             James Whitfield
@@ -45,6 +47,25 @@ export default function ClassicSlate() {
           </div>
         </Reveal>
       </header>
+
+      <div className="pt-16">
+        <DemoStatStrip color={gold} border="#dcdfe5" stats={[
+          { value: '$340M', label: 'closed-deal transaction value' },
+          { value: '3.9', label: 'cumulative finance GPA' },
+          { value: '+162%', label: 'growth in student fund AUM' },
+        ]} />
+      </div>
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=85"
+        alt="Finance team reviewing reports in a modern office"
+        eyebrow="Analytical profile"
+        title="Rigorous analysis. Clear recommendations."
+        body="I am drawn to work where the details matter and the answer still has to be explained simply. My strongest work sits at the intersection of modeling, research, and concise communication."
+        bullets={['Three-statement and DCF modeling', 'Market and comparable-company research', 'Executive-ready materials and investment memos']}
+        accent={gold}
+        panel="#ffffff"
+      />
 
       {/* Experience */}
       <section id="experience" className="mx-auto max-w-3xl px-6 py-20">
@@ -75,7 +96,7 @@ export default function ClassicSlate() {
           <h2 className="text-2xl" style={{ fontFamily: '"DM Serif Display", Georgia, serif' }}>
             james.whitfield@example.com
           </h2>
-          <p className="mt-2 text-sm" style={{ color: '#5b6472' }}>New York · Open to 2026 analyst roles</p>
+          <p className="mt-2 text-sm" style={{ color: '#5b6472' }}>New York &middot; Open to 2026 analyst roles</p>
         </Reveal>
         <p className="mt-14 text-xs" style={{ color: '#9aa1ac' }}>
           A FolioLabz style example, not a finished site. James is made up; yours is built around you.

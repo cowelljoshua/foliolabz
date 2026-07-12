@@ -15,7 +15,7 @@
 
     <!-- Hidden form definitions so Netlify detects them at deploy time.
          Field names must match what the intake wizard submits. -->
-    <form name="website-intake" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data" autocomplete="off">
+    <form name="website-intake" netlify netlify-honeypot="bot-field" hidden autocomplete="off">
       <input type="text" name="bot-field" autocomplete="off" />
       <input type="text" name="name" autocomplete="name" />
       <input type="email" name="email" autocomplete="email" />
@@ -31,49 +31,39 @@
       <input type="text" name="pages" autocomplete="off" />
       <input type="text" name="socials" autocomplete="url" />
       <textarea name="extra_notes" autocomplete="off"></textarea>
+      <input type="url" name="headshot_url" autocomplete="off" />
+      <input type="url" name="resume_url" autocomplete="off" />
+      <input type="url" name="logo_url" autocomplete="off" />
+      <input type="text" name="upload_session" autocomplete="off" />
+      <textarea name="cloudinary_assets" autocomplete="off"></textarea>
       <textarea name="summary" autocomplete="off"></textarea>
-      <input type="file" name="headshot" />
-      <input type="file" name="resume_file" />
-      <input type="file" name="logo_file" />
       <input type="text" name="project_1_title" autocomplete="off" />
       <textarea name="project_1_description" autocomplete="off"></textarea>
       <input type="text" name="project_1_link" autocomplete="url" />
-      <input type="file" name="project_1_image_1" />
-      <input type="file" name="project_1_image_2" />
-      <input type="file" name="project_1_image_3" />
+      <textarea name="project_1_image_urls" autocomplete="off"></textarea>
       <input type="text" name="project_2_title" autocomplete="off" />
       <textarea name="project_2_description" autocomplete="off"></textarea>
       <input type="text" name="project_2_link" autocomplete="url" />
-      <input type="file" name="project_2_image_1" />
-      <input type="file" name="project_2_image_2" />
-      <input type="file" name="project_2_image_3" />
+      <textarea name="project_2_image_urls" autocomplete="off"></textarea>
       <input type="text" name="project_3_title" autocomplete="off" />
       <textarea name="project_3_description" autocomplete="off"></textarea>
       <input type="text" name="project_3_link" autocomplete="url" />
-      <input type="file" name="project_3_image_1" />
-      <input type="file" name="project_3_image_2" />
-      <input type="file" name="project_3_image_3" />
+      <textarea name="project_3_image_urls" autocomplete="off"></textarea>
       <input type="text" name="project_4_title" autocomplete="off" />
       <textarea name="project_4_description" autocomplete="off"></textarea>
       <input type="text" name="project_4_link" autocomplete="url" />
-      <input type="file" name="project_4_image_1" />
-      <input type="file" name="project_4_image_2" />
-      <input type="file" name="project_4_image_3" />
+      <textarea name="project_4_image_urls" autocomplete="off"></textarea>
       <input type="text" name="project_5_title" autocomplete="off" />
       <textarea name="project_5_description" autocomplete="off"></textarea>
       <input type="text" name="project_5_link" autocomplete="url" />
-      <input type="file" name="project_5_image_1" />
-      <input type="file" name="project_5_image_2" />
-      <input type="file" name="project_5_image_3" />
+      <textarea name="project_5_image_urls" autocomplete="off"></textarea>
       <input type="text" name="project_6_title" autocomplete="off" />
       <textarea name="project_6_description" autocomplete="off"></textarea>
       <input type="text" name="project_6_link" autocomplete="url" />
-      <input type="file" name="project_6_image_1" />
-      <input type="file" name="project_6_image_2" />
-      <input type="file" name="project_6_image_3" />
+      <textarea name="project_6_image_urls" autocomplete="off"></textarea>
     </form>
 
-    <form name="resume-intake" netlify netlify-honeypot="bot-field" hidden enctype="multipart/form-data" autocomplete="off">
+    <form name="resume-intake" netlify netlify-honeypot="bot-field" hidden autocomplete="off">
       <input type="text" name="bot-field" autocomplete="off" />
       <input type="text" name="name" autocomplete="name" />
       <input type="email" name="email" autocomplete="email" />
@@ -82,10 +72,12 @@
       <input type="text" name="target_role" autocomplete="organization-title" />
       <textarea name="whats_wrong" autocomplete="off"></textarea>
       <textarea name="extra_notes" autocomplete="off"></textarea>
+      <input type="url" name="resume_url" autocomplete="off" />
+      <input type="text" name="resume_public_id" autocomplete="off" />
+      <input type="text" name="upload_session" autocomplete="off" />
+      <textarea name="cloudinary_assets" autocomplete="off"></textarea>
       <textarea name="summary" autocomplete="off"></textarea>
-      <input type="file" name="resume_file" />
     </form>
-
     <!-- Existing-client portal requests (domain setup + edit requests). -->
     <form name="client-request" netlify netlify-honeypot="bot-field" hidden autocomplete="off">
       <input type="text" name="bot-field" autocomplete="off" />

@@ -30,9 +30,9 @@ export default function Thanks() {
           ['You get it back sharper', 'With notes on every change I made.'],
         ]
       : [
-          ['I read your brief', 'Personally. Usually the same day.'],
-          [`You put down a $${deposit.amount} deposit`, 'It locks in your spot. The rest is due only when your site is live.'],
-          ['Your preview link arrives', 'Then rounds of changes until you love it, and you pay the balance at launch.'],
+          ['I read your brief'],
+          [`You put down a $${deposit.amount} deposit`],
+          ['Your preview link arrives'],
         ]
 
   return (
@@ -56,7 +56,7 @@ export default function Thanks() {
                 <span className="font-display text-lg font-bold text-gradient">{i + 1}</span>
                 <div>
                   <p className="font-display font-semibold">{t}</p>
-                  <p className="mt-0.5 text-sm text-mist">{d}</p>
+                  {d && <p className="mt-0.5 text-sm text-mist">{d}</p>}
                 </div>
               </div>
             </Reveal>

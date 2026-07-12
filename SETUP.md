@@ -114,37 +114,95 @@ only one the site charges automatically; every balance is a quick personal link.
 
 ---
 
-## 2. Netlify (about 15 minutes)
+## 2. Cloudinary + Turnstile + Netlify (about 30 minutes)
 
-Netlify hosts the site free AND receives the intake form, including file uploads.
-No server needed. (This is why we are not using GitHub Pages: it cannot receive forms.)
+The intake wizard now sends every file directly from the customer's browser to
+Cloudinary. Netlify receives only ordinary text fields, clickable Cloudinary URLs,
+and a compact JSON manifest. A 160 MB batch of photos therefore creates only a few
+kilobytes of Netlify form data.
 
-1. Push this folder to a GitHub repo (private is fine):
-   ```
-   git init
-   git add .
-   git commit -m "FolioLabz site"
-   ```
-   then create a repo on github.com and follow its push instructions.
-2. Go to https://app.netlify.com, sign up with GitHub, click
-   **Add new site → Import an existing project**, pick the repo.
-   Build settings are auto-detected from `netlify.toml`. Deploy.
-3. Turn on email notifications: **Site → Forms → Form notifications →
-   Add notification → Email**, choose your email. Do it for all three forms
-   (`website-intake`, `resume-intake`, and `client-request` from the client portal).
-4. **Test it**: open your live site, submit the intake form with a small file
-   attached. You should get an email where the `summary` field reads as one
-   clean client brief, with download links for the files.
+### A. Create the signed Cloudinary upload preset
 
-### Form limits (free tier)
-- 100 submissions/month, 10 MB per file upload. Plenty to start.
-- The form itself asks clients to stay under 8 MB of attachments and email you
-  anything bigger, so you should never hit the ceiling by accident.
-- If you ever outgrow it, Netlify Forms Level 1 ($19/mo) is one click. That fits
-  your "up to $15/mo" budget closely enough to decide later; there is no rush.
+1. Create a Cloudinary account and open **Settings → Upload → Upload presets**.
+2. Add a preset named `foliolabz_signed_intake` and set its signing mode to
+   **Signed**. Do not use an unsigned preset for this form.
+3. Set the maximum file size to **15 MB** (`15728640` bytes).
+4. Allow these formats: `jpg,jpeg,png,heic,webp,pdf,doc,docx`.
+5. Add an incoming image transformation of `c_limit,w_4000,h_4000`. The browser
+   already shrinks oversized local phone photos; this preset rule also covers
+   supported remote-source images.
+6. Save the preset. Copy the cloud name, API key, and API secret from Cloudinary's
+   API Keys page.
+
+The API key and preset name are public identifiers. The **API secret is private**
+and must never be placed in a `VITE_` variable or frontend file.
+
+### B. Create the Cloudflare Turnstile widget
+
+1. In Cloudflare, open **Turnstile → Add widget**.
+2. Add the production FolioLabz hostname and the Netlify preview hostname you use
+   for testing. Choose the managed widget type.
+3. Copy the site key and secret key.
+
+Customers complete this check once. The server exchanges it for a one-hour upload
+session, so a 30-file batch does not ask for 30 CAPTCHAs.
+
+### C. Add Netlify environment variables
+
+In **Netlify → Site configuration → Environment variables**, add the values shown
+in `.env.example`. Use the same Cloudinary cloud name, API key, and signed preset
+for both the public `VITE_` entries and their server-side counterparts:
+
+| Variable | Where it is used |
+|---|---|
+| `VITE_CLOUDINARY_CLOUD_NAME` | Browser upload widget |
+| `VITE_CLOUDINARY_API_KEY` | Browser upload widget; safe to expose |
+| `VITE_CLOUDINARY_UPLOAD_PRESET` | Browser upload widget |
+| `VITE_TURNSTILE_SITE_KEY` | Browser security check |
+| `CLOUDINARY_CLOUD_NAME` | Netlify Functions |
+| `CLOUDINARY_API_KEY` | Netlify Functions |
+| `CLOUDINARY_UPLOAD_PRESET` | Signature allowlist |
+| `CLOUDINARY_API_SECRET` | Signature, tagging, and cleanup; private |
+| `TURNSTILE_SECRET_KEY` | CAPTCHA verification; private |
+| `UPLOAD_TOKEN_SECRET` | A new random 32+ character value; private |
+| `CLOUDINARY_ABANDONED_DAYS` | Optional; defaults to `7` |
+
+Redeploy after adding or changing a `VITE_` variable because Vite embeds those
+public values at build time.
+
+### D. What the server automation does
+
+- `upload-authorize` verifies Turnstile and issues a short-lived upload session.
+- `cloudinary-signature` signs only the customer's session folder and approved
+  preset. The Cloudinary API secret never reaches the browser.
+- Netlify rate limits CAPTCHA authorization to 10 requests per minute and upload
+  signatures to 90 per minute per IP/domain, leaving room for a 30-file batch.
+- `cloudinary-form-events` waits for Netlify to verify the form, then marks every
+  listed asset as submitted.
+- `cloudinary-cleanup` runs daily and deletes only uploads that are still pending
+  after seven days. Submitted customer files are preserved.
+
+Each submission is organized below
+`foliolabz/intake/<upload-session>/<file-category>`. The form saves both the secure
+URL and Cloudinary public/asset IDs.
+
+### E. Deploy and test
+
+1. Deploy to Netlify. In **Forms**, keep email notifications enabled for
+   `website-intake`, `resume-intake`, and `client-request`.
+2. Submit the website intake with several files totaling more than 8 MB.
+3. Confirm the Cloudinary Media Library receives the originals in the session
+   folder while the Netlify form shows URLs and no binary file fields.
+4. Open links from the `summary` field and confirm they resolve.
+5. Check the Functions log once: the verified form event should add the
+   `foliolabz-submitted` tag. New uploads initially carry `foliolabz-pending`.
+
+The uploader supports multiple files, drag-and-drop, phone camera selection,
+Google Drive, Dropbox, upload progress, previews, retry/removal controls, five
+files per project, 30 files per intake, and 15 MB per file. The Submit button stays
+disabled while a queue is active.
 
 ---
-
 ## Hosting and domains (how it actually works)
 
 This trips up a lot of people, so here is the plain truth.

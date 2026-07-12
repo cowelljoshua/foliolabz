@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const cream = '#f4f1e9'
 const sage = '#4f7a4a'
@@ -15,9 +16,10 @@ const offerings = [
 export default function Botanical() {
   return (
     <div className="min-h-screen pb-28" style={{ background: cream, color: ink, fontFamily: '"Fraunces", Georgia, serif' }}>
-      <header className="mx-auto max-w-4xl px-6 pt-24 text-center">
+      <DemoTopNav brand="Priya Anand" tone="light" accent={sage} links={[{ href: '#work', label: 'Offerings' }, { href: '#about', label: 'Approach' }, { href: '#contact', label: 'Contact' }]} />
+      <header id="top" className="mx-auto max-w-4xl px-6 pt-24 text-center">
         <Reveal>
-          <span className="text-3xl" aria-hidden="true">🌿</span>
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border text-sm font-bold tracking-[0.2em]" style={{ borderColor: sage, color: sage }}>PA</span>
           <p className="mt-4 text-sm font-semibold uppercase tracking-[0.3em]" style={{ color: sage, fontFamily: 'Inter, sans-serif' }}>
             Wellness Coach
           </p>
@@ -35,12 +37,29 @@ export default function Botanical() {
         </Reveal>
       </header>
 
+      <div className="pt-16">
+        <DemoStatStrip color={sage} border="#e2dccc" stats={[
+          { value: '240+', label: 'clients supported' },
+          { value: '12 wks', label: 'signature coaching path' },
+          { value: '94%', label: 'program completion rate' },
+        ]} />
+      </div>
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1400&q=85"
+        alt="Quiet outdoor meditation practice in warm morning light"
+        eyebrow="My approach"
+        title="Wellness that fits inside a real life."
+        body="No perfect routines and no guilt. We build small practices around the life you already have, then make them sturdy enough to survive a hard week."
+        bullets={['Evidence-informed tools without the clinical jargon', 'Simple practices designed around your actual schedule', 'Gentle accountability and measurable progress']}
+        accent={sage}
+        panel="#ffffff"
+      />
+
       <section className="mx-auto max-w-4xl px-6 py-16">
         <Reveal>
           <div className="rounded-3xl p-8 text-center sm:p-12" style={{ background: '#ffffff' }}>
-            <p className="text-2xl italic leading-relaxed sm:text-3xl">
-              “Wellness is not a destination. It is a set of small, kind choices you make every day.”
-            </p>
+            <p className="text-2xl italic leading-relaxed sm:text-3xl">&ldquo;Wellness is not a destination. It is a set of small, kind choices you make every day.&rdquo;</p>
           </div>
         </Reveal>
       </section>

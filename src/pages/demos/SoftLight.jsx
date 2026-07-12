@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const sage = '#7aa5a0'
 const peach = '#e8b4a0'
@@ -16,8 +17,9 @@ const certs = ['RN License', 'BLS', 'ACLS', 'Med-Surg Certified (CMSRN)', 'Wound
 export default function SoftLight() {
   return (
     <div className="min-h-screen bg-[#f7f6f2] pb-28 font-body" style={{ color: ink }}>
+      <DemoTopNav brand="Elena Brooks, RN" tone="light" accent={sage} links={[{ href: '#experience', label: 'Experience' }, { href: '#about', label: 'Approach' }, { href: '#contact', label: 'Contact' }]} />
       {/* Hero */}
-      <header className="mx-auto flex min-h-[75vh] max-w-4xl flex-col items-center justify-center px-6 text-center">
+      <header id="top" className="mx-auto flex min-h-[75vh] max-w-4xl flex-col items-center justify-center px-6 text-center">
         <Reveal>
           <div
             className="mx-auto flex h-28 w-28 items-center justify-center rounded-full text-3xl font-semibold text-white shadow-lg"
@@ -50,6 +52,24 @@ export default function SoftLight() {
           </div>
         </Reveal>
       </header>
+
+      <DemoStatStrip color={sage} border="rgba(122,165,160,0.28)" stats={[
+        { value: '32', label: 'beds supported on my unit' },
+        { value: '5', label: 'active clinical certifications' },
+        { value: '4.9/5', label: 'average patient-care feedback' },
+      ]} />
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1400&q=85"
+        alt="Nurse reviewing care notes in a bright clinical setting"
+        eyebrow="My care philosophy"
+        title="Clinical confidence, without losing the human part."
+        body="The best care is technically sharp and deeply reassuring. I make sure patients understand what is happening, families know what comes next, and teammates never have to wonder if I will follow through."
+        bullets={['Clear bedside education in plain language', 'Calm prioritization during high-acuity shifts', 'Thoughtful handoffs that protect continuity of care']}
+        accent={sage}
+        panel="#ffffff"
+        reverse
+      />
 
       {/* Experience */}
       <section id="experience" className="mx-auto max-w-3xl px-6 py-14">

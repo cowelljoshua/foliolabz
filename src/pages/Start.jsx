@@ -1,9 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import RushSwitch from '../components/RushSwitch.jsx'
-import FileDrop from '../components/FileDrop.jsx'
+import CloudinaryUpload from '../components/CloudinaryUpload.jsx'
+import UploadGate from '../components/UploadGate.jsx'
 import {
   site,
   tiers,
@@ -16,10 +17,15 @@ import {
   resumeService,
 } from '../config/site.js'
 
-const MAX_TOTAL_BYTES = 8 * 1024 * 1024 // stay under Netlify's upload ceiling
+const MAX_UPLOADS = 30
 const MAX_PROJECTS = 6
-const MAX_IMAGES_PER_PROJECT = 3
+const MAX_IMAGES_PER_PROJECT = 5
 const PROJECTS_PAGE = 'Projects / Work'
+
+const makeSessionId = () =>
+  globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}-${Math.random().toString(16).slice(2)}`
+
+const assetLine = (asset) => `${asset.name}: ${asset.url}`
 
 const emptyProject = () => ({ title: '', description: '', link: '', images: [] })
 
@@ -78,6 +84,9 @@ export default function Start() {
   const [stepIdx, setStepIdx] = useState(0)
   const [error, setError] = useState('')
   const [sending, setSending] = useState(false)
+  const [uploadSession] = useState(makeSessionId)
+  const [uploadAuthorization, setUploadAuthorization] = useState(null)
+  const [uploadingKeys, setUploadingKeys] = useState(() => new Set())
 
   const [form, setForm] = useState({
     name: '',
@@ -138,20 +147,50 @@ export default function Start() {
       projects: f.projects.map((p, i) => (i === idx ? { ...p, [key]: value } : p)),
     }))
 
+  const markUploading = useCallback((key, active) => {
+    setUploadingKeys((current) => {
+      const next = new Set(current)
+      if (active) next.add(key)
+      else next.delete(key)
+      return next
+    })
+  }, [])
+  const authorizeUploads = useCallback((authorization) => setUploadAuthorization(authorization), [])
+  const expireUploads = useCallback(() => setUploadAuthorization(null), [])
+
   const wantsProjects = form.pages.includes(PROJECTS_PAGE)
   const projectImages = form.projects.flatMap((p) => p.images)
   const allFiles = [...form.headshot, ...form.resumeFile, ...form.logoFile, ...projectImages]
-  const totalBytes = allFiles.reduce((s, f) => s + f.size, 0)
-  const overLimit = totalBytes > MAX_TOTAL_BYTES
+  const uploadsBusy = uploadingKeys.size > 0
+  const activeAuthorization = uploadAuthorization?.expiresAt > Date.now() ? uploadAuthorization : null
 
   const emailOk = /.+@.+\..+/.test(form.email)
   const canNext = useMemo(() => {
     if (step === 'about') return form.name.trim() && emailOk
     if (step === 'package') return !!form.package
-    if (step === 'resume') return form.resumeFile.length > 0 && !overLimit
-    if (step === 'files') return !overLimit
+    if (step === 'resume') return form.resumeFile.length > 0 && !uploadsBusy
+    if (step === 'files') return !uploadsBusy
     return true
-  }, [step, form, emailOk, overLimit])
+  }, [step, form, emailOk, uploadsBusy])
+
+  const uploadManifest = () => [
+    ...form.headshot.map((asset) => ({ ...asset, role: 'headshot' })),
+    ...form.resumeFile.map((asset) => ({ ...asset, role: 'resume' })),
+    ...form.logoFile.map((asset) => ({ ...asset, role: 'logo' })),
+    ...form.projects.flatMap((project, index) =>
+      project.images.map((asset) => ({ ...asset, role: 'project-image', project: index + 1, projectTitle: project.title })),
+    ),
+  ].map(({ publicId, assetId, url, name, bytes, format, resourceType, role, project, projectTitle }) => ({
+    publicId,
+    assetId,
+    url,
+    name,
+    bytes,
+    format,
+    resourceType,
+    role,
+    ...(project ? { project, projectTitle } : {}),
+  }))
 
   /* ---------- summary (this becomes the "one sheet" email) ---------- */
 
@@ -168,7 +207,7 @@ export default function Start() {
       if (form.target) L.push(`Aiming for: ${form.target}`)
       if (form.wrong) L.push(`What is not working: ${form.wrong}`)
       if (form.notes) L.push(`Notes: ${form.notes}`)
-      L.push(`Resume attached: ${form.resumeFile[0]?.name || 'no'}`)
+      L.push(`Resume: ${form.resumeFile[0] ? assetLine(form.resumeFile[0]) : 'not uploaded'}`)
     } else {
       L.push(`Profession: ${form.profession || 'not given'}`)
       L.push('')
@@ -195,11 +234,19 @@ export default function Start() {
           L.push(`${i + 1}. ${p.title || 'Untitled project'}`)
           if (p.description) L.push(`   ${p.description}`)
           if (p.link) L.push(`   Link: ${p.link}`)
-          L.push(`   Images: ${p.images.length ? p.images.map((f) => f.name).join(', ') : 'none attached'}`)
+          if (p.images.length) {
+            L.push('   Files:')
+            p.images.forEach((asset) => L.push(`   - ${assetLine(asset)}`))
+          } else {
+            L.push('   Files: none uploaded')
+          }
         })
       }
       L.push('')
-      L.push(`OTHER FILES: ${[...form.headshot, ...form.resumeFile, ...form.logoFile].length ? [...form.headshot, ...form.resumeFile, ...form.logoFile].map((f) => f.name).join(', ') : 'none attached'}`)
+      L.push('OTHER FILES')
+      L.push(`Headshot: ${form.headshot[0] ? assetLine(form.headshot[0]) : 'not uploaded'}`)
+      L.push(`Resume: ${form.resumeFile[0] ? assetLine(form.resumeFile[0]) : 'not uploaded'}`)
+      L.push(`Logo: ${form.logoFile[0] ? assetLine(form.logoFile[0]) : 'not uploaded'}`)
     }
     return L.join('\n')
   }
@@ -209,7 +256,14 @@ export default function Start() {
   const submit = async () => {
     setSending(true)
     setError('')
-    const fd = new FormData()
+    if (uploadsBusy) {
+      setError('Please wait for every upload to finish before submitting.')
+      setSending(false)
+      return
+    }
+
+    const fd = new URLSearchParams()
+    const manifest = uploadManifest()
     if (track === 'resume') {
       fd.append('form-name', 'resume-intake')
       fd.append('name', form.name)
@@ -219,7 +273,8 @@ export default function Start() {
       fd.append('target_role', form.target)
       fd.append('whats_wrong', form.wrong)
       fd.append('extra_notes', form.notes)
-      if (form.resumeFile[0]) fd.append('resume_file', form.resumeFile[0])
+      fd.append('resume_url', form.resumeFile[0]?.url || '')
+      fd.append('resume_public_id', form.resumeFile[0]?.publicId || '')
     } else {
       fd.append('form-name', 'website-intake')
       fd.append('name', form.name)
@@ -236,16 +291,21 @@ export default function Start() {
       fd.append('pages', form.pages.join(', '))
       fd.append('socials', form.socials)
       fd.append('extra_notes', form.notes)
-      if (form.headshot[0]) fd.append('headshot', form.headshot[0])
-      if (form.resumeFile[0]) fd.append('resume_file', form.resumeFile[0])
-      if (form.logoFile[0]) fd.append('logo_file', form.logoFile[0])
-      form.projects.slice(0, MAX_PROJECTS).forEach((p, i) => {
-        fd.append(`project_${i + 1}_title`, p.title)
-        fd.append(`project_${i + 1}_description`, p.description)
-        fd.append(`project_${i + 1}_link`, p.link)
-        p.images.slice(0, MAX_IMAGES_PER_PROJECT).forEach((img, j) => fd.append(`project_${i + 1}_image_${j + 1}`, img))
+      fd.append('headshot_url', form.headshot[0]?.url || '')
+      fd.append('resume_url', form.resumeFile[0]?.url || '')
+      fd.append('logo_url', form.logoFile[0]?.url || '')
+      form.projects.slice(0, MAX_PROJECTS).forEach((project, index) => {
+        fd.append(`project_${index + 1}_title`, project.title)
+        fd.append(`project_${index + 1}_description`, project.description)
+        fd.append(`project_${index + 1}_link`, project.link)
+        fd.append(
+          `project_${index + 1}_image_urls`,
+          project.images.slice(0, MAX_IMAGES_PER_PROJECT).map((asset) => asset.url).join('\n'),
+        )
       })
     }
+    fd.append('upload_session', uploadSession)
+    fd.append('cloudinary_assets', JSON.stringify(manifest))
     fd.append('summary', buildSummary())
 
     const state = {
@@ -256,7 +316,11 @@ export default function Start() {
     }
 
     try {
-      const res = await fetch('/', { method: 'POST', body: fd })
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: fd.toString(),
+      })
       if (!res.ok) throw new Error(`Status ${res.status}`)
       navigate('/thanks', { state })
     } catch (e) {
@@ -271,7 +335,6 @@ export default function Start() {
       setSending(false)
     }
   }
-
   /* ---------- track picker ---------- */
 
   if (!track) {
@@ -352,6 +415,14 @@ export default function Start() {
           <p className="mt-1.5 text-sm text-mist">{subtitle}</p>
 
           <div className="mt-8 space-y-6">
+            {((step === 'content' && wantsProjects) || step === 'files' || step === 'resume') && (
+              <UploadGate
+                sessionId={uploadSession}
+                authorization={activeAuthorization}
+                onAuthorize={authorizeUploads}
+                onExpire={expireUploads}
+              />
+            )}
             {/* ABOUT */}
             {step === 'about' && (
               <>
@@ -561,14 +632,20 @@ export default function Start() {
                                 placeholder="Live demo, GitHub, write-up…"
                               />
                             </Field>
-                            <FileDrop
-                              label="Photos"
-                              hint={`Up to ${MAX_IMAGES_PER_PROJECT} images of this project`}
-                              files={p.images}
-                              onChange={(v) => updateProject(i, 'images', v)}
+                            <CloudinaryUpload
+                              label="Project files"
+                              hint={`Up to ${MAX_IMAGES_PER_PROJECT} images or PDFs for this project · 15 MB each`}
+                              assets={p.images}
+                              onChange={(value) => updateProject(i, 'images', value)}
                               multiple
                               max={MAX_IMAGES_PER_PROJECT}
-                              accept="image/*"
+                              totalCount={allFiles.length}
+                              totalMax={MAX_UPLOADS}
+                              sessionId={uploadSession}
+                              category={`project-${i + 1}`}
+                              authorization={activeAuthorization}
+                              onAuthorizationExpired={expireUploads}
+                              onUploadingChange={(active) => markUploading(`project-${i + 1}`, active)}
                             />
                           </div>
                         </div>
@@ -594,13 +671,49 @@ export default function Start() {
             {/* FILES */}
             {step === 'files' && (
               <>
-                <FileDrop label="Headshot" hint="A photo of you, if you want one on the site" files={form.headshot} onChange={(v) => set('headshot', v)} accept="image/*" />
-                <FileDrop label="Resume" hint="PDF or Word" files={form.resumeFile} onChange={(v) => set('resumeFile', v)} accept=".pdf,.doc,.docx" />
-                <FileDrop label="Logo" hint="If you have one" files={form.logoFile} onChange={(v) => set('logoFile', v)} />
-                <p className={`text-xs ${overLimit ? 'font-semibold text-[#ff6b6b]' : 'text-mist/70'}`}>
-                  {overLimit
-                    ? `That is ${(totalBytes / 1024 / 1024).toFixed(1)} MB total. Keep it under 8 MB here and email me the rest after submitting.`
-                    : 'Everything is optional. 8 MB total limit here; bigger files can be emailed later.'}
+                <CloudinaryUpload
+                  label="Headshot"
+                  hint="JPG, JPEG, PNG, HEIC or WebP · 15 MB"
+                  assets={form.headshot}
+                  onChange={(value) => set('headshot', value)}
+                  formats={['jpg', 'jpeg', 'png', 'heic', 'webp']}
+                  totalCount={allFiles.length}
+                  totalMax={MAX_UPLOADS}
+                  sessionId={uploadSession}
+                  category="headshot"
+                  authorization={activeAuthorization}
+                  onAuthorizationExpired={expireUploads}
+                  onUploadingChange={(active) => markUploading('headshot', active)}
+                />
+                <CloudinaryUpload
+                  label="Resume"
+                  hint="PDF or Word · 15 MB"
+                  assets={form.resumeFile}
+                  onChange={(value) => set('resumeFile', value)}
+                  formats={['pdf', 'doc', 'docx']}
+                  totalCount={allFiles.length}
+                  totalMax={MAX_UPLOADS}
+                  sessionId={uploadSession}
+                  category="resume"
+                  authorization={activeAuthorization}
+                  onAuthorizationExpired={expireUploads}
+                  onUploadingChange={(active) => markUploading('resume', active)}
+                />
+                <CloudinaryUpload
+                  label="Logo"
+                  hint="JPG, JPEG, PNG, HEIC, WebP or PDF · 15 MB"
+                  assets={form.logoFile}
+                  onChange={(value) => set('logoFile', value)}
+                  totalCount={allFiles.length}
+                  totalMax={MAX_UPLOADS}
+                  sessionId={uploadSession}
+                  category="logo"
+                  authorization={activeAuthorization}
+                  onAuthorizationExpired={expireUploads}
+                  onUploadingChange={(active) => markUploading('logo', active)}
+                />
+                <p className="text-xs text-mist/70">
+                  Files upload directly to Cloudinary and never pass through Netlify. Up to {MAX_UPLOADS} files total, 15 MB each.
                 </p>
               </>
             )}
@@ -624,7 +737,20 @@ export default function Start() {
                     </button>
                   ))}
                 </div>
-                <FileDrop label="Your current resume" hint="PDF or Word. This one is required." files={form.resumeFile} onChange={(v) => set('resumeFile', v)} accept=".pdf,.doc,.docx" />
+                <CloudinaryUpload
+                  label="Your current resume"
+                  hint="PDF or Word · 15 MB · required"
+                  assets={form.resumeFile}
+                  onChange={(value) => set('resumeFile', value)}
+                  formats={['pdf', 'doc', 'docx']}
+                  totalCount={allFiles.length}
+                  totalMax={MAX_UPLOADS}
+                  sessionId={uploadSession}
+                  category="resume"
+                  authorization={activeAuthorization}
+                  onAuthorizationExpired={expireUploads}
+                  onUploadingChange={(active) => markUploading('resume', active)}
+                />
                 <Field label="What are you aiming for?" optional>
                   <input className="field-input" value={form.target} onChange={(e) => set('target', e.target.value)} placeholder="Job title, industry, or a posting link" />
                 </Field>
@@ -661,7 +787,7 @@ export default function Start() {
               ← Back
             </button>
             {step === 'review' ? (
-              <button type="button" onClick={submit} disabled={sending || overLimit} className="btn-primary disabled:opacity-50">
+              <button type="button" onClick={submit} disabled={sending || uploadsBusy} className="btn-primary disabled:opacity-50">
                 {sending ? 'Sending…' : 'Send it to me 🚀'}
               </button>
             ) : (

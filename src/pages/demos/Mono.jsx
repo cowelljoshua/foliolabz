@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const ink = '#111111'
 
@@ -13,7 +14,8 @@ const projects = [
 export default function Mono() {
   return (
     <div className="min-h-screen bg-white pb-28" style={{ color: ink, fontFamily: 'Inter, sans-serif' }}>
-      <header className="mx-auto max-w-5xl px-6 pt-28">
+      <DemoTopNav brand="TL / Architecture" tone="light" accent={ink} links={[{ href: '#work', label: 'Projects' }, { href: '#about', label: 'Studio' }, { href: '#contact', label: 'Contact' }]} />
+      <header id="top" className="mx-auto max-w-5xl px-6 pt-28">
         <Reveal>
           <div className="flex items-baseline justify-between border-b-2 pb-6" style={{ borderColor: ink }}>
             <h1 className="text-5xl font-semibold tracking-tight sm:text-7xl">Theo Laurent</h1>
@@ -31,6 +33,26 @@ export default function Mono() {
           </div>
         </Reveal>
       </header>
+
+      <div className="pt-16">
+        <DemoStatStrip color={ink} border="#dedede" stats={[
+          { value: '18', label: 'built projects' },
+          { value: '6', label: 'design awards' },
+          { value: '4', label: 'cities currently in progress' },
+        ]} />
+      </div>
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1400&q=85&sat=-100"
+        alt="Minimal modern residence with strong geometric lines"
+        eyebrow="Studio position"
+        title="Restraint is not absence. It is precision."
+        body="Every project begins with what the site already knows: where light enters, how people move, what should be preserved, and what can quietly disappear."
+        bullets={['Site-led concepts before formal gestures', 'Material palettes that improve with age', 'Close collaboration from feasibility through construction']}
+        accent={ink}
+        panel="#f1f1f1"
+        reverse
+      />
 
       <section id="work" className="mx-auto max-w-5xl px-6 py-16">
         {projects.map((p, i) => (

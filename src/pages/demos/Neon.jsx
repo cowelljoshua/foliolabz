@@ -1,5 +1,6 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const magenta = '#ff2e97'
 const cyan = '#0ff0fc'
@@ -21,6 +22,7 @@ export default function Neon() {
         fontFamily: mono,
       }}
     >
+      <DemoTopNav brand="kai.dev" tone="dark" accent={cyan} links={[{ href: '#work', label: 'Projects' }, { href: '#about', label: 'About' }, { href: '#contact', label: 'Contact' }]} />
       {/* Grid overlay */}
       <div
         className="pointer-events-none fixed inset-0 opacity-[0.15]"
@@ -31,7 +33,7 @@ export default function Neon() {
         }}
       />
 
-      <header className="relative mx-auto max-w-4xl px-6 pt-28">
+      <header id="top" className="relative mx-auto max-w-4xl px-6 pt-28">
         <Reveal>
           <p className="text-sm" style={{ color: cyan }}>
             <span style={{ color: magenta }}>$</span> whoami
@@ -53,6 +55,26 @@ export default function Neon() {
           </div>
         </Reveal>
       </header>
+
+      <div className="relative pt-16">
+        <DemoStatStrip color={cyan} border="rgba(15,240,252,0.2)" stats={[
+          { value: '4K+', label: 'open-source stars' },
+          { value: '<40s', label: 'average deployment time' },
+          { value: '99.98%', label: 'production uptime' },
+        ]} />
+      </div>
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=85"
+        alt="Developer workspace with code on a laptop"
+        eyebrow="README.md"
+        title="Useful software over clever software."
+        body="I care about the unglamorous things that make products last: legible code, fast feedback loops, boring deployments, and documentation that answers the question before someone has to ask it."
+        bullets={['Product-minded frontend and API architecture', 'Performance budgets built into CI', 'Open-source defaults whenever they make sense']}
+        accent={cyan}
+        panel="rgba(255,255,255,0.035)"
+        reverse
+      />
 
       <section id="work" className="relative mx-auto max-w-4xl px-6 py-16">
         <Reveal>

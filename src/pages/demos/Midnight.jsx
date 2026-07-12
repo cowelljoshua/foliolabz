@@ -1,6 +1,7 @@
 import DemoBar from '../../components/DemoBar.jsx'
 import Aurora from '../../components/reactbits/Aurora.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
+import { DemoFeature, DemoStatStrip, DemoTopNav } from '../../components/DemoExtras.jsx'
 
 const projects = [
   {
@@ -28,8 +29,9 @@ const skills = ['SolidWorks', 'ANSYS', 'MATLAB', 'Python', 'GD&T', 'DFM', 'Instr
 export default function Midnight() {
   return (
     <div className="min-h-screen bg-[#08080f] pb-28 font-body text-frost">
+      <DemoTopNav brand="Mara Chen" tone="dark" accent="#22d3ee" links={[{ href: '#work', label: 'Work' }, { href: '#about', label: 'About' }, { href: '#contact', label: 'Contact' }]} />
       {/* Hero */}
-      <header className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 text-center">
+      <header id="top" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 text-center">
         <Aurora />
         <div className="relative z-10">
           <Reveal>
@@ -47,6 +49,23 @@ export default function Midnight() {
           </Reveal>
         </div>
       </header>
+
+      <DemoStatStrip color="#22d3ee" border="rgba(255,255,255,0.12)" stats={[
+        { value: '12', label: 'successful hot-fire tests' },
+        { value: '18%', label: 'pressure-drop reduction' },
+        { value: '3', label: 'systems taken from CAD to test' },
+      ]} />
+
+      <DemoFeature
+        image="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1400&q=85"
+        alt="Engineer working in a modern test laboratory"
+        eyebrow="How I work"
+        title="From first sketch to clean test data."
+        body="I like the whole engineering loop: define the failure modes, build the hardware, instrument it properly, and let the data make the next decision obvious."
+        bullets={['Design reviews that surface risk early', 'Test plans written before hardware arrives', 'Documentation the next engineer can actually use']}
+        accent="#22d3ee"
+        panel="rgba(255,255,255,0.045)"
+      />
 
       {/* Projects */}
       <section id="work" className="mx-auto max-w-5xl px-6 py-16">
