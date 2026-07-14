@@ -6,14 +6,55 @@ couple of config touches. Budget about an hour total.
 
 ---
 
+## 🚨 YOUR LAUNCH TO-DO LIST (updated 2026-07-13)
+
+These are the things only you can do. The first two block your launch posts.
+
+- [ ] **1. Fix file uploads (BROKEN on the live site right now).** The upload code
+  is in place, but the accounts behind it are not, so the intake form currently
+  shows "File uploads are not configured yet" and the resume track cannot be
+  submitted at all (it requires a resume upload). Do section
+  **"2. Cloudinary + Turnstile + Netlify"** below: create the Cloudinary preset,
+  create the Turnstile widget, paste all the environment variables into Netlify,
+  and redeploy. About 30 minutes. **Do not post the launch announcement until
+  this works.**
+- [ ] **2. Add your headshot.** Save a square, friendly photo of your face as
+  `public/josh-headshot.jpg` (600x600 or bigger), then open `src/config/site.js`
+  and set `founder.showPhoto: true`. It appears next to your signature under the
+  home-page story. A real face is the biggest single trust upgrade the site can
+  get, and it matters for your LinkedIn post too.
+- [ ] **3. Dress rehearsal on the live site.** After #1: submit the website form
+  with a couple of real files, submit the resume form, and send one portal
+  request. Confirm all three land in your email, the files appear in Cloudinary,
+  and every link in the summary opens.
+- [ ] **4. Get two one-line testimonials.** Ask David and Caroline for one honest
+  sentence each about their site. Send them to me (Claude) with "add testimonials"
+  and I will build the section; the site intentionally ships without fake quotes.
+- [ ] **5. Pick an analytics option before launch week.** Netlify Analytics
+  ($9/mo, zero setup) or GoatCounter (free, one script tag; tell me and I will add
+  it). Without one you will not know what your launch posts actually did.
+- [ ] **6. Optional pricing call: the $20/yr domain option roughly breaks even**
+  (domain costs you ~$20/yr plus Stripe fees). If you want yearly to profit, bump
+  the Stripe price (e.g. $36/yr) and tell me so I update the site copy to match.
+- [ ] **7. Add real clients to `src/config/clients.js`** (David, Caroline) so the
+  portal recognizes their emails. Two-minute copy-paste of the demo template.
+
+Things already handled for you (2026-07-13): social link previews (Open Graph
+tags + `public/og.png`), real screenshot thumbnails in `public/examples/`, and the
+new paper theme. If you ever change the primary domain away from foliolabz.com,
+update the `og:` URLs in `index.html`.
+
+---
+
 ## 0. Two-minute config touches (do these first)
 
 Open `src/config/site.js`:
 
 1. **Email**: near the top, set `email:` to the address you want clients using. It is
    currently a guess.
-2. **Caroline's site**: when it is live, find `realSites`, paste her URL into the
-   `caroline` entry, and change `live: false` to `live: true`.
+2. **Caroline's site**: done, it is live in `realSites`. When you launch a new
+   client site, copy one of those entries, drop a thumbnail in `public/examples/`,
+   and set `live: true`.
 3. **Prices**: every price on the whole site lives in this one file. Change a number,
    save, redeploy, done.
 
@@ -235,8 +276,9 @@ Plan (that was removed) and no talk of them buying their own domain.
 - **Custom domain** (~$20/year cost, you bill it via Stripe at $4/mo or $20/yr): buy
   it at Namecheap, connect it in Netlify (Domain management → Add a domain), HTTPS is
   automatic. See the hosting section above.
-- **Screenshot thumbnails**: see `public/examples/README.txt`. Optional polish
-  for the Styles page while live previews load.
+- **Screenshot thumbnails**: already generated (2026-07-13) into
+  `public/examples/` as `josh.jpg`, `david.jpg`, `caroline.jpg`. To refresh one or
+  add a new client, see `public/examples/README.txt`.
 - **Meetings**: for the $75 resume tier and the Pro strategy call, replying by
   email to schedule works fine. If you get busy, make a free https://calendly.com
   and paste the link into your reply template.
@@ -279,13 +321,13 @@ password. For 99% of clients, Option A is plenty.
 
 ---
 
-## The 5-round edit promise (say this in your launch email)
+## The 3-round edit promise (say this in your launch email)
 
-Every build includes up to **5 rounds of changes** to get it perfect before launch.
-When you email a client their preview link, spell out the one rule that keeps this
-sane for you:
+Every build includes up to **3 rounds of changes** to get it perfect before launch
+(this matches what the site promises everywhere). When you email a client their
+preview link, spell out the one rule that keeps this sane for you:
 
-> "You have up to 5 rounds of edits to make this perfect. Each round can be as long
+> "You have up to 3 rounds of edits to make this perfect. Each round can be as long
 > as you like, so send me everything you want changed in one go. Just be specific:
 > tell me the exact text, the section, or the color, and I will handle the rest."
 

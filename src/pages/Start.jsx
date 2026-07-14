@@ -62,7 +62,7 @@ function Chip({ active, onClick, children }) {
       type="button"
       onClick={onClick}
       className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
-        active ? 'border-violet bg-violet/20 text-frost' : 'border-white/15 text-mist hover:border-white/30'
+        active ? 'border-violet bg-violet/20 text-frost' : 'border-frost/20 text-mist hover:border-frost/40'
       }`}
     >
       {children}
@@ -341,15 +341,20 @@ export default function Start() {
     return (
       <main className="mx-auto flex min-h-[80vh] max-w-3xl flex-col justify-center px-6 pt-28 pb-16">
         <Reveal className="text-center">
-          <h1 className="font-display text-4xl font-bold sm:text-5xl">What can I build for you?</h1>
+          <h1 className="font-head text-4xl sm:text-5xl">What can I build for you?</h1>
         </Reveal>
         <div className="mt-10 grid gap-5 sm:grid-cols-2">
           <Reveal delay={0.1}>
             <button
               onClick={() => setTrack('website')}
-              className="group h-full w-full rounded-3xl border hairline bg-ink-800/70 p-8 text-left transition-all hover:-translate-y-1 hover:border-violet/60"
+              className="group h-full w-full rounded-3xl border hairline bg-ink-800 p-8 text-left shadow-[0_14px_30px_-24px_rgba(24,34,48,0.4)] transition-all hover:-translate-y-1 hover:border-violet/60"
             >
-              <span className="text-3xl">🌐</span>
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet/12 text-violet">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+                  <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" strokeWidth="1.4" />
+                </svg>
+              </span>
               <h2 className="font-display mt-4 text-2xl font-semibold">A website</h2>
               <p className="mt-2 text-sm text-mist">Your portfolio, built and launched for you. From $300.</p>
               <p className="mt-5 text-sm font-semibold text-gradient">Let&rsquo;s go →</p>
@@ -358,9 +363,14 @@ export default function Start() {
           <Reveal delay={0.2}>
             <button
               onClick={() => setTrack('resume')}
-              className="group h-full w-full rounded-3xl border hairline bg-ink-800/70 p-8 text-left transition-all hover:-translate-y-1 hover:border-mint/60"
+              className="group h-full w-full rounded-3xl border hairline bg-ink-800 p-8 text-left shadow-[0_14px_30px_-24px_rgba(24,34,48,0.4)] transition-all hover:-translate-y-1 hover:border-mint/60"
             >
-              <span className="text-3xl">📄</span>
+              <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint/12 text-mint">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 3h7l4 4v14H7z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                  <path d="M14 3v4h4M10 12h5M10 16h5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+                </svg>
+              </span>
               <h2 className="font-display mt-4 text-2xl font-semibold">A sharper resume</h2>
               <p className="mt-2 text-sm text-mist">Polished by a human, me. From $40, money back if it is not better.</p>
               <p className="mt-5 text-sm font-semibold text-mint">Let&rsquo;s go →</p>
@@ -394,9 +404,9 @@ export default function Start() {
             Switch to {track === 'resume' ? 'website' : 'resume'} instead
           </button>
         </div>
-        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
+        <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-frost/10">
           <motion.div
-            className="h-full rounded-full bg-gradient-to-r from-violet to-cyan"
+            className="h-full rounded-full bg-violet"
             animate={{ width: `${progress}%` }}
             transition={{ type: 'spring', stiffness: 120, damping: 20 }}
           />
@@ -411,7 +421,7 @@ export default function Start() {
           exit={{ opacity: 0, x: -24 }}
           transition={{ duration: 0.25 }}
         >
-          <h1 className="font-display text-3xl font-bold">{title}</h1>
+          <h1 className="font-head text-3xl">{title}</h1>
           <p className="mt-1.5 text-sm text-mist">{subtitle}</p>
 
           <div className="mt-8 space-y-6">
@@ -455,7 +465,7 @@ export default function Start() {
                       type="button"
                       onClick={() => set('package', t.id)}
                       className={`flex items-baseline justify-between rounded-2xl border p-5 text-left transition-colors ${
-                        form.package === t.id ? 'border-violet bg-violet/10' : 'hairline bg-white/[0.03] hover:border-white/25'
+                        form.package === t.id ? 'border-violet bg-violet/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                       }`}
                     >
                       <span>
@@ -488,12 +498,12 @@ export default function Start() {
                         type="button"
                         onClick={() => set('style', form.style === d.id ? '' : d.id)}
                         className={`rounded-2xl border p-4 text-left transition-colors ${
-                          form.style === d.id ? 'border-violet bg-violet/10' : 'hairline bg-white/[0.03] hover:border-white/25'
+                          form.style === d.id ? 'border-violet bg-violet/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                         }`}
                       >
                         <span className="flex gap-1">
                           {d.swatch.map((c) => (
-                            <span key={c} className="h-3 w-3 rounded-full border border-white/20" style={{ background: c }} />
+                            <span key={c} className="h-3 w-3 rounded-full border border-frost/15" style={{ background: c }} />
                           ))}
                         </span>
                         <span className="font-display mt-2 block text-sm font-semibold">{d.name}</span>
@@ -515,12 +525,12 @@ export default function Start() {
                         type="button"
                         onClick={() => set('palette', form.palette === p.id ? '' : p.id)}
                         className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors ${
-                          form.palette === p.id ? 'border-violet bg-violet/10 text-frost' : 'border-white/15 text-mist hover:border-white/30'
+                          form.palette === p.id ? 'border-violet bg-violet/10 text-frost' : 'border-frost/20 text-mist hover:border-frost/40'
                         }`}
                       >
                         <span className="flex gap-1">
                           {p.colors.map((c) => (
-                            <span key={c} className="h-3 w-3 rounded-full border border-white/20" style={{ background: c }} />
+                            <span key={c} className="h-3 w-3 rounded-full border border-frost/15" style={{ background: c }} />
                           ))}
                         </span>
                         {p.name}
@@ -577,8 +587,8 @@ export default function Start() {
                             active
                               ? 'border-violet bg-violet/20 text-frost'
                               : disabled
-                                ? 'cursor-not-allowed border-white/10 text-mist/40'
-                                : 'border-white/15 text-mist hover:border-white/30'
+                                ? 'cursor-not-allowed border-frost/10 text-mist/40'
+                                : 'border-frost/20 text-mist hover:border-frost/40'
                           }`}
                         >
                           {s}
@@ -598,7 +608,7 @@ export default function Start() {
                     <p className="mb-2 text-sm font-medium">Your projects</p>
                     <div className="space-y-4">
                       {form.projects.map((p, i) => (
-                        <div key={i} className="rounded-2xl border hairline bg-white/[0.03] p-4">
+                        <div key={i} className="rounded-2xl border hairline bg-frost/[0.03] p-4">
                           <div className="flex items-start justify-between gap-3">
                             <p className="text-xs font-semibold uppercase tracking-wide text-mist">Project {i + 1}</p>
                             {form.projects.length > 1 && (
@@ -728,7 +738,7 @@ export default function Start() {
                       type="button"
                       onClick={() => set('resumePkg', t.id)}
                       className={`rounded-2xl border p-5 text-left transition-colors ${
-                        form.resumePkg === t.id ? 'border-mint bg-mint/10' : 'hairline bg-white/[0.03] hover:border-white/25'
+                        form.resumePkg === t.id ? 'border-mint bg-mint/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                       }`}
                     >
                       <span className="font-display block font-semibold">{t.name}</span>
@@ -772,7 +782,7 @@ export default function Start() {
                 <p className="text-xs text-mist/70">
                   Spot something off? Use Back to fix it. Payment comes after, nothing is charged by this form.
                 </p>
-                {error && <p className="rounded-xl bg-[#ff6b6b]/10 p-4 text-sm text-[#ff9b9b]">{error}</p>}
+                {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
               </div>
             )}
           </div>

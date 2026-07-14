@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { Routes, Route, Outlet, useLocation } from 'react-router-dom'
+import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
+import { demoStyles } from './config/site.js'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
 import Home from './pages/Home.jsx'
@@ -34,6 +35,26 @@ function ScrollToTop() {
   return null
 }
 
+const pageTitles = {
+  '/': 'FolioLabz · Portfolio websites, built for you',
+  '/styles': 'Styles · FolioLabz',
+  '/pricing': 'Pricing · FolioLabz',
+  '/start': 'Start my build · FolioLabz',
+  '/thanks': 'Brief received · FolioLabz',
+  '/portal': 'Client portal · FolioLabz',
+}
+
+function PageTitle() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    const demo = demoStyles.find((d) => pathname === `/styles/${d.id}`)
+    document.title = demo
+      ? `${demo.name} style example · FolioLabz`
+      : pageTitles[pathname] || pageTitles['/']
+  }, [pathname])
+  return null
+}
+
 function Layout() {
   return (
     <div className="min-h-screen bg-ink-950 text-frost">
@@ -48,6 +69,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <PageTitle />
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
@@ -68,9 +90,8 @@ export default function App() {
         <Route path="/styles/mono" element={<Mono />} />
         <Route path="/styles/coastal" element={<Coastal />} />
         <Route path="/styles/luxe" element={<Luxe />} />
-        <Route path="*" element={<Layout />}>
-          <Route path="*" element={<Home />} />
-        </Route>
+        {/* Unknown URLs go home rather than silently rendering Home at a wrong address */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   )

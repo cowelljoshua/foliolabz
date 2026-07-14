@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import Aurora from '../components/reactbits/Aurora.jsx'
+import GridPaper from '../components/reactbits/GridPaper.jsx'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import { site, stripeLinks, tiers, resumeService, deposit } from '../config/site.js'
 
@@ -37,11 +37,16 @@ export default function Thanks() {
 
   return (
     <main className="relative flex min-h-[85vh] items-center justify-center overflow-hidden px-6 pt-24">
-      <Aurora />
+      <GridPaper />
       <div className="relative z-10 mx-auto max-w-xl py-16 text-center">
         <Reveal>
-          <span className="text-5xl">🎉</span>
-          <h1 className="font-display mt-5 text-4xl font-bold sm:text-5xl">
+          <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-mint/12 text-mint">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+              <path d="M8.5 12.5l2.4 2.4L15.5 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+          <h1 className="font-head mt-5 text-4xl sm:text-5xl">
             Got it{firstName ? `, ${firstName}` : ''}.
           </h1>
           <p className="mt-4 text-mist">

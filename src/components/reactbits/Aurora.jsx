@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 
 // Animated aurora ribbons + drifting stars on a canvas.
-// Sits absolutely behind content. Honors prefers-reduced-motion.
+// Used by the dark style demos (Midnight); the marketing site
+// itself uses GridPaper. Honors prefers-reduced-motion.
 export default function Aurora({ className = '' }) {
   const canvasRef = useRef(null)
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
@@ -30,8 +30,8 @@ function TierCard({ tier, onOpen }) {
     >
       <button onClick={onOpen} className="block h-full w-full p-7 text-left">
         {tier.popular && (
-          <span className="mb-3 inline-block rounded-full bg-violet/20 px-3 py-1 text-xs font-semibold text-violet-soft">
-            Most popular
+          <span className="mb-3 inline-block rounded-full bg-violet/15 px-3 py-1 text-xs font-semibold text-violet-soft">
+            Best value
           </span>
         )}
         <h3 className="font-display text-xl font-semibold">{tier.name}</h3>
@@ -54,9 +54,15 @@ function TierCard({ tier, onOpen }) {
 function TierModal({ tier, onClose }) {
   const [rushOn, setRushOn] = useState(false)
 
+  useEffect(() => {
+    const onKey = (e) => e.key === 'Escape' && onClose()
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+
   return (
     <motion.div
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 p-4 backdrop-blur-sm sm:items-center"
+      className="fixed inset-0 z-[60] flex items-end justify-center bg-frost/45 p-4 backdrop-blur-sm sm:items-center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -76,7 +82,7 @@ function TierModal({ tier, onClose }) {
             <p className="font-display mt-1 text-3xl font-bold text-gradient">{tier.priceLabel}</p>
             <p className="mt-1 text-xs font-semibold text-cyan">${deposit.amount} deposit to start</p>
           </div>
-          <button onClick={onClose} className="rounded-full p-2 text-mist hover:bg-white/10 hover:text-frost" aria-label="Close">
+          <button onClick={onClose} className="rounded-full p-2 text-mist hover:bg-frost/10 hover:text-frost" aria-label="Close">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
               <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
             </svg>
@@ -155,8 +161,8 @@ export default function Pricing() {
   return (
     <main className="mx-auto max-w-6xl px-6 pt-32">
       <Reveal className="text-center">
-        <h1 className="font-display text-4xl font-bold sm:text-5xl">
-          Simple pricing. <span className="text-gradient">Zero surprises.</span>
+        <h1 className="font-head text-4xl sm:text-5xl">
+          Simple pricing. <span className="text-gradient italic">Zero surprises.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-mist">
           Start with a ${deposit.amount} deposit. You pay the rest only once your site is live and you love it.
@@ -232,7 +238,7 @@ export default function Pricing() {
       {/* RESUME POLISH */}
       <section id="resume" className="mt-28 scroll-mt-28">
         <Reveal className="text-center">
-          <h2 className="font-display text-3xl font-bold sm:text-4xl">{resumeService.heading}</h2>
+          <h2 className="font-head text-3xl sm:text-4xl">{resumeService.heading}</h2>
           <p className="mt-3 text-mist">{resumeService.humanLine}</p>
         </Reveal>
 
@@ -272,16 +278,16 @@ export default function Pricing() {
       {/* FAQ */}
       <section className="mt-24">
         <Reveal className="text-center">
-          <h2 className="font-display text-3xl font-bold">Questions, answered.</h2>
+          <h2 className="font-head text-3xl">Questions, answered.</h2>
         </Reveal>
         <Faq />
       </section>
 
       {/* CTA */}
       <Reveal className="mx-auto my-20 max-w-2xl">
-        <StarBorder className="rounded-3xl">
-          <div className="rounded-3xl p-10 text-center">
-            <h2 className="font-display text-2xl font-bold">Still deciding? Start the form.</h2>
+        <StarBorder className="rounded-2xl">
+          <div className="rounded-2xl p-10 text-center">
+            <h2 className="font-head text-2xl">Still deciding? Start the form.</h2>
             <p className="mt-2 text-sm text-mist">Answering a few questions usually makes the choice obvious.</p>
             <Link to="/start" className="btn-primary mt-6">Start my build</Link>
           </div>

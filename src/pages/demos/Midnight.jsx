@@ -28,23 +28,23 @@ const skills = ['SolidWorks', 'ANSYS', 'MATLAB', 'Python', 'GD&T', 'DFM', 'Instr
 
 export default function Midnight() {
   return (
-    <div className="min-h-screen bg-[#08080f] pb-28 font-body text-frost">
+    <div className="min-h-screen bg-[#08080f] pb-28 font-body text-[#eef0f8]">
       <DemoTopNav brand="Mara Chen" tone="dark" accent="#22d3ee" links={[{ href: '#work', label: 'Work' }, { href: '#about', label: 'About' }, { href: '#contact', label: 'Contact' }]} />
       {/* Hero */}
       <header id="top" className="relative flex min-h-[80vh] items-center justify-center overflow-hidden px-6 text-center">
         <Aurora />
         <div className="relative z-10">
           <Reveal>
-            <p className="font-display text-sm uppercase tracking-[0.3em] text-cyan">Mechanical Engineer</p>
+            <p className="font-display text-sm uppercase tracking-[0.3em] text-[#22d3ee]">Mechanical Engineer</p>
             <h1 className="font-display mt-4 text-6xl font-bold tracking-tight sm:text-8xl">
-              Mara <span className="text-gradient">Chen</span>
+              Mara <span className="bg-gradient-to-r from-[#a595ff] to-[#22d3ee] bg-clip-text text-transparent">Chen</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-md text-mist">
+            <p className="mx-auto mt-5 max-w-md text-[#b7bccd]">
               I build hardware that survives the test stand. Propulsion, thermal systems, and the data to prove it.
             </p>
             <div className="mt-8 flex justify-center gap-4">
-              <a href="#work" className="btn-primary">See my work</a>
-              <a href="#contact" className="btn-ghost">Resume</a>
+              <a href="#work" className="font-display inline-flex items-center rounded-full bg-gradient-to-r from-[#7c5cff] via-[#5b8cff] to-[#22d3ee] px-6 py-3 font-semibold text-white shadow-[0_8px_30px_-10px_rgba(124,92,255,0.65)] transition-transform hover:-translate-y-0.5">See my work</a>
+              <a href="#contact" className="font-display inline-flex items-center rounded-full border border-white/16 px-6 py-3 font-semibold text-[#eef0f8] transition-colors hover:bg-white/5">Resume</a>
             </div>
           </Reveal>
         </div>
@@ -78,9 +78,9 @@ export default function Midnight() {
               <article className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] transition-transform duration-300 hover:-translate-y-1">
                 <div className="h-32 opacity-80 transition-opacity group-hover:opacity-100" style={{ background: p.grad }} />
                 <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-cyan">{p.tag}</p>
+                  <p className="text-xs font-semibold uppercase tracking-wide text-[#22d3ee]">{p.tag}</p>
                   <h3 className="font-display mt-1 text-lg font-semibold">{p.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-mist">{p.body}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[#b7bccd]">{p.body}</p>
                 </div>
               </article>
             </Reveal>
@@ -92,7 +92,7 @@ export default function Midnight() {
       <section className="mx-auto max-w-5xl px-6 py-8">
         <Reveal className="flex flex-wrap gap-2">
           {skills.map((s) => (
-            <span key={s} className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-sm text-mist">
+            <span key={s} className="rounded-full border border-white/12 bg-white/[0.04] px-4 py-1.5 text-sm text-[#b7bccd]">
               {s}
             </span>
           ))}
@@ -103,11 +103,11 @@ export default function Midnight() {
       <section id="contact" className="mx-auto max-w-3xl px-6 py-16 text-center">
         <Reveal>
           <h2 className="font-display text-3xl font-bold">
-            Build something <span className="text-gradient">that flies.</span>
+            Build something <span className="bg-gradient-to-r from-[#a595ff] to-[#22d3ee] bg-clip-text text-transparent">that flies.</span>
           </h2>
-          <p className="mt-3 text-mist">mara.chen@example.com</p>
+          <p className="mt-3 text-[#b7bccd]">mara.chen@example.com</p>
         </Reveal>
-        <p className="mt-14 text-xs text-mist/60">A FolioLabz style example, not a finished site. Mara is made up; yours is built around you.</p>
+        <p className="mt-14 text-xs text-[#b7bccd]/60">A FolioLabz style example, not a finished site. Mara is made up; yours is built around you.</p>
       </section>
 
       <DemoBar styleId="midnight" styleName="Midnight" />

@@ -20,7 +20,7 @@ export default function UploadGate({ sessionId, authorization, onAuthorize, onEx
         setStatus('ready')
         widgetRef.current = window.turnstile.render(containerRef.current, {
           sitekey: SITE_KEY,
-          theme: 'dark',
+          theme: 'light',
           size: 'flexible',
           callback: async (turnstileToken) => {
             setStatus('checking')
@@ -79,20 +79,20 @@ export default function UploadGate({ sessionId, authorization, onAuthorize, onEx
 
   if (!SITE_KEY) {
     return (
-      <div className="rounded-2xl border border-[#ff6b6b]/40 bg-[#ff6b6b]/[0.06] p-4 text-sm text-[#ffb0b0]">
+      <div className="rounded-2xl border border-[#b3261e]/30 bg-[#b3261e]/[0.06] p-4 text-sm text-[#8f1d16]">
         File uploads are not configured yet. Add the Cloudinary and Turnstile environment variables from SETUP.md.
       </div>
     )
   }
 
   return (
-    <div className="rounded-2xl border hairline bg-white/[0.03] p-4">
+    <div className="rounded-2xl border hairline bg-frost/[0.03] p-4">
       <p className="mb-3 text-sm text-mist">
         Complete this quick security check once before uploading. It protects the file storage from spam.
       </p>
       <div ref={containerRef} />
       {status === 'checking' && <p className="mt-2 text-xs text-cyan">Unlocking uploads…</p>}
-      {message && <p className="mt-2 text-xs text-[#ff9b9b]">{message}</p>}
+      {message && <p className="mt-2 text-xs text-[#8f1d16]">{message}</p>}
     </div>
   )
 }

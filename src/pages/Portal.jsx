@@ -38,7 +38,7 @@ function BillingToggle({ billing, onChange }) {
           type="button"
           onClick={() => onChange(b)}
           className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
-            billing === b ? 'bg-white/15 text-frost' : 'text-mist'
+            billing === b ? 'bg-frost/10 text-frost' : 'text-mist'
           }`}
         >
           <span className="capitalize">{b}</span> · {domainOffer[b].label}
@@ -151,7 +151,7 @@ export default function Portal() {
     return (
       <main className="mx-auto flex min-h-[80vh] max-w-lg flex-col justify-center px-6 pt-28 pb-16">
         <Reveal className="text-center">
-          <h1 className="font-display text-4xl font-bold sm:text-5xl">{portal.heading}</h1>
+          <h1 className="font-head text-4xl sm:text-5xl">{portal.heading}</h1>
           <p className="mt-3 text-mist">{portal.sub}</p>
         </Reveal>
         <Reveal delay={0.1} className="mt-9">
@@ -204,7 +204,7 @@ export default function Portal() {
       <Reveal>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
-            <h1 className="font-display text-3xl font-bold sm:text-4xl">Welcome back, {firstName}.</h1>
+            <h1 className="font-head text-3xl sm:text-4xl">Welcome back, {firstName}.</h1>
             <p className="mt-1.5 text-sm text-mist">Signed in as {email}</p>
           </div>
           <button
@@ -228,7 +228,7 @@ export default function Portal() {
               {owed > 0 ? `$${owed} due at launch` : 'Fully paid ✓'}
             </span>
             {client.domain && (
-              <span className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${client.domainActive ? 'bg-mint/15 text-mint' : 'bg-white/10 text-mist'}`}>
+              <span className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${client.domainActive ? 'bg-mint/15 text-mint' : 'bg-frost/10 text-mist'}`}>
                 {client.domain}{client.domainActive ? ' · active ✓' : ' · pending'}
               </span>
             )}
@@ -249,7 +249,12 @@ export default function Portal() {
           >
             <button onClick={() => openAction('balance')} className="text-left">
               <SpotlightCard className="h-full p-6" spotColor="rgba(34,211,238,0.14)">
-                <span className="text-2xl">💳</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan/12 text-cyan">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
+                    <path d="M3 10h18" stroke="currentColor" strokeWidth="1.6" />
+                  </svg>
+                </span>
                 <h2 className="font-display mt-3 text-lg font-semibold">Pay your balance</h2>
                 <p className="mt-1 text-sm text-mist">
                   {client
@@ -262,7 +267,12 @@ export default function Portal() {
             </button>
             <button onClick={() => openAction('domain')} className="text-left">
               <SpotlightCard className="h-full p-6" spotColor="rgba(124,92,255,0.14)">
-                <span className="text-2xl">🌐</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet/12 text-violet">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+                    <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" strokeWidth="1.4" />
+                  </svg>
+                </span>
                 <h2 className="font-display mt-3 text-lg font-semibold">Set up a domain</h2>
                 <p className="mt-1 text-sm text-mist">
                   {client?.domainActive
@@ -275,7 +285,12 @@ export default function Portal() {
             </button>
             <button onClick={() => openAction('edit')} className="text-left">
               <SpotlightCard className="h-full p-6" spotColor="rgba(74,222,128,0.14)">
-                <span className="text-2xl">✏️</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-mint/12 text-mint">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 20l1-4L16.5 4.5a2.1 2.1 0 013 3L8 19l-4 1z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+                    <path d="M14.5 6.5l3 3" stroke="currentColor" strokeWidth="1.6" />
+                  </svg>
+                </span>
                 <h2 className="font-display mt-3 text-lg font-semibold">Request an edit</h2>
                 <p className="mt-1 text-sm text-mist">Wording from $10, design changes from $40.</p>
               </SpotlightCard>
@@ -307,7 +322,12 @@ export default function Portal() {
                   </div>
                 ) : (
                   <div className="mt-5 rounded-2xl border border-mint/40 bg-mint/[0.06] p-6 text-center">
-                    <span className="text-2xl">🎉</span>
+                    <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-mint/12 text-mint">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+                        <path d="M8.5 12.5l2.4 2.4L15.5 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
                     <p className="font-display mt-2 font-semibold">You are all paid up.</p>
                     <p className="mt-1 text-sm text-mist">Nothing due on your build.</p>
                   </div>
@@ -324,7 +344,7 @@ export default function Portal() {
                         key={b.pkg}
                         onClick={() => setBalancePkg(b.pkg)}
                         className={`rounded-2xl border p-5 text-left transition-colors ${
-                          balancePkg === b.pkg ? 'border-cyan bg-cyan/10' : 'hairline bg-white/[0.03] hover:border-white/25'
+                          balancePkg === b.pkg ? 'border-cyan bg-cyan/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                         }`}
                       >
                         <span className="font-display block font-semibold">{b.name}</span>
@@ -360,7 +380,12 @@ export default function Portal() {
               {client?.domainActive ? (
                 /* Their domain is already live and billing. */
                 <div className="mt-5 rounded-2xl border border-mint/40 bg-mint/[0.06] p-6 text-center">
-                  <span className="text-2xl">🌐</span>
+                  <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-mint/12 text-mint">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
+                      <path d="M8.5 12.5l2.4 2.4L15.5 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
                   <p className="font-display mt-2 font-semibold">{client.domain} is live.</p>
                   <p className="mt-1 text-sm text-mist">Nothing to do here.</p>
                 </div>
@@ -390,7 +415,7 @@ export default function Portal() {
                     <p className="mb-2 text-sm font-medium">How do you want it billed?</p>
                     <BillingToggle billing={domainBilling} onChange={setDomainBilling} />
                   </div>
-                  {error && <p className="rounded-xl bg-[#ff6b6b]/10 p-4 text-sm text-[#ff9b9b]">{error}</p>}
+                  {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
                   <button
                     onClick={() => submitRequest('domain')}
                     disabled={sending || !domainWanted.trim()}
@@ -431,7 +456,7 @@ export default function Portal() {
                         key={e.id}
                         onClick={() => setEditType(e.id)}
                         className={`rounded-2xl border p-5 text-left transition-colors ${
-                          editType === e.id ? 'border-mint bg-mint/10' : 'hairline bg-white/[0.03] hover:border-white/25'
+                          editType === e.id ? 'border-mint bg-mint/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                         }`}
                       >
                         <span className="flex items-baseline justify-between">
@@ -450,7 +475,7 @@ export default function Portal() {
                       placeholder="Be specific: the exact text, the section, the color. For wording, list everything you want in one go, it is all one request."
                     />
                   </Field>
-                  {error && <p className="rounded-xl bg-[#ff6b6b]/10 p-4 text-sm text-[#ff9b9b]">{error}</p>}
+                  {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
                   <button
                     onClick={() => submitRequest('edit')}
                     disabled={sending || !editType || !editDetails.trim()}

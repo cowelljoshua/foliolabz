@@ -16,6 +16,17 @@ export const site = {
 
   github: "https://github.com/cowelljoshua",
 
+  // The signature block on the home-page story section.
+  // TODO(JOSH): drop a square photo at public/josh-headshot.jpg, then set
+  // showPhoto: true. A real face is the single biggest trust boost the
+  // site can get. (See "Your launch to-do list" in SETUP.md.)
+  founder: {
+    name: "Josh Cowell",
+    role: "Founder, FolioLabz",
+    photo: "/josh-headshot.jpg",
+    showPhoto: false,
+  },
+
   // Typical build timelines shown on the pricing page. Wording stays soft ("about").
   delivery: {
     standard: "about 2 weeks",
@@ -311,7 +322,7 @@ export const realSites = [
     name: "Josh Cowell",
     field: "Engineering",
     url: "https://joshuacowell.com",
-    thumb: "/examples/josh.png",
+    thumb: "/examples/josh.jpg",
     live: true,
   },
   {
@@ -319,7 +330,7 @@ export const realSites = [
     name: "David Cowell",
     field: "Engineering",
     url: "https://davidcowell.com",
-    thumb: "/examples/david.png",
+    thumb: "/examples/david.jpg",
     live: true,
   },
   {
@@ -327,7 +338,7 @@ export const realSites = [
     name: "Caroline",
     field: "Nursing",
     url: "https://carolinethomas.netlify.app/",
-    thumb: "/examples/caroline.png",
+    thumb: "/examples/caroline.jpg",
     live: true,
   },
 ]

@@ -25,12 +25,12 @@ export default function Nav() {
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
       <nav
         className={`glass flex items-center gap-6 rounded-full px-5 py-2.5 transition-shadow duration-300 sm:gap-10 ${
-          scrolled ? 'shadow-[0_10px_40px_-12px_rgba(124,92,255,0.35)]' : ''
+          scrolled ? 'shadow-[0_12px_32px_-16px_rgba(24,34,48,0.4)]' : ''
         }`}
       >
-        <Link to="/" className="font-display text-lg font-700 tracking-tight shrink-0">
+        <Link to="/" className="font-head text-lg tracking-tight shrink-0">
           <span className="text-frost">Folio</span>
-          <span className="text-gradient font-bold">Labz</span>
+          <span className="text-gradient">Labz</span>
         </Link>
 
         <div className="hidden items-center gap-1 sm:flex">
@@ -40,7 +40,7 @@ export default function Nav() {
               to={l.to}
               className={({ isActive }) =>
                 `rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  isActive ? 'bg-white/10 text-frost' : 'text-mist hover:text-frost'
+                  isActive ? 'bg-frost/10 text-frost' : 'text-mist hover:text-frost'
                 }`
               }
             >
@@ -74,7 +74,7 @@ export default function Nav() {
             <NavLink
               key={l.to}
               to={l.to}
-              className="block rounded-xl px-4 py-3 text-mist hover:bg-white/5 hover:text-frost"
+              className="block rounded-xl px-4 py-3 text-mist hover:bg-frost/5 hover:text-frost"
             >
               {l.label}
             </NavLink>

@@ -113,19 +113,19 @@ export default function CloudinaryUpload({
           singleUploadAutoClose: !multiple,
           styles: {
             palette: {
-              window: '#11131d',
-              windowBorder: '#2a2e42',
-              tabIcon: '#22d3ee',
-              menuIcons: '#aeb4c7',
-              textDark: '#10111a',
-              textLight: '#f5f7ff',
-              link: '#22d3ee',
-              action: '#7c5cff',
-              inactiveTabIcon: '#788097',
-              error: '#ff6b6b',
-              inProgress: '#22d3ee',
-              complete: '#4ade80',
-              sourceBg: '#171a27',
+              window: '#fdfcf8',
+              windowBorder: '#d8d2c4',
+              tabIcon: '#2a4fd6',
+              menuIcons: '#5f6a76',
+              textDark: '#182230',
+              textLight: '#faf8f2',
+              link: '#2a4fd6',
+              action: '#2a4fd6',
+              inactiveTabIcon: '#8b93a0',
+              error: '#b3261e',
+              inProgress: '#2a4fd6',
+              complete: '#177a45',
+              sourceBg: '#f4f1e9',
             },
           },
         },
@@ -168,7 +168,7 @@ export default function CloudinaryUpload({
         type="button"
         onClick={openWidget}
         disabled={disabled}
-        className="w-full rounded-2xl border border-dashed border-white/20 bg-white/[0.03] p-5 text-center transition-colors hover:border-white/35 disabled:cursor-not-allowed disabled:opacity-45"
+        className="w-full rounded-2xl border border-dashed border-frost/25 bg-frost/[0.03] p-5 text-center transition-colors hover:border-frost/45 disabled:cursor-not-allowed disabled:opacity-45"
       >
         <span className="text-sm text-mist">
           {full ? '30-file limit reached' : assets.length ? (multiple ? 'Add more project files' : 'Replace uploaded file') : 'Upload or drag in files'}
@@ -181,11 +181,11 @@ export default function CloudinaryUpload({
       {assets.length > 0 && (
         <ul className="mt-2 space-y-2">
           {assets.map((asset) => (
-            <li key={asset.publicId} className="flex items-center gap-3 rounded-xl bg-white/[0.05] px-3 py-2.5 text-sm">
+            <li key={asset.publicId} className="flex items-center gap-3 rounded-xl bg-frost/[0.05] px-3 py-2.5 text-sm">
               {asset.resourceType === 'image' && asset.format !== 'pdf' ? (
                 <img src={asset.thumbnailUrl || asset.url} alt="" className="h-10 w-10 rounded-lg object-cover" />
               ) : (
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/[0.06] text-lg" aria-hidden="true">📄</span>
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-frost/[0.06] text-lg" aria-hidden="true">📄</span>
               )}
               <a href={asset.url} target="_blank" rel="noreferrer" className="min-w-0 flex-1 truncate text-mist hover:text-cyan hover:underline">
                 {asset.name} {asset.bytes ? <span className="text-xs text-mist/60">({sizeLabel(asset.bytes)})</span> : null}
@@ -202,7 +202,7 @@ export default function CloudinaryUpload({
           ))}
         </ul>
       )}
-      {error && <p className="mt-2 text-xs text-[#ff9b9b]">{error}</p>}
+      {error && <p className="mt-2 text-xs text-[#8f1d16]">{error}</p>}
     </div>
   )
 }
