@@ -3,22 +3,43 @@ import { site } from '../config/site.js'
 
 export default function Footer() {
   return (
-    <footer className="mt-24 border-t hairline">
-      <div className="mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-12 text-center sm:flex-row sm:justify-between sm:text-left">
-        <div>
-          <p className="font-head text-lg">
-            <span className="text-frost">Folio</span>
-            <span className="text-gradient">Labz</span>
-          </p>
-          <p className="mt-1 text-sm text-mist">
-            Yes, this site is my work too.
-          </p>
+    <footer className="px-6 pb-8 pt-20 lg:px-10">
+      <div className="footer-shell mx-auto max-w-7xl">
+        <div className="grid gap-12 px-7 py-12 sm:px-10 lg:grid-cols-[1.4fr_.6fr_.6fr] lg:py-14">
+          <div className="max-w-md">
+            <Link to="/" className="flex items-center gap-2.5">
+              <span className="brand-mark brand-mark-light">F</span>
+              <span className="font-head text-2xl text-white">Folio<span className="text-[#91a6ff]">Labz</span></span>
+            </Link>
+            <p className="mt-5 text-sm leading-relaxed text-white/55">
+              Portfolio websites designed, built, and launched for you. One polished link for the work you are proud of.
+            </p>
+            <a href={'mailto:' + site.email} className="mt-5 inline-block text-sm font-semibold text-white transition hover:text-[#91a6ff]">
+              {site.email}
+            </a>
+          </div>
+
+          <div>
+            <p className="footer-label">Explore</p>
+            <div className="mt-4 flex flex-col items-start gap-3 text-sm text-white/58">
+              <Link to="/styles" className="hover:text-white">Work & styles</Link>
+              <Link to="/pricing" className="hover:text-white">Pricing</Link>
+              <Link to="/start" className="hover:text-white">Start a build</Link>
+            </div>
+          </div>
+
+          <div>
+            <p className="footer-label">Clients</p>
+            <div className="mt-4 flex flex-col items-start gap-3 text-sm text-white/58">
+              <Link to="/portal" className="hover:text-white">Client portal</Link>
+              <a href={site.github} target="_blank" rel="noreferrer" className="hover:text-white">GitHub</a>
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-5 text-sm text-mist">
-          <Link to="/styles" className="hover:text-frost">Styles</Link>
-          <Link to="/pricing" className="hover:text-frost">Pricing</Link>
-          <Link to="/portal" className="hover:text-frost">Client portal</Link>
-          <a href={`mailto:${site.email}`} className="hover:text-frost">{site.email}</a>
+
+        <div className="flex flex-col gap-2 border-t border-white/10 px-7 py-5 text-xs text-white/38 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+          <p>© {new Date().getFullYear()} FolioLabz. Built by {site.founder.name}.</p>
+          <p>Design · Build · Launch</p>
         </div>
       </div>
     </footer>
