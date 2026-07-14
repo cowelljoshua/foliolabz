@@ -6,16 +6,16 @@ import { asset } from '../lib/asset.js'
 import { site, demoStyles, resumeService, realSites, tiers, deposit, promises } from '../config/site.js'
 
 const process = [
-  ['01', 'Send me what you have', 'One guided form collects your story, projects, resume, photos, and the styles you like.'],
-  ['02', 'I build the whole thing', 'I shape the message, design every page, build it for every screen, and send you a private preview.'],
-  ['03', 'Review it, then go live', 'You get three rounds of changes. Once it feels right, I handle the launch and keep hosting simple.'],
+  ['01', 'Send your work'],
+  ['02', 'I build it'],
+  ['03', 'Approve and launch'],
 ]
 
 const outcomes = [
-  ['01', 'A story recruiters can follow', 'Your best work gets context, structure, and a clear point of view instead of living in scattered links.'],
-  ['02', 'A design that feels like you', 'Get a site shaped around your field, work, and personality—not a one-size-fits-all template.'],
-  ['03', 'One link that works everywhere', 'Applications, LinkedIn, email signatures, and networking conversations all point to one polished place.'],
-  ['04', 'No website chores', 'You never touch code, hosting dashboards, or a website builder. I take care of the technical side.'],
+  ['01', 'Clear story'],
+  ['02', 'Built around you'],
+  ['03', 'One polished link'],
+  ['04', 'No tech work'],
 ]
 
 const rise = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 } }
@@ -75,7 +75,7 @@ export default function Home() {
               <motion.span {...rise} transition={{ duration: 0.6, delay: 0.18 }} className="block text-violet">before the interview.</motion.span>
             </h1>
             <motion.p {...rise} transition={{ duration: 0.6, delay: 0.28 }} className="mt-7 max-w-xl text-lg leading-relaxed text-mist sm:text-xl">
-              I turn your projects, experience, and personality into a sharp portfolio website—then I design, build, and launch it for you.
+              Send me your work. I turn it into a sharp portfolio site and launch it for you.
             </motion.p>
             <motion.div {...rise} transition={{ duration: 0.6, delay: 0.38 }} className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link to="/start" className="btn-primary justify-center sm:justify-start">Start with {'$'}{deposit.amount} <Arrow /></Link>
@@ -119,13 +119,11 @@ export default function Home() {
       <section id="work" className="home-section">
         <Reveal className="section-heading-row">
           <div className="max-w-2xl">
-            <p className="section-kicker">Selected work</p>
-            <h2 className="section-title">Proof you can click through.</h2>
-            <p className="section-copy">These are real portfolio sites for real people—not concept art or a template gallery.</p>
+            <h2 className="section-title">Real sites. Live right now.</h2>
           </div>
-          <Link to="/styles" className="text-link shrink-0">View every example <Arrow /></Link>
+          <Link to="/styles" className="text-link shrink-0">See all work <Arrow /></Link>
         </Reveal>
-        <div className="mt-12 grid gap-5 lg:grid-cols-2">
+        <div className="mt-9 grid gap-5 lg:grid-cols-2">
           {liveSites.map((project, index) => (
             <Reveal key={project.id} delay={index * 0.08} className={index === 0 ? 'lg:col-span-2' : ''}><WorkCard project={project} index={index} /></Reveal>
           ))}
@@ -135,9 +133,7 @@ export default function Home() {
       <section className="home-section pt-8">
         <div className="value-panel">
           <Reveal className="max-w-xl">
-            <p className="section-kicker text-white/55">More than a nice-looking page</p>
-            <h2 className="font-head mt-4 text-4xl leading-tight text-white sm:text-5xl">Your work, finally presented like it matters.</h2>
-            <p className="mt-5 text-base leading-relaxed text-white/65 sm:text-lg">A strong portfolio makes the case for you before you enter the room. I help turn the raw material into a clear, confident first impression.</p>
+            <h2 className="font-head text-4xl leading-tight text-white sm:text-5xl">Your work, presented like it matters.</h2>
             <Link to="/start" className="btn-light mt-8">Build my portfolio <Arrow /></Link>
           </Reveal>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -146,7 +142,6 @@ export default function Home() {
                 <article className="outcome-card">
                   <span className="outcome-number">{item[0]}</span>
                   <h3 className="font-display mt-10 text-lg font-semibold text-white">{item[1]}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/58">{item[2]}</p>
                 </article>
               </Reveal>
             ))}
@@ -156,9 +151,8 @@ export default function Home() {
 
       <section className="home-section">
         <Reveal className="mx-auto max-w-2xl text-center">
-          <p className="section-kicker">Straightforward pricing</p>
           <h2 className="section-title">Pick the level. I handle the rest.</h2>
-          <p className="section-copy mx-auto">A {'$'}{deposit.amount} deposit reserves your build. The remaining balance is due only when your site is live and you love it.</p>
+          <p className="section-copy mx-auto">{'$'}{deposit.amount} starts your build. Pay the rest when it is live.</p>
         </Reveal>
         <div className="mx-auto mt-12 grid max-w-5xl gap-5 lg:grid-cols-2">
           {tiers.map((tier, index) => (
@@ -167,7 +161,6 @@ export default function Home() {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-3"><h3 className="font-display text-2xl font-semibold">{tier.name}</h3>{tier.popular && <span className="popular-pill">Best value</span>}</div>
-                    <p className="mt-2 text-sm text-mist">{tier.blurb}</p>
                   </div>
                   <div className="text-right"><p className="font-head text-4xl">{tier.priceLabel}</p><p className="mt-1 text-xs text-mist">one time</p></div>
                 </div>
@@ -191,14 +184,13 @@ export default function Home() {
       </section>
 
       <section className="home-section pt-8">
-        <Reveal className="max-w-2xl"><p className="section-kicker">A low-lift process</p><h2 className="section-title">You do one form. I do the website.</h2></Reveal>
+        <Reveal className="max-w-2xl"><h2 className="section-title">One form. I handle the rest.</h2></Reveal>
         <div className="process-grid mt-12">
           {process.map((step, index) => (
             <Reveal key={step[0]} delay={index * 0.1}>
               <article className="process-card">
                 <div className="flex items-center justify-between"><span className="process-number">{step[0]}</span>{index < process.length - 1 && <Arrow className="hidden text-frost/25 sm:block" />}</div>
                 <h3 className="font-display mt-8 text-xl font-semibold">{step[1]}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-mist">{step[2]}</p>
               </article>
             </Reveal>
           ))}
@@ -208,7 +200,7 @@ export default function Home() {
       <section className="home-section pt-8">
         <div className="founder-panel">
           <Reveal className="founder-photo-wrap">
-            {site.founder.storyPhoto && <img src={asset(site.founder.storyPhoto)} alt="Josh Cowell holding a rocket overhead in front of Freedom Tower at Liberty University" className="h-full min-h-[28rem] w-full object-cover" loading="lazy" />}
+            {site.founder.storyPhoto && <img src={asset(site.founder.storyPhoto)} alt="Josh Cowell standing with student-built rockets at Liberty University" className="h-full min-h-[28rem] w-full object-cover object-center" loading="lazy" />}
             <div className="founder-caption"><span className="h-2 w-2 rounded-full bg-mint" /> Built personally by Josh</div>
           </Reveal>
           <Reveal delay={0.12} className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
@@ -228,7 +220,7 @@ export default function Home() {
 
       <section className="home-section pt-8">
         <Reveal className="section-heading-row">
-          <div className="max-w-2xl"><p className="section-kicker">Made to feel like you</p><h2 className="section-title">Start with a direction, not a template.</h2><p className="section-copy">Choose a look you like. Your finished portfolio is then shaped around your own work and personality.</p></div>
+          <div className="max-w-2xl"><h2 className="section-title">Pick a direction. I make it yours.</h2></div>
           <Link to="/styles" className="text-link shrink-0">Explore all 10 styles <Arrow /></Link>
         </Reveal>
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -252,7 +244,7 @@ export default function Home() {
             <div>
               <p className="section-kicker text-white/55">Not ready for a website?</p>
               <h2 className="font-head mt-3 text-3xl text-white sm:text-4xl">Start with a stronger resume.</h2>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">Get sharper wording, a cleaner recruiter-friendly layout, and personal notes on every change. Edited by a human.</p>
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">Human-edited wording and a recruiter-ready layout.</p>
             </div>
             <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end"><p className="font-head text-4xl text-white">{resumeService.tiers[0].priceLabel}</p><Link to="/pricing#resume" className="btn-light">Polish my resume <Arrow /></Link></div>
           </div>
@@ -262,9 +254,8 @@ export default function Home() {
       <section className="px-6 pb-8 pt-10 lg:px-10">
         <Reveal>
           <div className="final-cta">
-            <p className="section-kicker text-white/55">Ready when you are</p>
-            <h2 className="font-head mx-auto mt-4 max-w-4xl text-4xl leading-tight text-white sm:text-6xl">Your work deserves more than a folder full of links.</h2>
-            <p className="mx-auto mt-5 max-w-xl text-white/62">Tell me what you have. I’ll turn it into one place you’ll be proud to send.</p>
+            <h2 className="font-head mx-auto max-w-4xl text-4xl leading-tight text-white sm:text-6xl">Your work deserves more than a folder full of links.</h2>
+
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"><Link to="/start" className="btn-accent">Start my build <Arrow /></Link><Link to="/pricing" className="btn-dark-ghost">See pricing</Link></div>
             <p className="mt-5 text-xs text-white/45">{deposit.label} · no technical setup · private preview before launch</p>
           </div>

@@ -24,7 +24,7 @@ export const site = {
   founder: {
     name: "Josh Cowell",
     role: "Founder, FolioLabz",
-    storyPhoto: "/josh-rocket.jpg",
+    storyPhoto: "/josh-founder.jpg",
     photo: "/josh-headshot.jpg",
     showPhoto: false,
   },
@@ -324,7 +324,7 @@ export const realSites = [
     name: "Josh Cowell",
     field: "Engineering",
     url: "https://joshuacowell.com",
-    thumb: "/examples/josh.jpg",
+    thumb: "/examples/josh-hd.png",
     live: true,
   },
   {
@@ -332,7 +332,7 @@ export const realSites = [
     name: "David Cowell",
     field: "Engineering",
     url: "https://davidcowell.com",
-    thumb: "/examples/david.jpg",
+    thumb: "/examples/david-hd.png",
     live: true,
   },
   {
@@ -340,7 +340,15 @@ export const realSites = [
     name: "Caroline",
     field: "Nursing",
     url: "https://carolinethomas.netlify.app/",
-    thumb: "/examples/caroline.jpg",
+    thumb: "/examples/caroline-hd.png",
+    live: true,
+  },
+  {
+    id: "caden",
+    name: "Caden Solle",
+    field: "Mechanical Engineering",
+    url: "https://cowelljoshua.github.io/caden-solle/",
+    thumb: "/examples/caden-hd.png",
     live: true,
   },
 ]
