@@ -12,3 +12,7 @@ Thumbs.db
 
 # Local tooling
 .claude/
+.codex-vite.*.log
+
+# Raw photo originals (cropped web versions live in /public)
+/josh cowell (needs cropping).jpg

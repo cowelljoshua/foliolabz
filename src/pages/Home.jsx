@@ -100,13 +100,24 @@ export default function Home() {
                 It is hard to show your personality, creativity, and what you are actually capable of before you ever get an interview. A portfolio gives employers a better sense of who you are, while also giving you one easy link to share and a real leg up when applying.
               </p>
             </div>
+            {site.founder.storyPhoto && (
+              <figure className="mx-auto mt-8 max-w-2xl">
+                <img
+                  src={asset(site.founder.storyPhoto)}
+                  alt="Josh Cowell holding a rocket overhead in front of Freedom Tower at Liberty University"
+                  className="w-full rounded-xl border hairline object-cover"
+                  loading="lazy"
+                />
+                <figcaption className="mt-2 text-center text-xs text-mist/70">
+                  Me and a rocket. I like building things that work.
+                </figcaption>
+              </figure>
+            )}
             <div className="mx-auto mt-8 flex max-w-2xl items-center justify-center gap-4 border-t hairline pt-6">
               {/*
-                TODO(JOSH): add your headshot.
-                1. Drop a square photo at  public/josh-headshot.jpg  (a clear, friendly
-                   picture of your face; ~600x600 or larger).
-                2. In src/config/site.js set  founder.showPhoto: true
-                That is it. The circle below stays hidden until you flip the flag.
+                OPTIONAL(JOSH): small round avatar next to the signature.
+                Drop a close-up of your face (no sunglasses, ~600x600) at
+                public/josh-headshot.jpg and set founder.showPhoto: true in site.js.
               */}
               {site.founder.showPhoto && (
                 <img

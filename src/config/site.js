@@ -16,13 +16,15 @@ export const site = {
 
   github: "https://github.com/cowelljoshua",
 
-  // The signature block on the home-page story section.
-  // TODO(JOSH): drop a square photo at public/josh-headshot.jpg, then set
-  // showPhoto: true. A real face is the single biggest trust boost the
-  // site can get. (See "Your launch to-do list" in SETUP.md.)
+  // The home-page story section.
+  // storyPhoto is the big picture shown above the signature (added 2026-07-14,
+  // cropped from the rocket photo). OPTIONAL LATER: for the small round avatar
+  // next to the signature, drop a CLOSE-UP of your face (no sunglasses) at
+  // public/josh-headshot.jpg and set showPhoto: true.
   founder: {
     name: "Josh Cowell",
     role: "Founder, FolioLabz",
+    storyPhoto: "/josh-rocket.jpg",
     photo: "/josh-headshot.jpg",
     showPhoto: false,
   },

@@ -18,11 +18,11 @@ These are the things only you can do. The first two block your launch posts.
   create the Turnstile widget, paste all the environment variables into Netlify,
   and redeploy. About 30 minutes. **Do not post the launch announcement until
   this works.**
-- [ ] **2. Add your headshot.** Save a square, friendly photo of your face as
-  `public/josh-headshot.jpg` (600x600 or bigger), then open `src/config/site.js`
-  and set `founder.showPhoto: true`. It appears next to your signature under the
-  home-page story. A real face is the biggest single trust upgrade the site can
-  get, and it matters for your LinkedIn post too.
+- [x] **2. Add your photo. DONE (2026-07-14):** the rocket photo is cropped to
+  `public/josh-rocket.jpg` and shows in the home-page story section. Optional
+  upgrade whenever: a close-up of your face (no sunglasses, ~600x600) saved as
+  `public/josh-headshot.jpg`, then set `founder.showPhoto: true` in
+  `src/config/site.js` to also get the small round avatar by your signature.
 - [ ] **3. Dress rehearsal on the live site.** After #1: submit the website form
   with a couple of real files, submit the resume form, and send one portal
   request. Confirm all three land in your email, the files appear in Cloudinary,
