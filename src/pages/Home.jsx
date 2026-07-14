@@ -37,14 +37,11 @@ function Check() {
   )
 }
 
-function WorkCard({ project, index }) {
-  const cardClass = ['work-card group', index === 0 ? 'lg:col-span-2' : ''].filter(Boolean).join(' ')
-  const imageClass = index === 0 ? 'h-[24rem] sm:h-[32rem]' : 'h-[22rem]'
-
+function WorkCard({ project }) {
   return (
-    <a href={project.url} target="_blank" rel="noreferrer" className={cardClass}>
-      <div className={'work-card-image ' + imageClass}>
-        <img src={asset(project.thumb)} alt={project.name + ' portfolio website'} className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.025]" loading={index === 0 ? 'eager' : 'lazy'} />
+    <a href={project.url} target="_blank" rel="noreferrer" className="work-card group">
+      <div className="work-card-image h-[22rem]">
+        <img src={asset(project.thumb)} alt={project.name + ' portfolio website'} className="h-full w-full object-cover object-top transition duration-700 group-hover:scale-[1.025]" loading="lazy" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0d1928]/75 via-transparent to-transparent" />
       </div>
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 text-white sm:p-8">
@@ -123,9 +120,9 @@ export default function Home() {
           </div>
           <Link to="/styles" className="text-link shrink-0">See all work <Arrow /></Link>
         </Reveal>
-        <div className="mt-9 grid gap-5 lg:grid-cols-2">
+        <div className="mt-9 grid gap-5 sm:grid-cols-2">
           {liveSites.map((project, index) => (
-            <Reveal key={project.id} delay={index * 0.08} className={index === 0 ? 'lg:col-span-2' : ''}><WorkCard project={project} index={index} /></Reveal>
+            <Reveal key={project.id} delay={index * 0.08}><WorkCard project={project} /></Reveal>
           ))}
         </div>
       </section>
