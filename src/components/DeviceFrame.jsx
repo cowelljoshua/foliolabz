@@ -47,7 +47,7 @@ function ExpandedModal({ name, url, onClose }) {
 
   return createPortal(
     <motion.div
-      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-frost/55 p-4 backdrop-blur-sm sm:p-8"
+      className="fixed inset-0 z-[70] flex flex-col items-center justify-center bg-black/75 p-4 backdrop-blur-sm sm:p-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -94,7 +94,7 @@ function ExpandedModal({ name, url, onClose }) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.96, opacity: 0 }}
         transition={{ type: 'spring', stiffness: 260, damping: 26 }}
-        className={`overflow-hidden rounded-2xl border hairline bg-ink-800 shadow-[0_30px_70px_-24px_rgba(24,34,48,0.55)] transition-all duration-500 ${
+        className={`overflow-hidden rounded-2xl border hairline bg-ink-800 shadow-[0_30px_80px_-24px_rgba(0,0,0,0.85)] transition-all duration-500 ${
           mode === 'laptop' ? 'h-[80vh] w-full max-w-6xl' : 'h-[78vh] max-h-[780px] w-[26rem] max-w-full'
         }`}
       >
@@ -106,7 +106,7 @@ function ExpandedModal({ name, url, onClose }) {
         />
       </motion.div>
 
-      <p className="mt-3 text-xs text-ink-800" onClick={(e) => e.stopPropagation()}>
+      <p className="mt-3 text-xs text-mist" onClick={(e) => e.stopPropagation()}>
         Live site. Scroll and click around, or press Esc to close.
       </p>
     </motion.div>,
@@ -152,7 +152,7 @@ export default function DeviceFrame({ name, url, thumb, field }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="group block w-full overflow-hidden rounded-2xl border hairline bg-ink-800 text-left shadow-[0_18px_40px_-26px_rgba(24,34,48,0.5)] transition-transform duration-300 hover:-translate-y-1"
+        className="group block w-full overflow-hidden rounded-2xl border hairline bg-ink-800 text-left shadow-[0_20px_44px_-28px_rgba(0,0,0,0.8)] transition-transform duration-300 hover:-translate-y-1"
       >
         <BrowserBar url={url} />
         <div className="relative aspect-[16/10] overflow-hidden">
@@ -179,7 +179,7 @@ export default function DeviceFrame({ name, url, thumb, field }) {
             className="pointer-events-none h-full w-full bg-white"
           />
           {/* Hover overlay inviting a click */}
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-frost/0 transition-colors duration-300 group-hover:bg-frost/35">
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/0 transition-colors duration-300 group-hover:bg-black/45">
             <span className="flex items-center gap-2 rounded-full border hairline bg-ink-800/95 px-5 py-2.5 text-sm font-semibold text-frost opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M6 2H2v4M10 2h4v4M6 14H2v-4M10 14h4v-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

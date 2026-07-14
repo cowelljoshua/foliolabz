@@ -30,7 +30,7 @@ export default function RushSwitch({ on, onChange }) {
         className={`relative h-6 w-11 shrink-0 rounded-full transition-colors duration-300 ${on ? 'bg-cyan' : 'bg-frost/15'}`}
       >
         <span
-          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-[0_1px_3px_rgba(24,34,48,0.35)] transition-all duration-300 ${on ? 'left-[1.4rem]' : 'left-0.5'}`}
+          className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.5)] transition-all duration-300 ${on ? 'left-[1.4rem]' : 'left-0.5'}`}
         />
       </span>
     </button>

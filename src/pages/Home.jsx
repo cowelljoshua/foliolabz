@@ -68,7 +68,7 @@ export default function Home() {
           {steps.map((s, i) => (
             <Reveal key={s.n} delay={i * 0.12}>
               <SpotlightCard className="h-full p-7">
-                <span className="font-display text-sm font-semibold text-gradient">{s.n}</span>
+                <span className="font-display text-xs font-semibold uppercase tracking-[0.18em] text-gradient">Fig. {s.n}</span>
                 <h3 className="font-display mt-3 text-xl font-semibold">{s.title}</h3>
               </SpotlightCard>
             </Reveal>
@@ -137,7 +137,7 @@ export default function Home() {
             <Reveal key={d.id} delay={Math.min(i, 5) * 0.06} className="shrink-0">
               <Link
                 to={`/styles/${d.id}`}
-                className="group block w-56 overflow-hidden rounded-2xl border hairline bg-ink-800 shadow-[0_10px_24px_-20px_rgba(24,34,48,0.5)] transition-transform duration-300 hover:-translate-y-1"
+                className="group block w-56 overflow-hidden rounded-2xl border hairline bg-ink-800 shadow-[0_12px_26px_-20px_rgba(0,0,0,0.75)] transition-transform duration-300 hover:-translate-y-1"
               >
                 <div
                   className="h-28 w-full transition-transform duration-500 group-hover:scale-105"

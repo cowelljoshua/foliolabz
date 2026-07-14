@@ -415,7 +415,7 @@ export default function Portal() {
                     <p className="mb-2 text-sm font-medium">How do you want it billed?</p>
                     <BillingToggle billing={domainBilling} onChange={setDomainBilling} />
                   </div>
-                  {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
+                  {error && <p className="rounded-xl bg-[#ff6b5e]/10 p-4 text-sm text-[#ffb3a8]">{error}</p>}
                   <button
                     onClick={() => submitRequest('domain')}
                     disabled={sending || !domainWanted.trim()}
@@ -475,7 +475,7 @@ export default function Portal() {
                       placeholder="Be specific: the exact text, the section, the color. For wording, list everything you want in one go, it is all one request."
                     />
                   </Field>
-                  {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
+                  {error && <p className="rounded-xl bg-[#ff6b5e]/10 p-4 text-sm text-[#ffb3a8]">{error}</p>}
                   <button
                     onClick={() => submitRequest('edit')}
                     disabled={sending || !editType || !editDetails.trim()}

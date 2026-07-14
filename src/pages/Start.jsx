@@ -347,7 +347,7 @@ export default function Start() {
           <Reveal delay={0.1}>
             <button
               onClick={() => setTrack('website')}
-              className="group h-full w-full rounded-3xl border hairline bg-ink-800 p-8 text-left shadow-[0_14px_30px_-24px_rgba(24,34,48,0.4)] transition-all hover:-translate-y-1 hover:border-violet/60"
+              className="group h-full w-full rounded-3xl border hairline bg-ink-800 p-8 text-left shadow-[0_16px_34px_-26px_rgba(0,0,0,0.8)] transition-all hover:-translate-y-1 hover:border-violet/60"
             >
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-violet/12 text-violet">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -363,7 +363,7 @@ export default function Start() {
           <Reveal delay={0.2}>
             <button
               onClick={() => setTrack('resume')}
-              className="group h-full w-full rounded-3xl border hairline bg-ink-800 p-8 text-left shadow-[0_14px_30px_-24px_rgba(24,34,48,0.4)] transition-all hover:-translate-y-1 hover:border-mint/60"
+              className="group h-full w-full rounded-3xl border hairline bg-ink-800 p-8 text-left shadow-[0_16px_34px_-26px_rgba(0,0,0,0.8)] transition-all hover:-translate-y-1 hover:border-mint/60"
             >
               <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint/12 text-mint">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -782,7 +782,7 @@ export default function Start() {
                 <p className="text-xs text-mist/70">
                   Spot something off? Use Back to fix it. Payment comes after, nothing is charged by this form.
                 </p>
-                {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
+                {error && <p className="rounded-xl bg-[#ff6b5e]/10 p-4 text-sm text-[#ffb3a8]">{error}</p>}
               </div>
             )}
           </div>

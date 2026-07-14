@@ -113,19 +113,19 @@ export default function CloudinaryUpload({
           singleUploadAutoClose: !multiple,
           styles: {
             palette: {
-              window: '#fdfcf8',
-              windowBorder: '#d8d2c4',
-              tabIcon: '#2a4fd6',
-              menuIcons: '#5f6a76',
-              textDark: '#182230',
-              textLight: '#faf8f2',
-              link: '#2a4fd6',
-              action: '#2a4fd6',
-              inactiveTabIcon: '#8b93a0',
-              error: '#b3261e',
-              inProgress: '#2a4fd6',
-              complete: '#177a45',
-              sourceBg: '#f4f1e9',
+              window: '#10283f',
+              windowBorder: '#2a4863',
+              tabIcon: '#ffd84d',
+              menuIcons: '#9fb3c2',
+              textDark: '#0b1f36',
+              textLight: '#eaf2f5',
+              link: '#ffd84d',
+              action: '#ffd84d',
+              inactiveTabIcon: '#5f7a90',
+              error: '#ff8a7a',
+              inProgress: '#ffd84d',
+              complete: '#7fd6a4',
+              sourceBg: '#0b1f36',
             },
           },
         },
@@ -202,7 +202,7 @@ export default function CloudinaryUpload({
           ))}
         </ul>
       )}
-      {error && <p className="mt-2 text-xs text-[#8f1d16]">{error}</p>}
+      {error && <p className="mt-2 text-xs text-[#ffb3a8]">{error}</p>}
     </div>
   )
 }

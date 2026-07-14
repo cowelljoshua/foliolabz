@@ -58,7 +58,7 @@ export default function Styles() {
               <TiltedCard>
                 <Link
                   to={`/styles/${d.id}`}
-                  className="group block overflow-hidden rounded-2xl border hairline bg-ink-800 shadow-[0_14px_30px_-24px_rgba(24,34,48,0.4)]"
+                  className="group block overflow-hidden rounded-2xl border hairline bg-ink-800 shadow-[0_16px_34px_-26px_rgba(0,0,0,0.8)]"
                 >
                   <div className="h-44 overflow-hidden border-b hairline">
                     <div className="h-full w-full transition-transform duration-500 group-hover:scale-[1.04]">

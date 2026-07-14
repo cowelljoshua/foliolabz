@@ -25,7 +25,7 @@ export default function Nav() {
     <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4">
       <nav
         className={`glass flex items-center gap-6 rounded-full px-5 py-2.5 transition-shadow duration-300 sm:gap-10 ${
-          scrolled ? 'shadow-[0_12px_32px_-16px_rgba(24,34,48,0.4)]' : ''
+          scrolled ? 'shadow-[0_14px_34px_-16px_rgba(0,0,0,0.7)]' : ''
         }`}
       >
         <Link to="/" className="font-head text-lg tracking-tight shrink-0">
