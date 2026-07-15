@@ -5,6 +5,7 @@ import { demoStyles } from '../config/site.js'
 // browse between styles, return to the gallery, or carry this style into the intake form.
 export default function DemoBar({ styleId, styleName }) {
   const currentIndex = demoStyles.findIndex((style) => style.id === styleId)
+  const currentStyle = demoStyles[currentIndex]
   const previousStyle = demoStyles[(currentIndex - 1 + demoStyles.length) % demoStyles.length]
   const nextStyle = demoStyles[(currentIndex + 1) % demoStyles.length]
   const carouselButton =
@@ -35,14 +36,16 @@ export default function DemoBar({ styleId, styleName }) {
             &larr; All styles
           </Link>
           <span className="mx-1 hidden text-frost/20 sm:inline">|</span>
-          <span className="hidden items-center gap-2 text-sm text-mist sm:inline-flex">
+          <span className="hidden items-center gap-2 text-sm text-mist lg:inline-flex">
             <span className="rounded-full bg-amber-400/25 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-800">
-              Example
+              Visual reference
             </span>
             <span className="font-semibold text-frost">{styleName}</span>
+            <span className="text-frost/25">&middot;</span>
+            <span>Sample content: {currentStyle?.sampleField}</span>
           </span>
           <Link to={`/start?style=${styleId}`} className="btn-primary !px-4 !py-1.5 text-sm">
-            I like this one
+            Save this direction
           </Link>
         </div>
       </div>

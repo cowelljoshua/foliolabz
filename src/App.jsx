@@ -19,6 +19,7 @@ import Botanical from './pages/demos/Botanical.jsx'
 import Mono from './pages/demos/Mono.jsx'
 import Coastal from './pages/demos/Coastal.jsx'
 import Luxe from './pages/demos/Luxe.jsx'
+import PackageExample from './pages/demos/PackageExample.jsx'
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -42,6 +43,8 @@ const pageTitles = {
   '/start': 'Start my build · FolioLabz',
   '/thanks': 'Brief received · FolioLabz',
   '/portal': 'Client portal · FolioLabz',
+  '/examples/launch': 'Launch package example · FolioLabz',
+  '/examples/pro': 'Pro package example · FolioLabz',
 }
 
 function PageTitle() {
@@ -90,6 +93,8 @@ export default function App() {
         <Route path="/styles/mono" element={<Mono />} />
         <Route path="/styles/coastal" element={<Coastal />} />
         <Route path="/styles/luxe" element={<Luxe />} />
+        <Route path="/examples/launch" element={<PackageExample packageId="launch" />} />
+        <Route path="/examples/pro" element={<PackageExample packageId="pro" />} />
         {/* Unknown URLs go home rather than silently rendering Home at a wrong address */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

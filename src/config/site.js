@@ -14,8 +14,6 @@ export const site = {
   // this one is used for the mailto links on the site.)
   email: "foliolabz@gmail.com",
 
-  github: "https://github.com/cowelljoshua",
-
   // The home-page story section.
   // storyPhoto is the big picture shown above the signature (added 2026-07-14,
   // cropped from the rocket photo). OPTIONAL LATER: for the small round avatar
@@ -47,8 +45,7 @@ export const stripeLinks = {
   deposit: "https://buy.stripe.com/00w4gs4Aw7CT6G0fly7Re00",         // $50 deposit that starts any website build
   launchBalance: "https://buy.stripe.com/7sY14gd72f5l9Sc3CQ7Re01",   // $250 balance (Launch $300 minus the $50 deposit)
   proBalance: "https://buy.stripe.com/bJe8wI0kg4qH3tOc9m7Re02",      // $500 balance (Pro $550 minus the $50 deposit)
-  domainYearly: "https://buy.stripe.com/9B6bIUc2Yf5l9Sc7T67Re03",    // $20/yr RECURRING, custom .com/.net for a client
-  domainMonthly: "https://buy.stripe.com/cNifZaeb6aP51lGgpC7Re04",   // $4/mo RECURRING, custom .com/.net for a client
+  domainYearly: "https://buy.stripe.com/9B6bIUc2Yf5l9Sc7T67Re03", // $30/yr recurring custom domain
   editWording: "https://buy.stripe.com/6oU7sE2so3mDd4oehu7Re05",     // $10 wording edits (as many as they want in one request)
   editDesign: "https://buy.stripe.com/7sY7sEgje6yP5BW8Xa7Re06",      // $40 design change
   resumePolish: "https://buy.stripe.com/4gMcMY3wsaP5d4o2yM7Re07",    // One-time $40
@@ -62,32 +59,36 @@ export const tiers = [
   {
     id: "launch",
     name: "Launch",
+    originalPrice: 350,
+    originalPriceLabel: "$350",
     price: 300,
     priceLabel: "$300",
     blurb: "Everything you need to look professional.",
     headline: ["Up to 4 pages", "Custom design in your style", "Launched and live for you"],
     full: [
       "Up to 4 pages: Home, Work, Resume, Contact",
-      "A custom design in the style you pick",
+      "A custom design shaped around your career and chosen color direction",
       "Looks perfect on phones, tablets, and laptops",
       "Contact and social buttons wherever you want them",
       "A resume download button for recruiters",
       "Hosting included free, for as long as you want it online",
-      "Launch free on a clean web address, or add your own .com for $4/mo (or $20/yr) and I handle it",
+      "Launch free on a clean web address, or add your own .com for $30/yr and I handle it",
     ],
     popular: false,
   },
   {
     id: "pro",
     name: "Pro",
+    originalPrice: 600,
+    originalPriceLabel: "$600",
     price: 550,
     priceLabel: "$550",
     blurb: "For people who want to stand out.",
-    headline: ["Up to 7 pages", "Photo and project gallery", "1 personal strategy meeting"],
+    headline: ["Up to 7 pages", "Expanded galleries and case studies", "1 personal strategy meeting"],
     full: [
       "Everything in Launch",
       "Up to 7 pages",
-      "A photo and project gallery that is a joy to scroll",
+      "Larger photo galleries and in-depth project case studies",
       "A working contact form: visitor messages land straight in your email",
       "A testimonials section that builds instant trust",
       "Extra animation and polish throughout",
@@ -102,9 +103,9 @@ export const tiers = [
 // ------------------------------------------------------------
 export const deposit = {
   amount: 50,
-  label: "$50 deposit to start",
+  label: "$50 today, applied toward your total",
   detail:
-    "You start with a $50 deposit to lock in your spot. The rest of your package is due only once your site is live and you love it. Nothing else is charged by the form.",
+    "Your $50 deposit is part of the package price, not an extra fee. The remaining balance is due only after your site is live and you approve it. Nothing else is charged by the form.",
 }
 
 // ------------------------------------------------------------
@@ -118,10 +119,9 @@ export const hosting = {
   },
   custom: {
     title: "Your own .com or .net",
-    monthly: "$4/mo",
-    yearly: "$20/yr",
+    yearly: "$30/yr",
     detail:
-      "Want yourname.com instead? It is $4/mo, or $20/yr. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
+      "Want your own .com instead? It is $30/yr. I check availability first, then buy it, set it up, and bill it through your account, so you never deal with a domain company.",
   },
 }
 
@@ -145,12 +145,11 @@ export const balances = [
   { pkg: "pro", name: "Pro", total: "$550", balanceLabel: "$500", stripeKey: "proBalance" },
 ]
 
-// Custom domain, handled by you. Client picks monthly or yearly billing.
+// Custom domain, handled by you. Payment is annual after availability is confirmed.
 export const domainOffer = {
   detail:
-    "Trade your free address for your own .com or .net. I buy it, connect it, and keep it pointed at your site. Pay monthly or yearly, cancel anytime.",
-  monthly: { label: "$4/mo", stripeKey: "domainMonthly" },
-  yearly: { label: "$20/yr", stripeKey: "domainYearly" },
+    "Interested in your own .com or .net? If you already have names in mind, share them. I check availability and confirm the domain before payment starts.",
+  yearly: { label: "$30/yr", stripeKey: "domainYearly" },
 }
 
 // Post-launch edit requests, priced flat.
@@ -236,7 +235,9 @@ export const demoStyles = [
     name: "Midnight",
     vibe: "Dark and futuristic",
     persona: "Mara Chen, Mechanical Engineer",
-    blurb: "Glowing accents on deep black. Built to impress technical recruiters.",
+    sampleField: "Engineering",
+    blurb: "A cinematic, high-contrast direction with glowing details and a strong project reveal.",
+    traits: ["High contrast", "Project-led", "Subtle glow"],
     swatch: ["#0a0a14", "#7c5cff", "#22d3ee"],
   },
   {
@@ -244,7 +245,9 @@ export const demoStyles = [
     name: "Soft Light",
     vibe: "Clean, airy, calm",
     persona: "Elena Brooks, Registered Nurse",
-    blurb: "Gentle colors and lots of breathing room. Warm and trustworthy.",
+    sampleField: "Healthcare",
+    blurb: "An open, reassuring direction that makes experience and personal values easy to scan.",
+    traits: ["Open layout", "People-first", "Gentle color"],
     swatch: ["#f7f6f2", "#7aa5a0", "#e8b4a0"],
   },
   {
@@ -252,7 +255,9 @@ export const demoStyles = [
     name: "Editorial",
     vibe: "Bold, magazine style",
     persona: "Devon Price, Marketing Graduate",
-    blurb: "Huge type and confident layout. For people with something to say.",
+    sampleField: "Marketing",
+    blurb: "A type-driven direction with strong opinions, sharp pacing, and room for a clear point of view.",
+    traits: ["Big type", "Story-led", "Sharp pacing"],
     swatch: ["#111111", "#f5f0e8", "#e63946"],
   },
   {
@@ -260,7 +265,9 @@ export const demoStyles = [
     name: "Warm Studio",
     vibe: "Creative earth tones",
     persona: "Sofia Reyes, Photographer",
-    blurb: "Terracotta and cream, image-first. Made for visual work.",
+    sampleField: "Photography",
+    blurb: "A tactile, image-forward direction with an approachable handmade quality.",
+    traits: ["Image-led", "Warm texture", "Relaxed grid"],
     swatch: ["#f3e9dc", "#b4552d", "#3a2e26"],
   },
   {
@@ -268,7 +275,9 @@ export const demoStyles = [
     name: "Classic Slate",
     vibe: "Traditional and refined",
     persona: "James Whitfield, Finance Student",
-    blurb: "Serif type and quiet confidence. Banks and firms love this one.",
+    sampleField: "Finance",
+    blurb: "A polished, structured direction that gives credentials and results quiet authority.",
+    traits: ["Credentials-led", "Structured", "Quiet detail"],
     swatch: ["#f4f4f6", "#1e293b", "#996515"],
   },
   {
@@ -276,7 +285,9 @@ export const demoStyles = [
     name: "Neon Grid",
     vibe: "Cyber and high-energy",
     persona: "Kai Nakamura, Software Developer",
-    blurb: "Electric magenta and cyan on black. For builders who ship.",
+    sampleField: "Software",
+    blurb: "A fast, energetic direction with technical cues, playful motion, and punchy proof points.",
+    traits: ["Energetic", "Proof-led", "Playful motion"],
     swatch: ["#0b0710", "#ff2e97", "#0ff0fc"],
   },
   {
@@ -284,7 +295,9 @@ export const demoStyles = [
     name: "Botanical",
     vibe: "Organic and calming",
     persona: "Priya Anand, Wellness Coach",
-    blurb: "Sage green and cream. Grounded, healthy, and human.",
+    sampleField: "Wellness",
+    blurb: "A grounded, human direction with soft rhythm and plenty of space for a personal story.",
+    traits: ["Story-led", "Organic shapes", "Soft rhythm"],
     swatch: ["#f4f1e9", "#4f7a4a", "#c98a5a"],
   },
   {
@@ -292,7 +305,9 @@ export const demoStyles = [
     name: "Mono",
     vibe: "Minimal black and white",
     persona: "Theo Laurent, Architect",
-    blurb: "Nothing but type, space, and confidence. Design speaks for itself.",
+    sampleField: "Architecture",
+    blurb: "A disciplined direction where typography, spacing, and the work itself do all the talking.",
+    traits: ["Minimal", "Work-led", "Precise grid"],
     swatch: ["#ffffff", "#111111", "#8a8a8a"],
   },
   {
@@ -300,7 +315,9 @@ export const demoStyles = [
     name: "Coastal",
     vibe: "Fresh and breezy",
     persona: "Hannah Reed, Teacher",
-    blurb: "Ocean blues and warm sand. Friendly and easy to trust.",
+    sampleField: "Education",
+    blurb: "A friendly, upbeat direction that makes personality and everyday impact feel immediate.",
+    traits: ["Friendly", "Personality-led", "Rounded details"],
     swatch: ["#eef6f8", "#2a7f9e", "#f2b134"],
   },
   {
@@ -308,8 +325,98 @@ export const demoStyles = [
     name: "Ivory Luxe",
     vibe: "Elegant and premium",
     persona: "Camille Rousseau, Interior Designer",
-    blurb: "Ivory and gold with quiet serif type. Understated luxury.",
+    sampleField: "Interior design",
+    blurb: "A restrained, premium direction with elegant type and gallery-like presentation.",
+    traits: ["Premium", "Gallery-led", "Elegant type"],
     swatch: ["#f6f1e7", "#1a1a1a", "#b08d57"],
+  },
+]
+
+// ------------------------------------------------------------
+// CAREER-AWARE PALETTES
+// Ten universal color directions. The visitor's career changes
+// the recommended content, while every visual stays color-only.
+// ------------------------------------------------------------
+export const portfolioPalettes = [
+  {
+    id: "afterdark",
+    name: "After Dark",
+    type: "Navy / violet / cyan",
+    blurb: "Deep navy with vivid violet and an electric cyan highlight.",
+    bestFor: "Bold and modern.",
+    swatch: ["#090d18", "#7567ff", "#71e5ff"],
+  },
+  {
+    id: "clearspace",
+    name: "Clear Space",
+    type: "Ivory / sage / mist",
+    blurb: "Warm ivory with muted sage and a soft blue-green.",
+    bestFor: "Calm and approachable.",
+    swatch: ["#f7f8f5", "#438176", "#dcebe7"],
+  },
+  {
+    id: "casebook",
+    name: "Warm Contrast",
+    type: "Cream / terracotta / ink",
+    blurb: "Warm cream and terracotta grounded by crisp dark ink.",
+    bestFor: "Warm and distinctive.",
+    swatch: ["#f1ebdf", "#b44825", "#171717"],
+  },
+  {
+    id: "essential",
+    name: "Monochrome",
+    type: "White / black / gray",
+    blurb: "Black, white, and soft gray with no competing color.",
+    bestFor: "Timeless and flexible.",
+    swatch: ["#ffffff", "#111111", "#b8b8b8"],
+  },
+  {
+    id: "ocean",
+    name: "Deep Ocean",
+    type: "Navy / blue / foam",
+    blurb: "Inky navy with confident blue and pale sea foam.",
+    bestFor: "Focused and trustworthy.",
+    swatch: ["#0b1f33", "#277da1", "#d9f0f0"],
+  },
+  {
+    id: "forest",
+    name: "Forest",
+    type: "Charcoal / green / mint",
+    blurb: "Dark charcoal with fresh green and a quiet mint.",
+    bestFor: "Grounded and fresh.",
+    swatch: ["#101a16", "#2f855a", "#cfe8d8"],
+  },
+  {
+    id: "sunset",
+    name: "Sunset",
+    type: "Plum / coral / gold",
+    blurb: "Deep plum with energetic coral and warm golden yellow.",
+    bestFor: "Expressive and upbeat.",
+    swatch: ["#2b1638", "#ef6f6c", "#f3c969"],
+  },
+  {
+    id: "classic",
+    name: "Classic Navy",
+    type: "Ivory / navy / gold",
+    blurb: "Soft ivory with traditional navy and a restrained gold.",
+    bestFor: "Polished and established.",
+    swatch: ["#f5f1e8", "#18263d", "#b5944b"],
+  },
+  {
+    id: "berry",
+    name: "Berry",
+    type: "Ink / berry / blush",
+    blurb: "Near-black ink with rich berry and a pale blush.",
+    bestFor: "Confident and creative.",
+    swatch: ["#19131d", "#9d3c72", "#f1d8e4"],
+  },
+  {
+    id: "clay",
+    name: "Clay & Olive",
+    type: "Sand / clay / olive",
+    blurb: "Natural sand with earthy clay and softened olive.",
+    bestFor: "Organic and relaxed.",
+    swatch: ["#e9ddc7", "#a85d3f", "#626b47"],
   },
 ]
 
@@ -328,19 +435,19 @@ export const realSites = [
     live: true,
   },
   {
-    id: "david",
-    name: "David Cowell",
-    field: "Engineering",
-    url: "https://davidcowell.com",
-    thumb: "/examples/david-hd.png",
-    live: true,
-  },
-  {
     id: "caroline",
     name: "Caroline",
     field: "Nursing",
     url: "https://carolinethomas.netlify.app/",
     thumb: "/examples/caroline-hd.png",
+    live: true,
+  },
+  {
+    id: "david",
+    name: "David Cowell",
+    field: "Engineering",
+    url: "https://davidcowell.com",
+    thumb: "/examples/david-hd.png",
     live: true,
   },
   {
@@ -384,11 +491,11 @@ export const pageLimits = { launch: 4, pro: 7 }
 export const faq = [
   {
     q: "What do I actually have to do?",
-    a: "One form. You tell me about yourself, pick a style, and attach your files. I handle the design, the build, the web address, and the launch. You review a private preview and request changes before it goes live.",
+    a: "One form. You tell me about yourself, enter your career field, choose a visual direction, and attach your files. I tailor the design to your work and handle the build, web address, and launch. You review a private preview and request changes before it goes live.",
   },
   {
     q: "When do I pay, and how much?",
-    a: "You start with a $50 deposit to lock in your spot. The rest of your package is due only once your site is live and you love it. Nothing else is charged by the form.",
+    a: "Your $50 deposit is part of the package price, not an extra fee. The remaining balance is due only after your site is live and you approve it. Nothing else is charged by the form.",
   },
   {
     q: "How do changes and edits work?",
@@ -400,7 +507,7 @@ export const faq = [
   },
   {
     q: "Do I pay for hosting or a domain?",
-    a: "Hosting is included free, for as long as you want your site online, and you can launch free on a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $4 a month, or $20 a year. I buy it, set it up, and bill it through your account, so you never deal with a domain company.",
+    a: "Hosting is included free, for as long as you want your site online, and you can launch free on a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $30 a year. If you have a name in mind, I check availability; if not, you can decide later. Payment starts only after I confirm the name, then I buy it, set it up, and bill it through your account.",
   },
   {
     q: "Can I make changes myself?",
@@ -412,6 +519,6 @@ export const faq = [
   },
   {
     q: "What if I do not like the design?",
-    a: "Before launch, you get a private preview and up to 3 rounds of changes, so we can shape it until it feels like you.",
+    a: "Before launch, you get a private preview and up to 3 rounds of changes. I refine it with your feedback until it feels like you.",
   },
 ]

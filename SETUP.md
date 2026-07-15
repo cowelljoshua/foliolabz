@@ -33,10 +33,7 @@ These are the things only you can do. The first two block your launch posts.
 - [ ] **5. Pick an analytics option before launch week.** Netlify Analytics
   ($9/mo, zero setup) or GoatCounter (free, one script tag; tell me and I will add
   it). Without one you will not know what your launch posts actually did.
-- [ ] **6. Optional pricing call: the $20/yr domain option roughly breaks even**
-  (domain costs you ~$20/yr plus Stripe fees). If you want yearly to profit, bump
-  the Stripe price (e.g. $36/yr) and tell me so I update the site copy to match.
-- [ ] **7. Add real clients to `src/config/clients.js`** (David, Caroline) so the
+- [ ] **6. Add real clients to `src/config/clients.js`** (David, Caroline) so the
   portal recognizes their emails. Two-minute copy-paste of the demo template.
 
 Things already handled for you (2026-07-13): social link previews (Open Graph
@@ -79,8 +76,7 @@ swap one out:
 | `deposit` | Deposit | $50 one-time, starts every website build |
 | `launchBalance` | Launch Package | $250 one-time (Launch $300 minus the deposit) |
 | `proBalance` | Pro Package | $500 one-time (Pro $550 minus the deposit) |
-| `domainMonthly` | Monthly Custom Domain | $4/mo recurring |
-| `domainYearly` | Yearly Custom Domain | $20/yr recurring |
+| `domainYearly` | Yearly Custom Domain | $30/yr recurring |
 | `editWording` | Website Wording Edit | $10 one-time |
 | `editDesign` | Website Design Edits | $40 one-time |
 | `resumePolish` | Resume Polish | $40 one-time |
@@ -92,7 +88,8 @@ Any link left as `""` simply hides its Pay button (the site shows "I'll email yo
 link" instead), which is how you can go live before every link exists.
 
 > **The client portal** (`/portal`) is where existing clients pay a balance, start a
-> custom domain (monthly or yearly, their choice), or request an edit. It uses every
+> custom domain after you confirm availability, or request an edit. Domain billing is
+> always $30/year. It uses every
 > key above except `deposit` and `resumePolish`/`resumeMeeting` (those two live on
 > the public Resume Polish section instead).
 
@@ -109,11 +106,15 @@ domain status, and nothing they do not need. Unknown emails still get the generi
 The routine, in order:
 1. A form submission lands in your email.
 2. Add the client to `clients.js`: email, name, `package: "launch"` or `"pro"`,
-   `rush` if they chose it.
-3. If they mention wanting a `.com`, put it in `domain`. Flip `domainActive: true`
-   once their subscription is running.
-4. When their balance payment arrives in Stripe, flip `balancePaid: true`.
-5. Save, commit, push. Netlify redeploys in about a minute.
+   `rush` if they chose it, and `buildStatus: "brief"`.
+3. For a custom domain request, check any names they supplied. If they left them
+   blank, follow up when they are ready. Put only a confirmed available name in
+   `domain` and leave `domainActive: false`. Do not buy or connect it yet; the portal
+   tells them payment is required before launch.
+4. Once their $30/year domain subscription is running, buy and connect the confirmed
+   domain, then flip `domainActive: true`.
+5. When their balance payment arrives in Stripe, flip `balancePaid: true`.
+6. Save, commit, push. Netlify redeploys in about a minute.
 
 Rush balances: the standard $250/$500 links do not include the $75, so for a rush
 client either paste a personal Stripe link into their `payLink` field or leave it
@@ -145,10 +146,9 @@ only one the site charges automatically; every balance is a quick personal link.
 ### Handy Stripe facts
 - Refunds (for the resume guarantee, or a deposit if you cannot take a job): open the
   payment in the dashboard, click Refund.
-- Domain billing: when a client wants their own `.com`, buy it (~$20/yr) and bill it
-  through Stripe. The client picks $4/mo or $20/yr in the portal. Note the margin: at
-  $20/yr you roughly break even after the domain cost and Stripe fees, while $4/mo
-  ($48/yr) actually earns. If you want yearly to profit too, bump that Stripe price.
+- Domain billing: check availability before putting a name in the client file. The
+  portal then asks the client to start the $30/year subscription. Buy and connect the
+  domain only after that payment is active.
 - Use **Test mode** (toggle, top right) to try a fake checkout with card
   `4242 4242 4242 4242`. Real links must be created in **live** mode, test-mode links
   do not move real money.
@@ -260,20 +260,20 @@ the pricing page and FAQ now promise, so handle it this way:
 - **Custom `.com` / `.net` (billed by you):** buy the domain yourself
   (Namecheap ~$20/yr including their WHOIS privacy), connect it in Netlify
   (Domain management → Add a domain, HTTPS is automatic), and bill the client
-  through Stripe. The client portal lets them pick either the `domainMonthly`
-  recurring price ($4/mo) or the `domainYearly` recurring price ($20/yr). Either
-  way the client never touches a domain company; you own the account and just keep
-  it pointed at their site.
+  through Stripe. The client may submit up to three names or leave them blank. Once
+  you confirm an available name in `clients.js`, the portal shows the `domainYearly` recurring price
+  ($30/yr). Buy and connect it only after that payment is active. The client never
+  touches a domain company; you own the account and keep it pointed at their site.
 
 **What the site promises clients:** hosting free on a `.netlify.app` address, or
-your own `.com` for $4/mo (or $20/yr) that you set up and bill. Nothing about a Care
+your own `.com` for $30/yr that you set up and bill. Nothing about a Care
 Plan (that was removed) and no talk of them buying their own domain.
 
 ---
 
 ## 3. Nice-to-haves (whenever)
 
-- **Custom domain** (~$20/year cost, you bill it via Stripe at $4/mo or $20/yr): buy
+- **Custom domain** (~$20/year cost, you bill it via Stripe at $30/yr): buy
   it at Namecheap, connect it in Netlify (Domain management → Add a domain), HTTPS is
   automatic. See the hosting section above.
 - **Screenshot thumbnails**: already generated (2026-07-13) into

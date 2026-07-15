@@ -8,8 +8,7 @@ export default function Footer() {
         <div className="grid gap-12 px-7 py-12 sm:px-10 lg:grid-cols-[1.4fr_.6fr_.6fr] lg:py-14">
           <div className="max-w-md">
             <Link to="/" className="flex items-center gap-2.5">
-              <span className="brand-mark brand-mark-light">F</span>
-              <span className="font-head text-2xl text-white">Folio<span className="text-[#91a6ff]">Labz</span></span>
+              <span className="font-display text-2xl font-bold tracking-[-0.03em] text-white">Folio<span className="text-[#91a6ff]">Labz</span></span>
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-white/55">
               Portfolio websites designed, built, and launched for you. One polished link for the work you are proud of.
@@ -32,7 +31,6 @@ export default function Footer() {
             <p className="footer-label">Clients</p>
             <div className="mt-4 flex flex-col items-start gap-3 text-sm text-white/58">
               <Link to="/portal" className="hover:text-white">Client portal</Link>
-              <a href={site.github} target="_blank" rel="noreferrer" className="hover:text-white">GitHub</a>
             </div>
           </div>
         </div>

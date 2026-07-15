@@ -9,8 +9,7 @@ import {
   site,
   tiers,
   deposit,
-  demoStyles,
-  palettes,
+  portfolioPalettes,
   brandChips,
   pageOptions,
   pageLimits,
@@ -32,10 +31,34 @@ const emptyProject = () => ({ title: '', description: '', link: '', images: [] }
 const websiteSteps = ['about', 'package', 'style', 'content', 'files', 'review']
 const resumeSteps = ['about', 'resume', 'review']
 
+const siteFormats = [
+  {
+    id: 'single',
+    name: 'One scrolling page',
+    detail: 'Everything flows on one page. Menu links jump to each section.',
+  },
+  {
+    id: 'multi',
+    name: 'Separate pages',
+    detail: 'A navigation bar opens distinct pages like Work, Resume, and Contact.',
+  },
+  {
+    id: 'recommend',
+    name: 'Recommend what fits',
+    detail: 'I will choose based on how much content you send.',
+  },
+]
+
+const domainInterestOptions = [
+  { id: 'yes', label: 'Yes, I would like one' },
+  { id: 'maybe', label: 'Maybe, tell me more later' },
+  { id: 'no', label: 'No, the free address is fine' },
+]
+
 const stepTitles = {
   about: ['First, the basics', 'So I know who I am building for.'],
   package: ['Your package', 'Change your mind anytime before I start.'],
-  style: ['Your style', 'This is the fun part.'],
+  style: ['Your palette', 'Choose the colors that feel like you.'],
   content: ['Your content', 'Rough is fine. I polish everything.'],
   files: ['Your files', 'Whatever you have. Missing something? Send it later.'],
   resume: ['Your resume', 'Attach it and tell me where you are aiming.'],
@@ -78,7 +101,8 @@ export default function Start() {
 
   const paramPackage = params.get('package') || ''
   const paramIsResume = params.get('track') === 'resume' || paramPackage.startsWith('resume')
-  const paramIsWebsite = !paramIsResume && (paramPackage || params.get('style'))
+  const paramCareer = (params.get('career') || '').trim()
+  const paramIsWebsite = !paramIsResume && (paramPackage || params.get('style') || paramCareer)
 
   const [track, setTrack] = useState(paramIsResume ? 'resume' : paramIsWebsite ? 'website' : null)
   const [stepIdx, setStepIdx] = useState(0)
@@ -92,15 +116,17 @@ export default function Start() {
     name: '',
     email: '',
     phone: '',
-    profession: '',
+    profession: paramCareer,
     package: ['launch', 'pro'].includes(paramPackage) ? paramPackage : '',
     rush: params.get('rush') === '1',
-    style: demoStyles.some((d) => d.id === params.get('style')) ? params.get('style') : '',
-    palette: '',
+    styles: portfolioPalettes.some((d) => d.id === params.get('style')) ? [params.get('style')] : [],
+    styleNotes: '',
     brands: [],
     emulate: '',
     bio: '',
+    siteFormat: '',
     pages: [],
+    domainInterest: '',
     socials: '',
     notes: '',
     headshot: [],
@@ -119,10 +145,12 @@ export default function Start() {
       [key]: f[key].includes(value) ? f[key].filter((v) => v !== value) : [...f[key], value],
     }))
 
+
   const steps = track === 'resume' ? resumeSteps : websiteSteps
   const step = steps[stepIdx]
   const tier = tiers.find((t) => t.id === form.package)
   const pageLimit = pageLimits[form.package] || pageLimits.launch
+  const contentUnit = form.siteFormat === 'single' ? 'sections' : 'pages'
 
   const togglePage = (page) =>
     setForm((f) => {
@@ -168,6 +196,7 @@ export default function Start() {
   const canNext = useMemo(() => {
     if (step === 'about') return form.name.trim() && emailOk
     if (step === 'package') return !!form.package
+    if (step === 'content') return !!form.siteFormat && form.pages.length > 0
     if (step === 'resume') return form.resumeFile.length > 0 && !uploadsBusy
     if (step === 'files') return !uploadsBusy
     return true
@@ -217,12 +246,14 @@ export default function Start() {
       L.push(`Payment: $${deposit.amount} deposit to start, balance due at launch`)
       L.push('')
       L.push('STYLE')
-      L.push(`Style pick: ${demoStyles.find((d) => d.id === form.style)?.name || 'undecided'}`)
-      L.push(`Palette: ${palettes.find((p) => p.id === form.palette)?.name || 'undecided'}`)
+      L.push(`Color direction: ${form.styles.map((id) => portfolioPalettes.find((d) => d.id === id)?.name).filter(Boolean).join(', ') || 'undecided'}`)
+      if (form.styleNotes) L.push(`Direction adjustments: ${form.styleNotes}`)
       if (form.brands.length) L.push(`Brands they like: ${form.brands.join(', ')}`)
       if (form.emulate) L.push(`Sites to emulate: ${form.emulate}`)
       L.push('')
       L.push('CONTENT')
+      L.push(`Site format: ${siteFormats.find((option) => option.id === form.siteFormat)?.name || 'undecided'}`)
+      L.push(`Custom domain interest: ${domainInterestOptions.find((option) => option.id === form.domainInterest)?.label || 'not answered'}`)
       if (form.pages.length) L.push(`Pages wanted (${form.pages.length}/${pageLimit}): ${form.pages.join(', ')}`)
       if (form.socials) L.push(`Links: ${form.socials}`)
       if (form.bio) L.push(`Bio: ${form.bio}`)
@@ -283,12 +314,14 @@ export default function Start() {
       fd.append('profession', form.profession)
       fd.append('package', form.package)
       fd.append('rush', form.rush ? 'yes' : 'no')
-      fd.append('style_pick', form.style)
-      fd.append('palette', form.palette)
+      fd.append('style_pick', form.styles.join(', '))
+      fd.append('style_notes', form.styleNotes)
       fd.append('brand_inspo', form.brands.join(', '))
       fd.append('emulate_links', form.emulate)
       fd.append('bio', form.bio)
+      fd.append('site_format', form.siteFormat)
       fd.append('pages', form.pages.join(', '))
+      fd.append('domain_interest', form.domainInterest)
       fd.append('socials', form.socials)
       fd.append('extra_notes', form.notes)
       fd.append('headshot_url', form.headshot[0]?.url || '')
@@ -472,7 +505,12 @@ export default function Start() {
                         <span className="font-display block font-semibold">{t.name}</span>
                         <span className="mt-0.5 block text-xs text-mist">{t.blurb}</span>
                       </span>
-                      <span className="font-display shrink-0 pl-4 font-bold">{t.priceLabel}</span>
+                      <span className="shrink-0 pl-4 text-right">
+                        <span className="block text-xs font-semibold text-mist line-through">{t.originalPriceLabel}</span>
+                        <span className="font-display block font-bold">{t.priceLabel} total</span>
+                        <span className="block text-[0.7rem] text-mist">${deposit.amount} today &middot; ${t.price - deposit.amount} after approval</span>
+                        <span className="block text-[0.65rem] font-semibold uppercase tracking-wide text-violet">Save $50 &middot; Sale ends July 26</span>
+                      </span>
                     </button>
                   ))}
                 </div>
@@ -490,15 +528,18 @@ export default function Start() {
             {step === 'style' && (
               <>
                 <div>
-                  <p className="mb-2 text-sm font-medium">Which style felt right?</p>
-                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                    {demoStyles.map((d) => (
+                  <div className="mb-3">
+                    <p className="text-sm font-medium">Which color direction feels right?</p>
+                    <p className="mt-1 text-xs leading-relaxed text-mist">These swatches set the color and mood only. I will design the final layout around your content.</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+                    {portfolioPalettes.map((d) => (
                       <button
                         key={d.id}
                         type="button"
-                        onClick={() => set('style', form.style === d.id ? '' : d.id)}
-                        className={`rounded-2xl border p-4 text-left transition-colors ${
-                          form.style === d.id ? 'border-violet bg-violet/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
+                        onClick={() => set('styles', form.styles[0] === d.id ? [] : [d.id])}
+                        className={`rounded-xl border p-3 text-left transition-colors ${
+                          form.styles.includes(d.id) ? 'border-violet bg-violet/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                         }`}
                       >
                         <span className="flex gap-1">
@@ -507,37 +548,18 @@ export default function Start() {
                           ))}
                         </span>
                         <span className="font-display mt-2 block text-sm font-semibold">{d.name}</span>
-                        <span className="block text-xs text-mist">{d.vibe}</span>
+                        <span className="block text-xs text-mist">{d.type}</span>
                       </button>
                     ))}
                   </div>
-                  <Link to="/styles" className="mt-2 inline-block text-xs text-cyan hover:underline">
-                    Need another look? Browse the styles ↗
+                  <Link to="/styles#finder" className="mt-2 inline-block text-xs text-cyan hover:underline">
+                    Need another look? Reopen all palettes ↗
                   </Link>
                 </div>
 
-                <div>
-                  <p className="mb-2 text-sm font-medium">Colors you gravitate toward?</p>
-                  <div className="flex flex-wrap gap-2.5">
-                    {palettes.map((p) => (
-                      <button
-                        key={p.id}
-                        type="button"
-                        onClick={() => set('palette', form.palette === p.id ? '' : p.id)}
-                        className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs font-medium transition-colors ${
-                          form.palette === p.id ? 'border-violet bg-violet/10 text-frost' : 'border-frost/20 text-mist hover:border-frost/40'
-                        }`}
-                      >
-                        <span className="flex gap-1">
-                          {p.colors.map((c) => (
-                            <span key={c} className="h-3 w-3 rounded-full border border-frost/15" style={{ background: c }} />
-                          ))}
-                        </span>
-                        {p.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+                <Field label="Anything you want to change or combine?" optional>
+                  <textarea className="field-input min-h-20" value={form.styleNotes} onChange={(e) => set('styleNotes', e.target.value)} placeholder="e.g. Keep it simple, but use the dark colors" />
+                </Field>
 
                 <div>
                   <p className="mb-2 text-sm font-medium">
@@ -561,6 +583,27 @@ export default function Start() {
             {/* CONTENT */}
             {step === 'content' && (
               <>
+                <div>
+                  <p className="mb-2 text-sm font-medium">How should the site be organized?</p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {siteFormats.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        aria-pressed={form.siteFormat === option.id}
+                        onClick={() => set('siteFormat', option.id)}
+                        className={`rounded-2xl border p-4 text-left transition-colors ${
+                          form.siteFormat === option.id
+                            ? 'border-violet bg-violet/10'
+                            : 'hairline bg-frost/[0.03] hover:border-frost/30'
+                        }`}
+                      >
+                        <span className="font-display block text-sm font-semibold">{option.name}</span>
+                        <span className="mt-1.5 block text-xs leading-relaxed text-mist">{option.detail}</span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <Field label="Tell me about yourself" optional>
                   <textarea
                     className="field-input min-h-28"
@@ -571,7 +614,7 @@ export default function Start() {
                 </Field>
                 <div>
                   <p className="mb-2 text-sm font-medium">
-                    Pages you want on the site <span className="text-xs font-normal text-mist/60">{form.pages.length}/{pageLimit} picked</span>
+                    {form.siteFormat === 'single' ? 'Sections' : 'Pages'} you want on the site <span className="rounded-full bg-violet/10 px-2 py-0.5 text-[0.65rem] font-semibold text-violet">required</span> <span className="text-xs font-normal text-mist/60">{form.pages.length}/{pageLimit} picked</span>
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {pageOptions.map((s) => {
@@ -596,11 +639,38 @@ export default function Start() {
                       )
                     })}
                   </div>
+                  {form.pages.length === 0 && (
+                    <p className="mt-2 text-xs font-medium text-violet">Choose at least one before continuing.</p>
+                  )}
                   {form.pages.length >= pageLimit && (
                     <p className="mt-1.5 text-xs text-mist/60">
-                      {tier?.name || 'Launch'} tops out at {pageLimit} pages. {form.package === 'launch' ? 'Go Pro for up to 7.' : ''}
+                      {tier?.name || 'Launch'} tops out at {pageLimit} {contentUnit}. {form.package === 'launch' ? 'Go Pro for up to 7.' : ''}
                     </p>
                   )}
+                </div>
+
+                <div>
+                  <p className="text-sm font-medium">
+                    Interested in a custom .com later? <span className="text-xs font-normal text-mist/60">optional</span>
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed text-mist">This does not reserve a name or start payment. It just lets me know whether to bring it up later.</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                    {domainInterestOptions.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        aria-pressed={form.domainInterest === option.id}
+                        onClick={() => set('domainInterest', option.id)}
+                        className={`rounded-xl border p-3 text-left text-sm transition-colors ${
+                          form.domainInterest === option.id
+                            ? 'border-violet bg-violet/10 text-frost'
+                            : 'hairline bg-frost/[0.03] text-mist hover:border-frost/30'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 {wantsProjects && (

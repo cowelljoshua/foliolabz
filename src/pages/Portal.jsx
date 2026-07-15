@@ -28,25 +28,6 @@ function BackLink({ onClick }) {
   )
 }
 
-// Monthly / yearly toggle for the domain subscription.
-function BillingToggle({ billing, onChange }) {
-  return (
-    <div className="mx-auto flex w-fit items-center rounded-full border hairline p-1">
-      {['monthly', 'yearly'].map((b) => (
-        <button
-          key={b}
-          type="button"
-          onClick={() => onChange(b)}
-          className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
-            billing === b ? 'bg-frost/10 text-frost' : 'text-mist'
-          }`}
-        >
-          <span className="capitalize">{b}</span> · {domainOffer[b].label}
-        </button>
-      ))}
-    </div>
-  )
-}
 
 // Payment button that gracefully falls back when a Stripe link is not set yet.
 function PayBlock({ url, label }) {
@@ -64,6 +45,55 @@ function PayBlock({ url, label }) {
   )
 }
 
+const buildStages = [
+  { id: 'brief', label: 'Brief received', detail: 'I have your information and files.' },
+  { id: 'building', label: 'Building', detail: 'Your portfolio is being designed and built.' },
+  { id: 'review', label: 'Your review', detail: 'Your private preview is ready for feedback.' },
+  { id: 'polish', label: 'Final polish', detail: 'I am applying the final changes before launch.' },
+  { id: 'live', label: 'Live', detail: 'Your portfolio is launched.' },
+]
+
+function BuildStatus({ status = 'brief' }) {
+  const matchedIndex = buildStages.findIndex((stage) => stage.id === status)
+  const currentIndex = matchedIndex >= 0 ? matchedIndex : 0
+  const current = buildStages[currentIndex]
+
+  return (
+    <section className="glass rounded-3xl p-6 sm:p-7" aria-label="Website build status">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-violet">Build status</p>
+          <h2 className="font-display mt-1 text-xl font-semibold">{current.label}</h2>
+          <p className="mt-1 text-sm text-mist">{current.detail}</p>
+        </div>
+        <span className="rounded-full bg-violet/10 px-3 py-1 text-xs font-semibold text-violet">
+          Step {currentIndex + 1} of {buildStages.length}
+        </span>
+      </div>
+      <div className="mt-6 overflow-x-auto pb-1">
+        <div className="grid min-w-[34rem] grid-cols-5 gap-2">
+          {buildStages.map((stage, index) => {
+            const complete = index <= currentIndex
+            return (
+              <div key={stage.id} className="relative text-center">
+                {index > 0 && (
+                  <span className={`absolute right-1/2 top-3.5 h-0.5 w-full ${index <= currentIndex ? 'bg-violet' : 'bg-frost/10'}`} />
+                )}
+                <span className={`relative z-10 mx-auto flex h-7 w-7 items-center justify-center rounded-full border text-xs font-bold ${
+                  complete ? 'border-violet bg-violet text-white' : 'border-frost/15 bg-ink-800 text-mist'
+                }`}>
+                  {index < currentIndex ? '✓' : index + 1}
+                </span>
+                <span className={`mt-2 block text-[0.68rem] font-semibold ${complete ? 'text-frost' : 'text-mist/65'}`}>{stage.label}</span>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ---------- the page ---------- */
 
 export default function Portal() {
@@ -73,9 +103,8 @@ export default function Portal() {
 
   const [action, setAction] = useState(null) // 'balance' | 'domain' | 'edit'
   const [balancePkg, setBalancePkg] = useState('')
-  const [domainWanted, setDomainWanted] = useState('')
+  const [domainChoices, setDomainChoices] = useState(['', '', ''])
   const [domainNotes, setDomainNotes] = useState('')
-  const [domainBilling, setDomainBilling] = useState('monthly')
   const [editType, setEditType] = useState('')
   const [editDetails, setEditDetails] = useState('')
 
@@ -104,9 +133,11 @@ export default function Portal() {
     const L = [`FOLIOLAB CLIENT REQUEST`, `=======================`, `Name: ${name}`, `Email: ${email}`, '']
     if (type === 'domain') {
       L.push('Request: Set up a custom domain')
-      L.push(`Domain wanted: ${domainWanted || 'not specified'}`)
+      domainChoices.forEach((choice, index) => {
+        L.push(`Choice ${index + 1}: ${choice || 'left blank'}`)
+      })
       if (domainNotes) L.push(`Notes: ${domainNotes}`)
-      L.push(`Billing: ${domainOffer[domainBilling].label}`)
+      L.push('Next step: Check availability before adding a domain to the client file or requesting payment.')
     } else if (type === 'edit') {
       L.push(`Request: ${chosenEdit?.name} (${chosenEdit?.priceLabel})`)
       L.push('')
@@ -117,6 +148,10 @@ export default function Portal() {
   }
 
   const submitRequest = async (type) => {
+    if (type === 'domain' && domainChoices.some((choice) => !choice.trim())) {
+      setError('Please enter all three domain choices before sending your request.')
+      return
+    }
     setSending(true)
     setError('')
     const fd = new FormData()
@@ -124,7 +159,9 @@ export default function Portal() {
     fd.append('name', name)
     fd.append('email', email)
     fd.append('request_type', type)
-    fd.append('domain', type === 'domain' ? domainWanted : '')
+    domainChoices.forEach((choice, index) => {
+      fd.append(`domain_option_${index + 1}`, type === 'domain' ? choice : '')
+    })
     fd.append('domain_notes', type === 'domain' ? domainNotes : '')
     fd.append('edit_type', type === 'edit' ? editType : '')
     fd.append('details', type === 'edit' ? editDetails : '')
@@ -229,12 +266,18 @@ export default function Portal() {
             </span>
             {client.domain && (
               <span className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${client.domainActive ? 'bg-mint/15 text-mint' : 'bg-frost/10 text-mist'}`}>
-                {client.domain}{client.domainActive ? ' · active ✓' : ' · pending'}
+                {client.domain}{client.domainActive ? ' · active ✓' : ' · payment needed'}
               </span>
             )}
           </div>
         )}
       </Reveal>
+
+      {client && (
+        <Reveal delay={0.08} className="mt-6">
+          <BuildStatus status={client.buildStatus} />
+        </Reveal>
+      )}
 
       <AnimatePresence mode="wait">
         {/* ---- menu ---- */}
@@ -278,8 +321,8 @@ export default function Portal() {
                   {client?.domainActive
                     ? `${client.domain} is live and billing.`
                     : client?.domain
-                      ? `${client.domain} is ready to start.`
-                      : `Get your own .com for ${domainOffer.monthly.label}.`}
+                      ? `${client.domain} is available. Payment is needed before launch.`
+                      : 'Share any domain names you want me to check.'}
                 </p>
               </SpotlightCard>
             </button>
@@ -393,46 +436,50 @@ export default function Portal() {
                 /* I already know the domain they want; just start billing. */
                 <div className="mt-5 space-y-4">
                   <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-6 text-center">
-                    <p className="text-sm text-mist">Your domain is picked out</p>
+                    <p className="text-sm text-mist">Available domain confirmed</p>
                     <p className="font-display mt-1 text-2xl font-bold">{client.domain}</p>
-                    <p className="mt-1 text-xs text-mist">Pick a billing cadence and start the subscription.</p>
+                    <p className="mt-2 text-sm text-mist">
+                      Your domain payment has not started yet. Start the {domainOffer.yearly.label} subscription before I can register it and put your site live there.
+                    </p>
                   </div>
-                  <BillingToggle billing={domainBilling} onChange={setDomainBilling} />
                   <PayBlock
-                    url={stripeLinks[domainOffer[domainBilling].stripeKey]}
-                    label={`Start ${client.domain}, ${domainOffer[domainBilling].label}`}
+                    url={stripeLinks[domainOffer.yearly.stripeKey]}
+                    label={`Start ${client.domain} · ${domainOffer.yearly.label}`}
                   />
                 </div>
               ) : !submitted ? (
                 <div className="mt-5 space-y-5">
-                  <Field label="What domain do you want?">
-                    <input className="field-input" value={domainWanted} onChange={(e) => setDomainWanted(e.target.value)} placeholder="yourname.com" />
-                  </Field>
+                  <p className="text-sm text-mist">
+                    Share three domain names you would like me to check, in order of preference.
+                  </p>
+                  {domainChoices.map((choice, index) => (
+                    <Field key={index} label={`${index === 0 ? 'First' : index === 1 ? 'Second' : 'Third'} choice`}>
+                      <input
+                        className="field-input"
+                        value={choice}
+                        onChange={(e) => setDomainChoices((current) => current.map((item, choiceIndex) => choiceIndex === index ? e.target.value : item))}
+                        required
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
+                      />
+                    </Field>
+                  ))}
                   <Field label="Anything I should know?" optional>
-                    <textarea className="field-input min-h-20" value={domainNotes} onChange={(e) => setDomainNotes(e.target.value)} placeholder="A backup name in case it is taken, etc." />
+                    <textarea className="field-input min-h-20" value={domainNotes} onChange={(e) => setDomainNotes(e.target.value)} placeholder="Anything else you want me to know." />
                   </Field>
-                  <div>
-                    <p className="mb-2 text-sm font-medium">How do you want it billed?</p>
-                    <BillingToggle billing={domainBilling} onChange={setDomainBilling} />
-                  </div>
                   {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
                   <button
                     onClick={() => submitRequest('domain')}
-                    disabled={sending || !domainWanted.trim()}
+                    disabled={sending || domainChoices.some((choice) => !choice.trim())}
                     className="btn-primary w-full justify-center disabled:opacity-40"
                   >
                     {sending ? 'Sending…' : 'Send my domain request'}
                   </button>
                 </div>
               ) : (
-                <div className="mt-6 space-y-4">
-                  <div className="rounded-xl border border-mint/40 bg-mint/[0.06] p-4 text-sm">
-                    Request sent. I will grab <span className="text-frost">{domainWanted}</span> (or your backup) and connect it. Start the {domainOffer[domainBilling].label} subscription below.
-                  </div>
-                  <PayBlock
-                    url={stripeLinks[domainOffer[domainBilling].stripeKey]}
-                    label={`Start domain, ${domainOffer[domainBilling].label}`}
-                  />
+                <div className="mt-6 rounded-xl border border-mint/40 bg-mint/[0.06] p-4 text-sm">
+                  Request sent. I will check the names you shared and reach out before confirming a domain. No payment is due until I confirm the name. After that, come back here to start the {domainOffer.yearly.label} subscription so I can put it live.
                 </div>
               )}
             </div>

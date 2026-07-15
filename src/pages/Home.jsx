@@ -1,21 +1,14 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
-import MiniSite from '../components/MiniSite.jsx'
 import { asset } from '../lib/asset.js'
-import { site, demoStyles, resumeService, realSites, tiers, deposit, promises } from '../config/site.js'
+import { site, resumeService, realSites, tiers, deposit } from '../config/site.js'
 
-const process = [
-  ['01', 'Send your work'],
-  ['02', 'I build it'],
-  ['03', 'Approve and launch'],
-]
-
-const outcomes = [
-  ['01', 'Clear story'],
-  ['02', 'Built around you'],
-  ['03', 'One polished link'],
-  ['04', 'No tech work'],
+const buyingReasons = [
+  ['$50', 'Starts your build', 'The remaining balance is due only after your site is live.'],
+  ['~2 weeks', 'Typical turnaround', 'You get a polished site without losing weeks to a DIY builder.'],
+  ['3 rounds', 'Edits included', 'I refine the details with you before you approve the final site.'],
+  ['1:1', 'Built with a real person', 'Work directly with me from the first form through launch.'],
 ]
 
 const rise = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 } }
@@ -57,7 +50,6 @@ function WorkCard({ project }) {
 
 export default function Home() {
   const liveSites = realSites.filter((project) => project.live && project.url)
-  const featuredStyles = demoStyles.slice(0, 6)
 
   return (
     <main className="overflow-hidden">
@@ -66,13 +58,12 @@ export default function Home() {
         <div className="hero-glow hero-glow-two" />
         <div className="relative mx-auto grid min-h-[47rem] max-w-7xl items-center gap-14 px-6 pb-20 pt-32 lg:grid-cols-[1.02fr_.98fr] lg:px-10 lg:pb-24 lg:pt-36">
           <div className="relative z-10 max-w-2xl">
-            <motion.div {...rise} transition={{ duration: 0.55 }}><span className="eyebrow"><span className="eyebrow-dot" /> Portfolio websites, handled end-to-end</span></motion.div>
-            <h1 className="font-head mt-7 text-[clamp(3.25rem,7vw,6.6rem)] leading-[0.93] tracking-[-0.045em]">
-              <motion.span {...rise} transition={{ duration: 0.6, delay: 0.08 }} className="block">Get remembered</motion.span>
-              <motion.span {...rise} transition={{ duration: 0.6, delay: 0.18 }} className="block text-violet">before the interview.</motion.span>
+            <h1 className="font-head text-[clamp(3.25rem,7vw,6.6rem)] leading-[0.93] tracking-[-0.045em]">
+              <motion.span {...rise} transition={{ duration: 0.6, delay: 0.08 }} className="block">Portfolios</motion.span>
+              <motion.span {...rise} transition={{ duration: 0.6, delay: 0.18 }} className="block text-violet">made easy.</motion.span>
             </h1>
             <motion.p {...rise} transition={{ duration: 0.6, delay: 0.28 }} className="mt-7 max-w-xl text-lg leading-relaxed text-mist sm:text-xl">
-              Send me your work. I turn it into a sharp portfolio site and launch it for you.
+              One easy form gets you one polished link to send to recruiters and add to every application.
             </motion.p>
             <motion.div {...rise} transition={{ duration: 0.6, delay: 0.38 }} className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link to="/start" className="btn-primary justify-center sm:justify-start">Start with {'$'}{deposit.amount} <Arrow /></Link>
@@ -98,98 +89,16 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="border-y hairline bg-white/65">
-        <div className="mx-auto flex max-w-7xl flex-col gap-5 px-6 py-6 sm:flex-row sm:items-center sm:justify-between lg:px-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-mist">Sites already working for</p>
-          <div className="flex flex-wrap gap-x-8 gap-y-3 sm:justify-end">
-            {liveSites.map((project) => (
-              <div key={project.id} className="flex items-center gap-2.5 text-sm">
-                <span className="h-1.5 w-1.5 rounded-full bg-mint" />
-                <span className="font-semibold text-frost">{project.name}</span>
-                <span className="text-mist">{project.field}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section id="work" className="home-section">
         <Reveal className="section-heading-row">
           <div className="max-w-2xl">
-            <h2 className="section-title">Real sites. Live right now.</h2>
+            <h2 className="section-title">Live right now.</h2>
           </div>
           <Link to="/styles" className="text-link shrink-0">See all work <Arrow /></Link>
         </Reveal>
         <div className="mt-9 grid gap-5 sm:grid-cols-2">
           {liveSites.map((project, index) => (
             <Reveal key={project.id} delay={index * 0.08}><WorkCard project={project} /></Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section className="home-section pt-8">
-        <div className="value-panel">
-          <Reveal className="max-w-xl">
-            <h2 className="font-head text-4xl leading-tight text-white sm:text-5xl">Your work, presented like it matters.</h2>
-            <Link to="/start" className="btn-light mt-8">Build my portfolio <Arrow /></Link>
-          </Reveal>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {outcomes.map((item, index) => (
-              <Reveal key={item[1]} delay={index * 0.06}>
-                <article className="outcome-card">
-                  <span className="outcome-number">{item[0]}</span>
-                  <h3 className="font-display mt-10 text-lg font-semibold text-white">{item[1]}</h3>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="home-section">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="section-title">Pick the level. I handle the rest.</h2>
-          <p className="section-copy mx-auto">{'$'}{deposit.amount} starts your build. Pay the rest when it is live.</p>
-        </Reveal>
-        <div className="mx-auto mt-12 grid max-w-5xl gap-5 lg:grid-cols-2">
-          {tiers.map((tier, index) => (
-            <Reveal key={tier.id} delay={index * 0.1}>
-              <article className={'service-card ' + (tier.popular ? 'service-card-featured' : '')}>
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-3"><h3 className="font-display text-2xl font-semibold">{tier.name}</h3>{tier.popular && <span className="popular-pill">Best value</span>}</div>
-                  </div>
-                  <div className="text-right"><p className="font-head text-4xl">{tier.priceLabel}</p><p className="mt-1 text-xs text-mist">one time</p></div>
-                </div>
-                <div className="my-7 h-px bg-frost/10" />
-                <ul className="space-y-3">
-                  {tier.headline.map((feature) => <li key={feature} className="flex items-center gap-2.5 text-sm text-mist"><span className="text-mint"><Check /></span>{feature}</li>)}
-                </ul>
-                <Link to={'/start?package=' + tier.id} className={(tier.popular ? 'btn-primary' : 'btn-ghost') + ' mt-8 w-full justify-center'}>Choose {tier.name} <Arrow /></Link>
-              </article>
-            </Reveal>
-          ))}
-        </div>
-        <Reveal className="mx-auto mt-5 max-w-5xl">
-          <div className="guarantee-bar">
-            <span className="guarantee-icon">
-              <svg width="25" height="25" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3 19 6v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" strokeWidth="1.5" /><path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
-            </span>
-            <div><p className="font-display font-semibold">{promises.website.title}</p><p className="mt-1 text-sm text-mist">{promises.website.short}</p></div>
-          </div>
-        </Reveal>
-      </section>
-
-      <section className="home-section pt-8">
-        <Reveal className="max-w-2xl"><h2 className="section-title">One form. I handle the rest.</h2></Reveal>
-        <div className="process-grid mt-12">
-          {process.map((step, index) => (
-            <Reveal key={step[0]} delay={index * 0.1}>
-              <article className="process-card">
-                <div className="flex items-center justify-between"><span className="process-number">{step[0]}</span>{index < process.length - 1 && <Arrow className="hidden text-frost/25 sm:block" />}</div>
-                <h3 className="font-display mt-8 text-xl font-semibold">{step[1]}</h3>
-              </article>
-            </Reveal>
           ))}
         </div>
       </section>
@@ -216,22 +125,24 @@ export default function Home() {
       </section>
 
       <section className="home-section pt-8">
-        <Reveal className="section-heading-row">
-          <div className="max-w-2xl"><h2 className="section-title">Pick a direction. I make it yours.</h2></div>
-          <Link to="/styles" className="text-link shrink-0">Explore all 10 styles <Arrow /></Link>
-        </Reveal>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredStyles.map((style, index) => (
-            <Reveal key={style.id} delay={Math.min(index, 3) * 0.06}>
-              <Link to={'/styles/' + style.id} className="style-card group">
-                <div className="h-48 overflow-hidden border-b hairline"><div className="h-full transition duration-500 group-hover:scale-[1.035]"><MiniSite swatch={style.swatch} /></div></div>
-                <div className="flex items-center justify-between gap-4 p-5">
-                  <div><p className="font-display font-semibold">{style.name}</p><p className="mt-1 text-xs text-mist">{style.vibe}</p></div>
-                  <Arrow className="text-frost/45 transition group-hover:translate-x-1 group-hover:text-violet" />
-                </div>
-              </Link>
-            </Reveal>
-          ))}
+        <div className="value-panel">
+          <Reveal className="max-w-xl">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/55">A finished site, without the website project</p>
+            <h2 className="font-head mt-4 text-4xl leading-tight text-white sm:text-5xl">You send the work. I handle everything else.</h2>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70">No templates to wrestle with, no hosting setup, and no wondering if it looks professional.</p>
+            <Link to="/start" className="btn-light mt-8">Start with ${deposit.amount} <Arrow /></Link>
+          </Reveal>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {buyingReasons.map((item, index) => (
+              <Reveal key={item[1]} delay={index * 0.06}>
+                <article className="outcome-card">
+                  <span className="outcome-number">{item[0]}</span>
+                  <h3 className="font-display mt-4 text-lg font-semibold text-white">{item[1]}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60">{item[2]}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

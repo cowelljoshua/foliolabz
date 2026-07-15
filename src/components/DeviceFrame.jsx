@@ -99,11 +99,17 @@ function ExpandedModal({ name, url, onClose }) {
         }`}
       >
         <BrowserBar url={url} />
-        <iframe
-          src={url}
-          title={`Live preview of ${name}`}
-          className="h-[calc(100%-2.6rem)] w-full bg-white"
-        />
+        <div className="h-[calc(100%-2.6rem)] overflow-hidden bg-white">
+          <iframe
+            src={url}
+            title={`Live preview of ${name}`}
+            className={
+              mode === 'laptop'
+                ? 'h-[125%] w-[125%] origin-top-left scale-[0.8] bg-white'
+                : 'h-full w-full bg-white'
+            }
+          />
+        </div>
       </motion.div>
 
       <p className="mt-3 text-xs text-ink-800" onClick={(e) => e.stopPropagation()}>

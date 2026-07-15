@@ -33,8 +33,7 @@ export default function Nav() {
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6">
       <nav className={'site-nav mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-5 ' + (scrolled ? 'site-nav-scrolled' : '')}>
         <Link to="/" className="group flex shrink-0 items-center gap-2.5" aria-label="FolioLabz home">
-          <span className="brand-mark">F</span>
-          <span className="font-head text-lg tracking-tight sm:text-xl">
+          <span className="font-display text-xl font-bold tracking-[-0.03em] sm:text-2xl">
             <span className="text-frost">Folio</span><span className="text-violet">Labz</span>
           </span>
         </Link>

@@ -9,7 +9,6 @@ import ResumeXray from '../components/ResumeXray.jsx'
 import {
   tiers,
   deposit,
-  hosting,
   rush,
   promises,
   resumeService,
@@ -35,8 +34,11 @@ function TierCard({ tier, onOpen }) {
           </span>
         )}
         <h3 className="font-display text-xl font-semibold">{tier.name}</h3>
-        <p className="font-display mt-2 text-4xl font-bold">{tier.priceLabel}</p>
-        <p className="mt-1 text-xs font-semibold text-cyan">${deposit.amount} deposit to start</p>
+        <div className="mt-2 flex items-baseline gap-2">
+          <span className="font-display text-lg font-semibold text-mist line-through">{tier.originalPriceLabel}</span>
+          <span className="font-display text-4xl font-bold">{tier.priceLabel}</span>
+        </div>
+        <p className="mt-1 text-xs font-semibold text-cyan">${tier.price} total &middot; ${deposit.amount} today &middot; ${tier.price - deposit.amount} after approval</p>
         <p className="mt-2 text-sm text-mist">{tier.blurb}</p>
         <ul className="mt-5 space-y-2">
           {tier.headline.map((f) => (
@@ -79,8 +81,11 @@ function TierModal({ tier, onClose }) {
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-display text-2xl font-bold">{tier.name}</h3>
-            <p className="font-display mt-1 text-3xl font-bold text-gradient">{tier.priceLabel}</p>
-            <p className="mt-1 text-xs font-semibold text-cyan">${deposit.amount} deposit to start</p>
+            <div className="mt-1 flex items-baseline gap-2">
+              <span className="font-display text-base font-semibold text-mist line-through">{tier.originalPriceLabel}</span>
+              <span className="font-display text-3xl font-bold text-gradient">{tier.priceLabel}</span>
+            </div>
+            <p className="mt-1 text-xs font-semibold text-cyan">${tier.price} total &middot; ${deposit.amount} today &middot; ${tier.price - deposit.amount} after approval</p>
           </div>
           <button onClick={onClose} className="rounded-full p-2 text-mist hover:bg-frost/10 hover:text-frost" aria-label="Close">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -107,11 +112,14 @@ function TierModal({ tier, onClose }) {
         </div>
 
         <div className="mt-7 flex flex-col gap-3">
+          <Link to={`/examples/${tier.id}`} className="btn-ghost justify-center">
+            View the {tier.name} example
+          </Link>
           <Link to={startLink(tier.id, rushOn)} className="btn-primary justify-center">
             Start my build
           </Link>
           <p className="text-center text-xs text-mist">
-            The rest of your {tier.priceLabel} is due only when your site is live{rushOn ? ', rush add-on included in that balance' : ''}.
+            Your ${deposit.amount} deposit is included in the {tier.priceLabel} total. The remaining ${tier.price - deposit.amount} is due after you approve the live site{rushOn ? ', with the rush add-on included in that balance' : ''}.
           </p>
         </div>
       </motion.div>
@@ -169,6 +177,12 @@ export default function Pricing() {
         </p>
       </Reveal>
 
+      <Reveal delay={0.08} className="mx-auto mt-7 max-w-3xl">
+        <div className="rounded-2xl border border-violet/30 bg-violet/10 px-5 py-3 text-center text-sm font-semibold text-frost">
+          <span className="mr-2 inline-flex rounded-full bg-violet px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white">Save $50 &middot; Sale ends July 26</span>
+          Launch <span className="text-mist line-through">$350</span> <span className="text-violet">$300</span> &middot; Pro <span className="text-mist line-through">$600</span> <span className="text-violet">$550</span>
+        </div>
+      </Reveal>
       {/* Tiers */}
       <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
         {tiers.map((t, i) => (
@@ -176,37 +190,6 @@ export default function Pricing() {
             <TierCard tier={t} onOpen={() => setOpenTier(t)} />
           </Reveal>
         ))}
-      </div>
-
-      {/* How payment + web address work */}
-      <div className="mx-auto mt-8 grid max-w-3xl gap-6 sm:grid-cols-2">
-        <Reveal>
-          <SpotlightCard className="h-full p-7" spotColor="rgba(34,211,238,0.14)">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan/15 text-cyan">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="6" width="18" height="12" rx="2" stroke="currentColor" strokeWidth="1.6" />
-                <path d="M3 10h18" stroke="currentColor" strokeWidth="1.6" />
-              </svg>
-            </span>
-            <h3 className="font-display mt-4 text-lg font-semibold">{deposit.label}</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-mist">{deposit.detail}</p>
-          </SpotlightCard>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <SpotlightCard className="h-full p-7" spotColor="rgba(124,92,255,0.14)">
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet/15 text-violet">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.6" />
-                <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" strokeWidth="1.4" />
-              </svg>
-            </span>
-            <h3 className="font-display mt-4 text-lg font-semibold">Your web address, sorted</h3>
-            <p className="mt-1.5 text-sm leading-relaxed text-mist">
-              Go live free on a clean address like <span className="text-frost">{hosting.free.example}</span>. Want your own .com or .net?
-              It runs {hosting.custom.monthly} or {hosting.custom.yearly} and I set it up and bill it through your account, so you never touch a domain company.
-            </p>
-          </SpotlightCard>
-        </Reveal>
       </div>
 
       <Reveal delay={0.2} className="mt-10">
@@ -278,7 +261,7 @@ export default function Pricing() {
       {/* FAQ */}
       <section className="mt-24">
         <Reveal className="text-center">
-          <h2 className="font-head text-3xl">Questions, answered.</h2>
+          <h2 className="font-head text-3xl">FAQs</h2>
         </Reveal>
         <Faq />
       </section>

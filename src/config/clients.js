@@ -14,12 +14,15 @@
 //   package      "launch" or "pro". Sets the balance owed.
 //   rush         true if they added rush (+$75 on the balance).
 //   balancePaid  false while they still owe the balance, true once paid.
+//   buildStatus  "brief", "building", "review", "polish", or "live".
 //   payLink      OPTIONAL personal Stripe link for their balance. Use for
 //                rush builds or special deals; leave "" to use the standard
 //                launchBalance/proBalance link from site.js.
-//   domain       The custom domain they want or have, e.g. "janedoe.com".
-//                Leave "" if they are on the free .netlify.app address.
-//   domainActive true once their domain subscription ($4/mo or $20/yr) is running.
+//   domain       The available custom domain you confirmed, e.g. "janedoe.com".
+//                Leave "" until you confirm an available name with the client.
+//   domainActive Leave false after adding the confirmed domain. This tells the client
+//                payment has not started and the domain cannot go live yet. Flip to
+//                true once their $30/yr subscription is running and you connect it.
 //
 // NOTE: this list ships inside the public site code, so keep it to
 // names + project status only. Never put anything sensitive here.
@@ -32,8 +35,20 @@ export const clients = {
     package: "launch",
     rush: false,
     balancePaid: false,
+    buildStatus: "building",
     payLink: "",
-    domain: "democlient.com",
+    domain: "",
+    domainActive: false,
+  },
+
+  "joshuacowell2005@gmail.com": {
+    name: "Joshua Cowell",
+    package: "launch",
+    rush: false,
+    balancePaid: false,
+    buildStatus: "brief",
+    payLink: "",
+    domain: "",
     domainActive: false,
   },
 
