@@ -52,6 +52,17 @@ export const clients = {
     domainActive: false,
   },
 
+  "davidericcowell@gmail.com": {
+    name: "David Cowell",
+    package: "pro",
+    rush: false,
+    balancePaid: true,
+    buildStatus: "live",
+    payLink: "",
+    domain: "davidcowell.com",
+    domainActive: true,
+  },
+
   // ---- real clients below, copy the block above as a template ----
 }
 

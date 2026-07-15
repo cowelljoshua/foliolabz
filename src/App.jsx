@@ -45,6 +45,12 @@ const pageTitles = {
   '/portal': 'Client portal · FolioLabz',
   '/examples/launch': 'Launch package example · FolioLabz',
   '/examples/pro': 'Pro package example · FolioLabz',
+  '/examples/pro/work': 'Pro example: Work · FolioLabz',
+  '/examples/pro/case-study': 'Pro example: Case Study · FolioLabz',
+  '/examples/pro/gallery': 'Pro example: Gallery · FolioLabz',
+  '/examples/pro/about': 'Pro example: About · FolioLabz',
+  '/examples/pro/resume': 'Pro example: Resume · FolioLabz',
+  '/examples/pro/contact': 'Pro example: Contact · FolioLabz',
 }
 
 function PageTitle() {
@@ -95,6 +101,12 @@ export default function App() {
         <Route path="/styles/luxe" element={<Luxe />} />
         <Route path="/examples/launch" element={<PackageExample packageId="launch" />} />
         <Route path="/examples/pro" element={<PackageExample packageId="pro" />} />
+        <Route path="/examples/pro/work" element={<PackageExample packageId="pro" proPage="work" />} />
+        <Route path="/examples/pro/case-study" element={<PackageExample packageId="pro" proPage="case-study" />} />
+        <Route path="/examples/pro/gallery" element={<PackageExample packageId="pro" proPage="gallery" />} />
+        <Route path="/examples/pro/about" element={<PackageExample packageId="pro" proPage="about" />} />
+        <Route path="/examples/pro/resume" element={<PackageExample packageId="pro" proPage="resume" />} />
+        <Route path="/examples/pro/contact" element={<PackageExample packageId="pro" proPage="contact" />} />
         {/* Unknown URLs go home rather than silently rendering Home at a wrong address */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
