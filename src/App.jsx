@@ -10,6 +10,7 @@ const Pricing = lazy(() => import('./pages/Pricing.jsx'))
 const Start = lazy(() => import('./pages/Start.jsx'))
 const Thanks = lazy(() => import('./pages/Thanks.jsx'))
 const Portal = lazy(() => import('./pages/Portal.jsx'))
+const Owner = lazy(() => import('./pages/Owner.jsx'))
 const Midnight = lazy(() => import('./pages/demos/Midnight.jsx'))
 const SoftLight = lazy(() => import('./pages/demos/SoftLight.jsx'))
 const Editorial = lazy(() => import('./pages/demos/Editorial.jsx'))
@@ -38,20 +39,21 @@ function ScrollToTop() {
 }
 
 const pageTitles = {
-  '/': 'FolioLabz · Portfolio websites, built for you',
-  '/styles': 'Styles · FolioLabz',
-  '/pricing': 'Pricing · FolioLabz',
-  '/start': 'Start my build · FolioLabz',
-  '/thanks': 'Brief received · FolioLabz',
-  '/portal': 'Client portal · FolioLabz',
-  '/examples/launch': 'Launch package example · FolioLabz',
-  '/examples/pro': 'Pro package example · FolioLabz',
-  '/examples/pro/work': 'Pro example: Work · FolioLabz',
-  '/examples/pro/case-study': 'Pro example: Case Study · FolioLabz',
-  '/examples/pro/gallery': 'Pro example: Gallery · FolioLabz',
-  '/examples/pro/about': 'Pro example: About · FolioLabz',
-  '/examples/pro/resume': 'Pro example: Resume · FolioLabz',
-  '/examples/pro/contact': 'Pro example: Contact · FolioLabz',
+  '/': 'FolioLabz Â· Portfolio websites, built for you',
+  '/styles': 'Styles Â· FolioLabz',
+  '/pricing': 'Pricing Â· FolioLabz',
+  '/start': 'Start my build Â· FolioLabz',
+  '/thanks': 'Brief received Â· FolioLabz',
+  '/portal': 'Client portal Â· FolioLabz',
+  '/owner': 'Owner workspace · FolioLabz',
+  '/examples/launch': 'Launch package example Â· FolioLabz',
+  '/examples/pro': 'Pro package example Â· FolioLabz',
+  '/examples/pro/work': 'Pro example: Work Â· FolioLabz',
+  '/examples/pro/case-study': 'Pro example: Case Study Â· FolioLabz',
+  '/examples/pro/gallery': 'Pro example: Gallery Â· FolioLabz',
+  '/examples/pro/about': 'Pro example: About Â· FolioLabz',
+  '/examples/pro/resume': 'Pro example: Resume Â· FolioLabz',
+  '/examples/pro/contact': 'Pro example: Contact Â· FolioLabz',
 }
 
 function PageTitle() {
@@ -59,7 +61,7 @@ function PageTitle() {
   useEffect(() => {
     const demo = demoStyles.find((d) => pathname === `/styles/${d.id}`)
     document.title = demo
-      ? `${demo.name} style example · FolioLabz`
+      ? `${demo.name} style example Â· FolioLabz`
       : pageTitles[pathname] || pageTitles['/']
   }, [pathname])
   return null
@@ -90,6 +92,7 @@ export default function App() {
           <Route path="/thanks" element={<Thanks />} />
           <Route path="/portal" element={<Portal />} />
         </Route>
+        <Route path="/owner" element={<Owner />} />
         {/* Full-screen style demos (immersive, no site nav) */}
         <Route path="/styles/midnight" element={<Midnight />} />
         <Route path="/styles/softlight" element={<SoftLight />} />

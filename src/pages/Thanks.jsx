@@ -30,8 +30,8 @@ export default function Thanks() {
           ['You get it back sharper', 'With notes on every change I made.'],
         ]
       : [
-          ['I read your brief'],
           [`You put down a $${deposit.amount} deposit`],
+          ['I read your brief'],
           ['Your preview link arrives'],
         ]
 
@@ -86,7 +86,7 @@ export default function Thanks() {
         </Reveal>
 
         <Reveal delay={0.6} className="mt-10">
-          <Link to="/" className="text-sm text-mist hover:text-frost">← Back home</Link>
+          <Link to="/" className="text-sm text-mist hover:text-frost">â† Back home</Link>
         </Reveal>
       </div>
     </main>

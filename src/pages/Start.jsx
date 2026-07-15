@@ -362,6 +362,18 @@ export default function Start() {
         body: fd.toString(),
       })
       if (!res.ok) throw new Error(`Status ${res.status}`)
+      if (track === 'website') {
+        try {
+          const profileResponse = await fetch('/.netlify/functions/client-intake', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ intake: { ...form, email: form.email.trim().toLowerCase(), assets: manifest } }),
+          })
+          if (!profileResponse.ok) throw new Error(`Status ${profileResponse.status}`)
+        } catch (profileError) {
+          console.warn('Client profile was not created automatically', profileError)
+        }
+      }
       navigate('/thanks', { state })
     } catch (e) {
       if (import.meta.env.DEV) {

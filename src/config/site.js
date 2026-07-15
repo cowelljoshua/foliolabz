@@ -479,7 +479,7 @@ export const brandChips = [
 ]
 
 export const pageOptions = [
-  "About me", "Projects / Work", "Resume", "Photo gallery", "Testimonials", "Experience timeline", "Contact", "Blog / Writing",
+  "About me", "Projects / Work", "Resume", "Photo gallery", "Testimonials", "Experience timeline", "Contact", "Blog / Writing", "Skills & tools", "Certifications", "Awards & honors", "Publications / research", "Services", "FAQ", "Press / features", "Speaking & events", "Booking / availability",
 ]
 
 // How many pages each package can pick from the list above.

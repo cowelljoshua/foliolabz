@@ -58,7 +58,7 @@ export default function Home() {
         <div className="hero-glow hero-glow-two" />
         <div className="relative mx-auto grid min-h-[47rem] max-w-7xl items-center gap-14 px-6 pb-20 pt-32 lg:grid-cols-[1.02fr_.98fr] lg:px-10 lg:pb-24 lg:pt-36">
           <div className="relative z-10 max-w-2xl">
-            <h1 className="font-head text-[clamp(3.25rem,7vw,6.6rem)] leading-[0.93] tracking-[-0.045em]">
+            <h1 className="font-display text-[clamp(3.25rem,7vw,6.6rem)] font-semibold leading-[0.93] tracking-[-0.045em]">
               <motion.span {...rise} transition={{ duration: 0.6, delay: 0.08 }} className="block">Portfolios</motion.span>
               <motion.span {...rise} transition={{ duration: 0.6, delay: 0.18 }} className="block text-violet">made easy.</motion.span>
             </h1>

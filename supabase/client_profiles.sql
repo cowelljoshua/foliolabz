@@ -15,6 +15,9 @@ create table if not exists public.client_profiles (
   updated_at timestamptz not null default now()
 );
 
+alter table public.client_profiles
+  add column if not exists intake jsonb not null default '{}'::jsonb;
+
 alter table public.client_profiles enable row level security;
 
 -- A signed-in client can read only the row that matches their verified email.
