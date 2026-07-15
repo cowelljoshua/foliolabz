@@ -1,8 +1,8 @@
 Screenshot thumbnails of the real client sites live here:
 
-  josh.jpg      (joshuacowell.com)
-  david.jpg     (davidcowell.com)
-  caroline.jpg  (carolinethomas.netlify.app)
+  josh-hd.png      (joshuacowell.com)
+  david-hd.png     (davidcowell.com)
+  caroline-hd.png  (carolinethomas.netlify.app)
 
 They show on the Styles page: on phones as the card image, on desktop
 for a moment while the live preview loads. Paths are set in
@@ -16,7 +16,7 @@ project folder, swapping the name and URL:
     --virtual-time-budget=9000 --window-size=1280,800 `
     --screenshot="public\examples\newclient.png" https://theirsite.com
 
-(A PNG straight from that command works fine; the .jpg versions were
+(A PNG straight from that command works fine; the existing PNG versions were
 just compressed to keep the repo light. Update the thumb path in
 site.js to match whatever extension you save.)
 

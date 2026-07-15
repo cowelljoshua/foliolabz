@@ -1,25 +1,26 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
 import { demoStyles } from './config/site.js'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
-import Home from './pages/Home.jsx'
-import Styles from './pages/Styles.jsx'
-import Pricing from './pages/Pricing.jsx'
-import Start from './pages/Start.jsx'
-import Thanks from './pages/Thanks.jsx'
-import Portal from './pages/Portal.jsx'
-import Midnight from './pages/demos/Midnight.jsx'
-import SoftLight from './pages/demos/SoftLight.jsx'
-import Editorial from './pages/demos/Editorial.jsx'
-import WarmStudio from './pages/demos/WarmStudio.jsx'
-import ClassicSlate from './pages/demos/ClassicSlate.jsx'
-import Neon from './pages/demos/Neon.jsx'
-import Botanical from './pages/demos/Botanical.jsx'
-import Mono from './pages/demos/Mono.jsx'
-import Coastal from './pages/demos/Coastal.jsx'
-import Luxe from './pages/demos/Luxe.jsx'
-import PackageExample from './pages/demos/PackageExample.jsx'
+
+const Home = lazy(() => import('./pages/Home.jsx'))
+const Styles = lazy(() => import('./pages/Styles.jsx'))
+const Pricing = lazy(() => import('./pages/Pricing.jsx'))
+const Start = lazy(() => import('./pages/Start.jsx'))
+const Thanks = lazy(() => import('./pages/Thanks.jsx'))
+const Portal = lazy(() => import('./pages/Portal.jsx'))
+const Midnight = lazy(() => import('./pages/demos/Midnight.jsx'))
+const SoftLight = lazy(() => import('./pages/demos/SoftLight.jsx'))
+const Editorial = lazy(() => import('./pages/demos/Editorial.jsx'))
+const WarmStudio = lazy(() => import('./pages/demos/WarmStudio.jsx'))
+const ClassicSlate = lazy(() => import('./pages/demos/ClassicSlate.jsx'))
+const Neon = lazy(() => import('./pages/demos/Neon.jsx'))
+const Botanical = lazy(() => import('./pages/demos/Botanical.jsx'))
+const Mono = lazy(() => import('./pages/demos/Mono.jsx'))
+const Coastal = lazy(() => import('./pages/demos/Coastal.jsx'))
+const Luxe = lazy(() => import('./pages/demos/Luxe.jsx'))
+const PackageExample = lazy(() => import('./pages/demos/PackageExample.jsx'))
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
@@ -79,7 +80,8 @@ export default function App() {
     <>
       <ScrollToTop />
       <PageTitle />
-      <Routes>
+      <Suspense fallback={<div className="grid min-h-[50vh] place-items-center bg-ink-950 text-sm text-mist">Loading page&hellip;</div>}>
+        <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/styles" element={<Styles />} />
@@ -110,6 +112,7 @@ export default function App() {
         {/* Unknown URLs go home rather than silently rendering Home at a wrong address */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </>
   )
 }

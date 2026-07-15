@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
 import { site, portal, balances, domainOffer, edits, stripeLinks } from '../config/site.js'
-import { findClient, balanceFor } from '../config/clients.js'
+import { supabase, supabaseConfigured } from '../lib/supabase.js'
 
 /* ---------- shared bits ---------- */
 
@@ -99,7 +99,11 @@ function BuildStatus({ status = 'brief' }) {
 export default function Portal() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [entered, setEntered] = useState(false)
+  const [session, setSession] = useState(null)
+  const [client, setClient] = useState(null)
+  const [loadingPortal, setLoadingPortal] = useState(true)
+  const [signingIn, setSigningIn] = useState(false)
+  const [authMessage, setAuthMessage] = useState('')
 
   const [action, setAction] = useState(null) // 'balance' | 'domain' | 'edit'
   const [balancePkg, setBalancePkg] = useState('')
@@ -115,13 +119,63 @@ export default function Portal() {
   const emailOk = /.+@.+\..+/.test(email)
   const chosenEdit = edits.find((e) => e.id === editType)
 
-  // Known client? Their profile drives what the dashboard shows.
-  const client = findClient(email)
-  const owed = balanceFor(client)
+  const owed = client?.balanceDue || 0
   const clientBalanceInfo = client ? balances.find((b) => b.pkg === client.package) : null
-  // Standard links assume no rush; a rush balance needs the personal payLink.
   const clientPayUrl = client ? (client.payLink || (!client.rush && clientBalanceInfo ? stripeLinks[clientBalanceInfo.stripeKey] : '')) : ''
   const chosenBalance = balances.find((b) => b.pkg === balancePkg)
+
+  useEffect(() => {
+    if (!supabaseConfigured) {
+      setLoadingPortal(false)
+      return undefined
+    }
+
+    let active = true
+    const loadClient = async (nextSession) => {
+      if (!active) return
+      setSession(nextSession)
+      if (!nextSession) {
+        setClient(null)
+        setLoadingPortal(false)
+        return
+      }
+
+      setLoadingPortal(true)
+      const { data, error: profileError } = await supabase
+        .from('client_profiles')
+        .select('name, email, package, rush, balance_due, build_status, pay_link, domain, domain_active')
+        .maybeSingle()
+
+      if (!active) return
+      if (profileError || !data) {
+        setClient(null)
+        setAuthMessage(`Your account is not set up for the client portal yet. Please email me at ${site.email}.`)
+      } else {
+        setClient({
+          name: data.name,
+          email: data.email,
+          package: data.package,
+          rush: data.rush,
+          balanceDue: data.balance_due,
+          buildStatus: data.build_status,
+          payLink: data.pay_link,
+          domain: data.domain,
+          domainActive: data.domain_active,
+        })
+        setName(data.name)
+        setEmail(data.email)
+        setAuthMessage('')
+      }
+      setLoadingPortal(false)
+    }
+
+    supabase.auth.getSession().then(({ data }) => loadClient(data.session))
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => loadClient(nextSession))
+    return () => {
+      active = false
+      listener.subscription.unsubscribe()
+    }
+  }, [])
 
   const openAction = (a) => {
     setAction(a)
@@ -137,7 +191,7 @@ export default function Portal() {
         L.push(`Choice ${index + 1}: ${choice || 'left blank'}`)
       })
       if (domainNotes) L.push(`Notes: ${domainNotes}`)
-      L.push('Next step: Check availability before adding a domain to the client file or requesting payment.')
+      L.push('Next step: Check availability before updating the client profile or requesting payment.')
     } else if (type === 'edit') {
       L.push(`Request: ${chosenEdit?.name} (${chosenEdit?.priceLabel})`)
       L.push('')
@@ -182,52 +236,79 @@ export default function Portal() {
     }
   }
 
-  /* ---------- gate ---------- */
+  /* ---------- secure sign-in gate ---------- */
 
-  if (!entered) {
+  const sendMagicLink = async () => {
+    if (!emailOk || !supabaseConfigured) return
+    setSigningIn(true)
+    setAuthMessage('')
+    try {
+      const response = await fetch('/.netlify/functions/portal-sign-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      })
+      const result = await response.json()
+      if (!response.ok) throw new Error(result.error)
+      setAuthMessage(result.approved
+        ? 'Check your email for your secure sign-in link.'
+        : `We could not find an account for that email. Please email me at ${site.email}.`)
+    } catch {
+      setAuthMessage(`We could not send a sign-in link. Please email me at ${site.email}.`)
+    } finally {
+      setSigningIn(false)
+    }
+  }
+
+  if (loadingPortal) {
+    return <main className="mx-auto flex min-h-[80vh] max-w-lg items-center justify-center px-6 pt-28 pb-16 text-mist">Loading your portal…</main>
+  }
+
+  if (!supabaseConfigured) {
+    return (
+      <main className="mx-auto flex min-h-[80vh] max-w-lg flex-col justify-center px-6 pt-28 pb-16">
+        <div className="glass rounded-3xl p-7 text-center">
+          <h1 className="font-head text-3xl">Client portal is being set up</h1>
+          <p className="mt-3 text-mist">Please email me at <a href={`mailto:${site.email}`} className="text-cyan hover:underline">{site.email}</a> for help.</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (!session) {
     return (
       <main className="mx-auto flex min-h-[80vh] max-w-lg flex-col justify-center px-6 pt-28 pb-16">
         <Reveal className="text-center">
           <h1 className="font-head text-4xl sm:text-5xl">{portal.heading}</h1>
-          <p className="mt-3 text-mist">{portal.sub}</p>
+          <p className="mt-3 text-mist">Enter the email you used when you signed up. If your account is approved, I’ll send a secure sign-in link.</p>
         </Reveal>
         <Reveal delay={0.1} className="mt-9">
           <div className="glass rounded-3xl p-7">
-            <h2 className="font-display text-lg font-semibold">{portal.gateTitle}</h2>
+            <h2 className="font-display text-lg font-semibold">Secure sign-in</h2>
             <div className="mt-5 space-y-5">
               <Field label="Email you signed up with">
-                <input className="field-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@email.com" />
+                <input className="field-input" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@email.com" />
               </Field>
-              {/* Known clients skip the name; I already have it on file. */}
-              {emailOk && !client && (
-                <Field label="Your name">
-                  <input className="field-input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Jordan Smith" />
-                </Field>
-              )}
-              {client && (
-                <p className="rounded-xl border border-mint/40 bg-mint/[0.06] p-3.5 text-sm">
-                  Found you, <span className="font-semibold text-frost">{client.name.split(' ')[0]}</span>. Your project is loaded.
-                </p>
-              )}
-              <button
-                onClick={() => {
-                  if (!emailOk) return
-                  if (client) {
-                    setName(client.name)
-                    setEntered(true)
-                  } else if (name.trim()) {
-                    setEntered(true)
-                  }
-                }}
-                disabled={!emailOk || (!client && !name.trim())}
-                className="btn-primary w-full justify-center disabled:opacity-40"
-              >
-                Continue →
+              <button onClick={sendMagicLink} disabled={!emailOk || signingIn} className="btn-primary w-full justify-center disabled:opacity-40">
+                {signingIn ? 'Sending…' : 'Email me a sign-in link'}
               </button>
-              <p className="text-xs text-mist/70">{portal.gateNote}</p>
+              {authMessage && <p className="rounded-xl border border-cyan/30 bg-cyan/[0.05] p-3.5 text-sm text-mist">{authMessage}</p>}
+              <p className="text-xs text-mist/70">No account? <a href={`mailto:${site.email}`} className="text-cyan hover:underline">Email me</a> and I’ll help.</p>
             </div>
           </div>
         </Reveal>
+      </main>
+    )
+  }
+
+  if (!client) {
+    return (
+      <main className="mx-auto flex min-h-[80vh] max-w-lg flex-col justify-center px-6 pt-28 pb-16">
+        <div className="glass rounded-3xl p-7 text-center">
+          <h1 className="font-head text-3xl">Account not found</h1>
+          <p className="mt-3 text-mist">{authMessage || `Please email me at ${site.email} and I’ll help you get access.`}</p>
+          <button onClick={() => supabase.auth.signOut()} className="mt-6 text-sm text-cyan hover:underline">Use a different email</button>
+        </div>
       </main>
     )
   }
@@ -245,12 +326,7 @@ export default function Portal() {
             <p className="mt-1.5 text-sm text-mist">Signed in as {email}</p>
           </div>
           <button
-            onClick={() => {
-              setEntered(false)
-              setName('')
-              setEmail('')
-              setAction(null)
-            }}
+            onClick={() => supabase.auth.signOut()}
             className="text-sm text-mist hover:text-frost"
           >
             Not you? Switch

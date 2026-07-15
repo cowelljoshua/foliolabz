@@ -19,7 +19,7 @@ These are the things only you can do. The first two block your launch posts.
   and redeploy. About 30 minutes. **Do not post the launch announcement until
   this works.**
 - [x] **2. Add your photo. DONE (2026-07-14):** the rocket photo is cropped to
-  `public/josh-rocket.jpg` and shows in the home-page story section. Optional
+  `public/josh-founder.jpg` and shows in the home-page story section. Optional
   upgrade whenever: a close-up of your face (no sunglasses, ~600x600) saved as
   `public/josh-headshot.jpg`, then set `founder.showPhoto: true` in
   `src/config/site.js` to also get the small round avatar by your signature.
@@ -103,30 +103,14 @@ their name, see exactly their balance (computed from their package + rush), thei
 domain status, and nothing they do not need. Unknown emails still get the generic
 "pick your package" flow, so a client you have not entered yet is never locked out.
 
-The routine, in order:
+The secure portal routine, in order:
 1. A form submission lands in your email.
-2. Add the client to `clients.js`: email, name, `package: "launch"` or `"pro"`,
-   `rush` if they chose it, and `buildStatus: "brief"`.
-3. For a custom domain request, check any names they supplied. If they left them
-   blank, follow up when they are ready. Put only a confirmed available name in
-   `domain` and leave `domainActive: false`. Do not buy or connect it yet; the portal
-   tells them payment is required before launch.
-4. Once their $30/year domain subscription is running, buy and connect the confirmed
-   domain, then flip `domainActive: true`.
-5. When their balance payment arrives in Stripe, flip `balancePaid: true`.
-6. Save, commit, push. Netlify redeploys in about a minute.
+2. In **SQL Editor**, add their private `client_profiles` record with their email and build details. Do not create an Authentication user or send an invitation—the portal does that automatically the first time they sign in.
+3. Keep their profile current in **SQL Editor**. The table structure and example query are in `supabase/client_profiles.sql`.
+4. For a custom domain request, check any names they supplied. Once one is confirmed, add it to their private profile and leave `domain_active` off until their subscription is active.
+5. When their balance payment arrives in Stripe, update `balance_due` to `0` in their profile.
 
-Rush balances: the standard $250/$500 links do not include the $75, so for a rush
-client either paste a personal Stripe link into their `payLink` field or leave it
-`""`; the portal then tells them a payment link is coming by email instead of
-showing a wrong amount.
-
-There is a demo profile, `demo@foliolabz.com`, so you can try the portal as a
-client. Delete it whenever.
-
-One honest caveat: this list ships inside the site's public code. Names and project
-status only, never anything sensitive. Fine at this scale; real hidden accounts
-would need a backend, which we deliberately skipped.
+Clients sign in with a secure email link; their browser can retrieve only the profile row matching their authenticated email. No client names, emails, balances, or domains are stored in the public website code.
 
 ### How website billing works now (deposit first, balance at launch)
 Every website is **$50 to start, the rest when it goes live**. So:
@@ -277,7 +261,7 @@ Plan (that was removed) and no talk of them buying their own domain.
   it at Namecheap, connect it in Netlify (Domain management → Add a domain), HTTPS is
   automatic. See the hosting section above.
 - **Screenshot thumbnails**: already generated (2026-07-13) into
-  `public/examples/` as `josh.jpg`, `david.jpg`, `caroline.jpg`. To refresh one or
+  `public/examples/` as the `*-hd.png` thumbnails configured in `src/config/site.js`. To refresh one or
   add a new client, see `public/examples/README.txt`.
 - **Meetings**: for the $75 resume tier and the Pro strategy call, replying by
   email to schedule works fine. If you get busy, make a free https://calendly.com
