@@ -122,6 +122,7 @@ export default function Portal() {
 
   const owed = client?.balanceDue || 0
   const clientBalanceInfo = client ? balances.find((b) => b.pkg === client.package) : null
+  const clientDepositPending = Boolean(client && clientBalanceInfo && owed === Number(clientBalanceInfo.total.replace(/[^0-9]/g, '')))
   const clientPayUrl = client ? (client.payLink || (!client.rush && clientBalanceInfo ? stripeLinks[clientBalanceInfo.stripeKey] : '')) : ''
   const chosenBalance = balances.find((b) => b.pkg === balancePkg)
 
@@ -389,7 +390,9 @@ export default function Portal() {
                 <p className="mt-1 text-sm text-mist">
                   {client
                     ? owed > 0
-                      ? `$${owed} due when your site goes live.`
+                      ? clientDepositPending
+                        ? '$50 deposit needed to start your build.'
+                        : `$${owed} due when your site goes live.`
                       : 'All paid up, nothing due.'
                     : 'Clear the rest of your build once it is live.'}
                 </p>
@@ -443,12 +446,14 @@ export default function Portal() {
                   <div className="mt-5 space-y-5">
                     <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-6 text-center">
                       <p className="text-sm text-mist">
-                        {clientBalanceInfo?.name} build{client.rush ? ' with rush' : ''}, $50 deposit paid
+                        {clientDepositPending
+                          ? `${clientBalanceInfo?.name} build, $${owed} package total`
+                          : `${clientBalanceInfo?.name} build${client.rush ? ' with rush' : ''}, $50 deposit paid`}
                       </p>
-                      <p className="font-display mt-2 text-4xl font-bold">${owed}</p>
-                      <p className="mt-1 text-xs text-mist">due when your site goes live</p>
+                      <p className="font-display mt-2 text-4xl font-bold">{clientDepositPending ? '$50' : `$${owed}`}</p>
+                      <p className="mt-1 text-xs text-mist">{clientDepositPending ? 'deposit to start your build' : 'due when your site goes live'}</p>
                     </div>
-                    <PayBlock url={clientPayUrl} label={`Pay my $${owed} balance`} />
+                    <PayBlock url={clientPayUrl} label={clientDepositPending ? 'Pay my $50 deposit' : `Pay my $${owed} balance`} />
                   </div>
                 ) : (
                   <div className="mt-5 rounded-2xl border border-mint/40 bg-mint/[0.06] p-6 text-center">

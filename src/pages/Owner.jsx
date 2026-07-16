@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { supabase, supabaseConfigured } from '../lib/supabase.js'
 import OwnerProjectTracker from '../components/OwnerProjectTracker.jsx'
 import { normalizeTracker } from '../config/projectTracker.js'
+import { stripeLinks } from '../config/site.js'
 
 const stages = [
   ['brief', 'Brief received'],
@@ -14,7 +15,45 @@ const stages = [
 
 const emptyClient = {
   name: '', email: '', package: 'launch', rush: false, balance_due: 250,
-  build_status: 'brief', pay_link: '', domain: '', domain_active: false,
+  build_status: 'brief', pay_link: stripeLinks.launchBalance, domain: '', domain_active: false,
+}
+
+const packagePaymentStages = {
+  launch: [
+    { balance: 300, label: '$300 — Deposit not paid', payLink: stripeLinks.deposit },
+    { balance: 250, label: '$250 — Deposit paid', payLink: stripeLinks.launchBalance },
+    { balance: 0, label: '$0 — Paid in full', payLink: '' },
+  ],
+  pro: [
+    { balance: 550, label: '$550 — Deposit not paid', payLink: stripeLinks.deposit },
+    { balance: 500, label: '$500 — Deposit paid', payLink: stripeLinks.proBalance },
+    { balance: 0, label: '$0 — Paid in full', payLink: '' },
+  ],
+}
+
+function paymentStages(packageId) {
+  return packagePaymentStages[packageId] || packagePaymentStages.launch
+}
+
+function paymentStage(packageId, balance) {
+  return paymentStages(packageId).find((stage) => stage.balance === Number(balance))
+}
+
+function balanceAfterDeposit(packageId) {
+  return packageId === 'pro' ? 500 : 250
+}
+
+function paymentLinkFor(packageId, balance) {
+  return paymentStage(packageId, balance)?.payLink || ''
+}
+
+function paymentStagesWithCurrent(packageId, balance) {
+  const stages = paymentStages(packageId)
+  const currentBalance = Number(balance)
+  if (currentBalance > 0 && !paymentStage(packageId, currentBalance)) {
+    return [{ balance: currentBalance, label: `${money(currentBalance)} — Current custom amount`, payLink: '' }, ...stages]
+  }
+  return stages
 }
 
 function money(value) {
@@ -118,8 +157,11 @@ export default function Owner() {
 
   useEffect(() => {
     if (selected) {
+      const balanceDue = Number(selected.balance_due) || 0
       setDraft({
         ...selected,
+        balance_due: balanceDue,
+        pay_link: balanceDue === 0 ? '' : (selected.pay_link || paymentLinkFor(selected.package, balanceDue)),
         next_step: selected.next_step || '',
         target_launch_date: selected.target_launch_date || '',
         preview_url: selected.preview_url || '',
@@ -199,7 +241,7 @@ export default function Owner() {
         rush: draft.rush,
         balance_due: Number(draft.balance_due),
         build_status: draft.build_status,
-        pay_link: draft.pay_link,
+        pay_link: Number(draft.balance_due) === 0 ? '' : draft.pay_link,
         domain: draft.domain,
         domain_active: draft.domain_active,
         next_step: draft.next_step,
@@ -237,11 +279,26 @@ export default function Owner() {
   function updateNew(key, value) {
     setNewClient((current) => {
       const next = { ...current, [key]: value }
-      if (key === 'package' || key === 'rush') {
-        next.balance_due = (next.package === 'pro' ? 500 : 250) + (next.rush ? 75 : 0)
+      if (key === 'package') {
+        next.balance_due = balanceAfterDeposit(next.package)
+        next.pay_link = paymentLinkFor(next.package, next.balance_due)
+      }
+      if (key === 'balance_due') {
+        next.balance_due = Number(value)
+        next.pay_link = paymentLinkFor(next.package, next.balance_due)
       }
       return next
     })
+  }
+
+  function updateDraftPackage(packageId) {
+    const balanceDue = balanceAfterDeposit(packageId)
+    setDraft({ ...draft, package: packageId, balance_due: balanceDue, pay_link: paymentLinkFor(packageId, balanceDue) })
+  }
+
+  function updateDraftBalance(balanceDue) {
+    const balance = Number(balanceDue)
+    setDraft({ ...draft, balance_due: balance, pay_link: paymentLinkFor(draft.package, balance) })
   }
 
   if (!authReady) return <main className="grid min-h-screen place-items-center bg-ink-950 text-mist">Loading owner dashboard…</main>
@@ -305,7 +362,8 @@ export default function Owner() {
                 <label><Label>Name</Label><input className="field-input" required value={newClient.name} onChange={(event) => updateNew('name', event.target.value)} /></label>
                 <label><Label>Email</Label><input className="field-input" type="email" required value={newClient.email} onChange={(event) => updateNew('email', event.target.value)} /></label>
                 <label><Label>Package</Label><select className="field-input" value={newClient.package} onChange={(event) => updateNew('package', event.target.value)}><option value="launch">Launch</option><option value="pro">Pro</option></select></label>
-                <label><Label>Balance due</Label><input className="field-input" type="number" min="0" value={newClient.balance_due} onChange={(event) => updateNew('balance_due', event.target.value)} /></label>
+                <label><Label>Balance due</Label><select className="field-input" value={newClient.balance_due} onChange={(event) => updateNew('balance_due', event.target.value)}>{paymentStages(newClient.package).map((stage) => <option key={stage.balance} value={stage.balance}>{stage.label}</option>)}</select></label>
+                <label><Label>Payment link (auto-filled)</Label><input className="field-input disabled:opacity-60" disabled={newClient.balance_due === 0} value={newClient.balance_due === 0 ? 'N/A' : newClient.pay_link} onChange={(event) => updateNew('pay_link', event.target.value)} /></label>
                 <label className="flex items-center gap-3 rounded-2xl border border-frost/10 p-4"><input type="checkbox" checked={newClient.rush} onChange={(event) => updateNew('rush', event.target.checked)} /><span className="text-sm font-semibold">Rush build (+$75)</span></label>
               </div>
               <button className="btn-primary mt-7 disabled:opacity-40" disabled={loading}>{loading ? 'Adding…' : 'Add client'}</button>
@@ -316,11 +374,11 @@ export default function Owner() {
                 <div className="flex flex-wrap items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-violet">Client profile</p><h2 className="font-display mt-2 text-3xl font-semibold">{draft.name}</h2><p className="mt-1 text-sm text-mist">{draft.email} · Added {dateLabel(draft.created_at)}</p></div><button onClick={saveClient} disabled={loading} className="btn-primary disabled:opacity-40">{loading ? 'Saving…' : 'Save changes'}</button></div>
                 <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
                   <label><Label>Name</Label><input className="field-input" value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} /></label>
-                  <label><Label>Package</Label><select className="field-input" value={draft.package} onChange={(event) => setDraft({ ...draft, package: event.target.value })}><option value="launch">Launch</option><option value="pro">Pro</option></select></label>
+                  <label><Label>Package</Label><select className="field-input" value={draft.package} onChange={(event) => updateDraftPackage(event.target.value)}><option value="launch">Launch</option><option value="pro">Pro</option></select></label>
                   <label><Label>Build status</Label><select className="field-input" value={draft.build_status} onChange={(event) => setDraft({ ...draft, build_status: event.target.value })}>{stages.map(([id, label]) => <option key={id} value={id}>{label}</option>)}</select></label>
-                  <label><Label>Balance due</Label><input className="field-input" type="number" min="0" value={draft.balance_due} onChange={(event) => setDraft({ ...draft, balance_due: event.target.value })} /></label>
+                  <label><Label>Balance due</Label><select className="field-input" value={draft.balance_due} onChange={(event) => updateDraftBalance(event.target.value)}>{paymentStagesWithCurrent(draft.package, draft.balance_due).map((stage) => <option key={stage.balance} value={stage.balance}>{stage.label}</option>)}</select></label>
                   <label><Label>Domain</Label><input className="field-input" placeholder="name.com" value={draft.domain || ''} onChange={(event) => setDraft({ ...draft, domain: event.target.value })} /></label>
-                  <label><Label>Personal payment link</Label><input className="field-input" placeholder="https://…" value={draft.pay_link || ''} onChange={(event) => setDraft({ ...draft, pay_link: event.target.value })} /></label>
+                  <label><Label>Payment link (auto-filled)</Label><input className="field-input disabled:opacity-60" disabled={Number(draft.balance_due) === 0} value={Number(draft.balance_due) === 0 ? 'N/A' : (draft.pay_link || paymentLinkFor(draft.package, draft.balance_due))} onChange={(event) => setDraft({ ...draft, pay_link: event.target.value })} /></label>
                 </div>
                 <div className="mt-5 flex flex-wrap gap-4"><label className="flex items-center gap-3 rounded-2xl border border-frost/10 px-4 py-3"><input type="checkbox" checked={draft.rush} onChange={(event) => setDraft({ ...draft, rush: event.target.checked })} /><span className="text-sm font-semibold">Rush build</span></label><label className="flex items-center gap-3 rounded-2xl border border-frost/10 px-4 py-3"><input type="checkbox" checked={draft.domain_active} onChange={(event) => setDraft({ ...draft, domain_active: event.target.checked })} /><span className="text-sm font-semibold">Domain active</span></label></div>
               </section>
