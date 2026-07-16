@@ -91,6 +91,8 @@ export default function Owner() {
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState('')
   const [signingIn, setSigningIn] = useState(false)
+  const [resetSending, setResetSending] = useState(false)
+  const [resetNotice, setResetNotice] = useState('')
   const [clients, setClients] = useState([])
   const [selectedEmail, setSelectedEmail] = useState('')
   const [draft, setDraft] = useState(null)
@@ -168,6 +170,25 @@ export default function Owner() {
     setSigningIn(false)
   }
 
+  async function sendPasswordReset() {
+    const ownerEmail = email.trim().toLowerCase()
+    setAuthError('')
+    setResetNotice('')
+    if (!ownerEmail) {
+      setAuthError('Enter your owner email first.')
+      return
+    }
+
+    setResetSending(true)
+    const { error } = await supabase.auth.resetPasswordForEmail(ownerEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    setResetSending(false)
+
+    if (error) setAuthError(error.message)
+    else setResetNotice('Password reset email sent. Open the newest message from Supabase.')
+  }
+
   async function saveClient() {
     setLoading(true)
     setNotice('')
@@ -240,7 +261,9 @@ export default function Owner() {
           <label className="mt-7 block"><Label>Email</Label><input className="field-input" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} /></label>
           <label className="mt-4 block"><Label>Password</Label><input className="field-input" type="password" autoComplete="current-password" required value={password} onChange={(event) => setPassword(event.target.value)} /></label>
           {authError && <p className="mt-4 rounded-xl bg-[#b3261e]/10 p-3 text-sm text-[#e98b84]">{authError}</p>}
+          {resetNotice && <p className="mt-4 rounded-xl bg-mint/10 p-3 text-sm text-mint">{resetNotice}</p>}
           <button className="btn-primary mt-6 w-full justify-center disabled:opacity-40" disabled={signingIn}>{signingIn ? 'Signing in…' : 'Sign in'}</button>
+          <button type="button" onClick={sendPasswordReset} className="mt-4 w-full text-center text-sm text-cyan hover:underline disabled:opacity-40" disabled={resetSending}>{resetSending ? 'Sending reset email…' : 'Forgot password?'}</button>
         </form>
       </main>
     )

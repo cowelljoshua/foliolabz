@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from 'react'
-import { Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom'
+import { Routes, Route, Outlet, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { demoStyles } from './config/site.js'
 import Nav from './components/Nav.jsx'
 import Footer from './components/Footer.jsx'
@@ -11,6 +11,7 @@ const Start = lazy(() => import('./pages/Start.jsx'))
 const Thanks = lazy(() => import('./pages/Thanks.jsx'))
 const Portal = lazy(() => import('./pages/Portal.jsx'))
 const Owner = lazy(() => import('./pages/Owner.jsx'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword.jsx'))
 const Midnight = lazy(() => import('./pages/demos/Midnight.jsx'))
 const SoftLight = lazy(() => import('./pages/demos/SoftLight.jsx'))
 const Editorial = lazy(() => import('./pages/demos/Editorial.jsx'))
@@ -38,6 +39,36 @@ function ScrollToTop() {
   return null
 }
 
+function RecoveryRedirect() {
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    let subscription
+    let cancelled = false
+    const hash = new URLSearchParams(window.location.hash.slice(1))
+
+    if (hash.get('error_code') || hash.get('type') === 'recovery') {
+      navigate(`/reset-password${window.location.hash}`, { replace: true })
+    }
+
+    import('./lib/supabase.js').then(({ supabase, supabaseConfigured }) => {
+      if (!supabaseConfigured) return
+      const { data } = supabase.auth.onAuthStateChange((event) => {
+        if (event === 'PASSWORD_RECOVERY') navigate('/reset-password', { replace: true })
+      })
+      if (cancelled) data.subscription.unsubscribe()
+      else subscription = data.subscription
+    })
+
+    return () => {
+      cancelled = true
+      subscription?.unsubscribe()
+    }
+  }, [navigate])
+
+  return null
+}
+
 const pageTitles = {
   '/': 'FolioLabz · Portfolio websites, built for you',
   '/styles': 'Styles · FolioLabz',
@@ -46,6 +77,7 @@ const pageTitles = {
   '/thanks': 'Brief received · FolioLabz',
   '/portal': 'Client portal · FolioLabz',
   '/owner': 'Owner workspace · FolioLabz',
+  '/reset-password': 'Reset password · FolioLabz',
   '/examples/launch': 'Launch package example · FolioLabz',
   '/examples/pro': 'Pro package example · FolioLabz',
   '/examples/pro/work': 'Pro example: Work · FolioLabz',
@@ -82,6 +114,7 @@ export default function App() {
     <>
       <ScrollToTop />
       <PageTitle />
+      <RecoveryRedirect />
       <Suspense fallback={<div className="grid min-h-[50vh] place-items-center bg-ink-950 text-sm text-mist">Loading page&hellip;</div>}>
         <Routes>
         <Route element={<Layout />}>
@@ -93,6 +126,7 @@ export default function App() {
           <Route path="/portal" element={<Portal />} />
         </Route>
         <Route path="/owner" element={<Owner />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         {/* Full-screen style demos (immersive, no site nav) */}
         <Route path="/styles/midnight" element={<Midnight />} />
         <Route path="/styles/softlight" element={<SoftLight />} />
