@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase, supabaseConfigured } from '../lib/supabase.js'
 
 export default function ResetPassword() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const portalReset = searchParams.get('return') === 'portal'
+  const destination = portalReset ? '/portal' : '/owner'
   const [checking, setChecking] = useState(true)
   const [hasSession, setHasSession] = useState(false)
   const [password, setPassword] = useState('')
@@ -54,15 +57,15 @@ export default function ResetPassword() {
     }
 
     setComplete(true)
-    setNotice('Password updated. Opening your owner workspace…')
-    window.setTimeout(() => navigate('/owner', { replace: true }), 900)
+    setNotice(`Password updated. Opening your ${portalReset ? 'client portal' : 'owner workspace'}…`)
+    window.setTimeout(() => navigate(destination, { replace: true }), 900)
   }
 
   return (
     <main className="grid min-h-screen place-items-center bg-ink-950 px-6 py-16 text-frost">
       <section className="glass w-full max-w-md rounded-3xl p-7 sm:p-9">
-        <Link to="/" className="text-sm text-mist hover:text-frost">← FolioLabz</Link>
-        <p className="mt-8 text-xs font-bold uppercase tracking-[0.16em] text-violet">Private workspace</p>
+        <Link to={destination} className="text-sm text-mist hover:text-frost">← FolioLabz</Link>
+        <p className="mt-8 text-xs font-bold uppercase tracking-[0.16em] text-violet">{portalReset ? 'Client account' : 'Private workspace'}</p>
         <h1 className="font-display mt-2 text-3xl font-semibold">Choose a new password</h1>
 
         {checking ? (
@@ -71,8 +74,8 @@ export default function ResetPassword() {
           <p className="mt-5 rounded-xl bg-[#b3261e]/10 p-3 text-sm text-[#e98b84]">Password recovery is not configured.</p>
         ) : !hasSession ? (
           <div className="mt-5 space-y-4">
-            <p className="rounded-xl bg-[#b3261e]/10 p-3 text-sm text-[#e98b84]">This recovery link is invalid or expired. Return to owner sign-in and request a new one.</p>
-            <Link to="/owner" className="btn-primary w-full justify-center">Return to owner sign-in</Link>
+            <p className="rounded-xl bg-[#b3261e]/10 p-3 text-sm text-[#e98b84]">This recovery link is invalid or expired. Return to sign-in and request a new one.</p>
+            <Link to={destination} className="btn-primary w-full justify-center">Return to sign-in</Link>
           </div>
         ) : (
           <form onSubmit={updatePassword} className="mt-6">

@@ -41,20 +41,21 @@ function ScrollToTop() {
 
 function RecoveryRedirect() {
   const navigate = useNavigate()
+  const location = useLocation()
 
   useEffect(() => {
     let subscription
     let cancelled = false
     const hash = new URLSearchParams(window.location.hash.slice(1))
 
-    if (hash.get('error_code') || hash.get('type') === 'recovery') {
+    if ((hash.get('error_code') || hash.get('type') === 'recovery') && location.pathname !== '/reset-password') {
       navigate(`/reset-password${window.location.hash}`, { replace: true })
     }
 
     import('./lib/supabase.js').then(({ supabase, supabaseConfigured }) => {
       if (!supabaseConfigured) return
       const { data } = supabase.auth.onAuthStateChange((event) => {
-        if (event === 'PASSWORD_RECOVERY') navigate('/reset-password', { replace: true })
+        if (event === 'PASSWORD_RECOVERY' && location.pathname !== '/reset-password') navigate('/reset-password', { replace: true })
       })
       if (cancelled) data.subscription.unsubscribe()
       else subscription = data.subscription
@@ -64,7 +65,7 @@ function RecoveryRedirect() {
       cancelled = true
       subscription?.unsubscribe()
     }
-  }, [navigate])
+  }, [navigate, location.pathname])
 
   return null
 }

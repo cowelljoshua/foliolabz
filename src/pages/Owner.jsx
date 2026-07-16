@@ -181,7 +181,7 @@ export default function Owner() {
 
     setResetSending(true)
     const { error } = await supabase.auth.resetPasswordForEmail(ownerEmail, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${window.location.origin}/reset-password?return=owner`,
     })
     setResetSending(false)
 

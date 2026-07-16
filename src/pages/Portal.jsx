@@ -100,6 +100,7 @@ function BuildStatus({ status = 'brief' }) {
 export default function Portal() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [session, setSession] = useState(null)
   const [client, setClient] = useState(null)
   const [loadingPortal, setLoadingPortal] = useState(true)
@@ -243,7 +244,20 @@ export default function Portal() {
 
   /* ---------- secure sign-in gate ---------- */
 
-  const sendMagicLink = async () => {
+  const signInWithPassword = async (event) => {
+    event.preventDefault()
+    if (!emailOk || !password || !supabaseConfigured) return
+    setSigningIn(true)
+    setAuthMessage('')
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    })
+    if (signInError) setAuthMessage('That username or password did not work. Use “Set or reset password” if needed.')
+    setSigningIn(false)
+  }
+
+  const sendPasswordSetup = async () => {
     if (!emailOk || !supabaseConfigured) return
     setSigningIn(true)
     setAuthMessage('')
@@ -256,10 +270,10 @@ export default function Portal() {
       const result = await response.json()
       if (!response.ok) throw new Error(result.error)
       setAuthMessage(result.approved
-        ? 'Check your email for your secure sign-in link.'
-        : `We could not find an account for that email. Please email me at ${site.email}.`)
+        ? 'Check your email for a secure link to choose your password.'
+        : `We could not find an approved client account for that email. Please email me at ${site.email}.`)
     } catch {
-      setAuthMessage(`We could not send a sign-in link. Please email me at ${site.email}.`)
+      setAuthMessage(`We could not send the password email. Please email me at ${site.email}.`)
     } finally {
       setSigningIn(false)
     }
@@ -285,22 +299,28 @@ export default function Portal() {
       <main className="mx-auto flex min-h-[80vh] max-w-lg flex-col justify-center px-6 pt-28 pb-16">
         <Reveal className="text-center">
           <h1 className="font-head text-4xl sm:text-5xl">{portal.heading}</h1>
-          <p className="mt-3 text-mist">Enter the email you used when you signed up. If your account is approved, I’ll send a secure sign-in link.</p>
+          <p className="mt-3 text-mist">Use the email on your project as your username, plus the password you created.</p>
         </Reveal>
         <Reveal delay={0.1} className="mt-9">
-          <div className="glass rounded-3xl p-7">
-            <h2 className="font-display text-lg font-semibold">Secure sign-in</h2>
+          <form onSubmit={signInWithPassword} className="glass rounded-3xl p-7">
+            <h2 className="font-display text-lg font-semibold">Client sign-in</h2>
             <div className="mt-5 space-y-5">
-              <Field label="Email you signed up with">
-                <input className="field-input" type="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@email.com" />
+              <Field label="Username / email">
+                <input className="field-input" type="email" autoComplete="username" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@email.com" required />
               </Field>
-              <button onClick={sendMagicLink} disabled={!emailOk || signingIn} className="btn-primary w-full justify-center disabled:opacity-40">
-                {signingIn ? 'Sending…' : 'Email me a sign-in link'}
+              <Field label="Password">
+                <input className="field-input" type="password" autoComplete="current-password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+              </Field>
+              <button type="submit" disabled={!emailOk || !password || signingIn} className="btn-primary w-full justify-center disabled:opacity-40">
+                {signingIn ? 'Signing in…' : 'Sign in'}
+              </button>
+              <button type="button" onClick={sendPasswordSetup} disabled={!emailOk || signingIn} className="w-full text-center text-sm font-semibold text-cyan hover:underline disabled:opacity-40">
+                Set or reset password
               </button>
               {authMessage && <p className="rounded-xl border border-cyan/30 bg-cyan/[0.05] p-3.5 text-sm text-mist">{authMessage}</p>}
-              <p className="text-xs text-mist/70">No account? <a href={`mailto:${site.email}`} className="text-cyan hover:underline">Email me</a> and I’ll help.</p>
+              <p className="text-xs text-mist/70">New client? Enter the email used on your intake, then choose “Set or reset password.”</p>
             </div>
-          </div>
+          </form>
         </Reveal>
       </main>
     )
