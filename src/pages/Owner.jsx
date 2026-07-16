@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase, supabaseConfigured } from '../lib/supabase.js'
+import OwnerProjectTracker from '../components/OwnerProjectTracker.jsx'
+import { normalizeTracker } from '../config/projectTracker.js'
 
 const stages = [
   ['brief', 'Brief received'],
@@ -113,7 +115,15 @@ export default function Owner() {
   }, [])
 
   useEffect(() => {
-    if (selected) setDraft({ ...selected })
+    if (selected) {
+      setDraft({
+        ...selected,
+        next_step: selected.next_step || '',
+        target_launch_date: selected.target_launch_date || '',
+        preview_url: selected.preview_url || '',
+        owner_tracker: normalizeTracker(selected.owner_tracker),
+      })
+    }
   }, [selected])
 
   useEffect(() => {
@@ -171,8 +181,11 @@ export default function Owner() {
         pay_link: draft.pay_link,
         domain: draft.domain,
         domain_active: draft.domain_active,
+        next_step: draft.next_step,
+        target_launch_date: draft.target_launch_date,
+        preview_url: draft.preview_url,
       }
-      const result = await api('PATCH', { email: draft.email, updates })
+      const result = await api('PATCH', { email: draft.email, updates, ownerTracker: draft.owner_tracker })
       setClients((current) => current.map((client) => client.email === result.client.email ? result.client : client))
       setNotice('Client updated.')
     } catch (error) {
@@ -288,6 +301,12 @@ export default function Owner() {
                 </div>
                 <div className="mt-5 flex flex-wrap gap-4"><label className="flex items-center gap-3 rounded-2xl border border-frost/10 px-4 py-3"><input type="checkbox" checked={draft.rush} onChange={(event) => setDraft({ ...draft, rush: event.target.checked })} /><span className="text-sm font-semibold">Rush build</span></label><label className="flex items-center gap-3 rounded-2xl border border-frost/10 px-4 py-3"><input type="checkbox" checked={draft.domain_active} onChange={(event) => setDraft({ ...draft, domain_active: event.target.checked })} /><span className="text-sm font-semibold">Domain active</span></label></div>
               </section>
+              <OwnerProjectTracker
+                tracker={draft.owner_tracker}
+                onChange={(owner_tracker) => setDraft({ ...draft, owner_tracker })}
+                publicFields={draft}
+                onPublicChange={(key, value) => setDraft({ ...draft, [key]: value })}
+              />
               <section className="glass rounded-3xl p-6 sm:p-8"><p className="text-xs font-bold uppercase tracking-[0.16em] text-violet">Original brief</p><h3 className="font-display mt-2 text-2xl font-semibold">Everything they submitted</h3><div className="mt-6"><IntakeDetails intake={draft.intake} /></div></section>
             </div>
           ) : (

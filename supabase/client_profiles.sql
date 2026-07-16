@@ -35,3 +35,27 @@ grant select on public.client_profiles to authenticated;
 -- Replace every placeholder before running this example:
 -- insert into public.client_profiles (email, name, package, rush, balance_due, build_status, pay_link, domain, domain_active)
 -- values ('client@example.com', 'Client Name', 'launch', false, 250, 'brief', '', '', false);
+-- Client-safe progress fields used by the portal.
+alter table public.client_profiles
+  add column if not exists next_step text not null default 'I am reviewing your brief and will share the next update soon.',
+  add column if not exists target_launch_date date,
+  add column if not exists preview_url text not null default '',
+  add column if not exists client_progress jsonb not null default '[]'::jsonb;
+
+-- Private owner-only project operations. No client browser role receives access.
+create table if not exists public.project_operations (
+  email text primary key references public.client_profiles(email) on update cascade on delete cascade,
+  owner_notes text not null default '',
+  blocked_by text not null default '',
+  next_owner_action text not null default '',
+  tracker jsonb not null default '{"tasks": []}'::jsonb,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table public.project_operations enable row level security;
+revoke all on public.project_operations from anon, authenticated;
+
+insert into public.project_operations (email)
+select email from public.client_profiles
+on conflict (email) do nothing;

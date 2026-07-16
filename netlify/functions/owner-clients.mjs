@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { clientProgressFromTracker, mergeOwnerTracker, operationRecord, safeUrl, sanitizeOwnerTracker } from '../lib/project-tracker.mjs'
 
 function json(statusCode, body) {
   return new Response(JSON.stringify(body), {
@@ -36,6 +37,7 @@ async function requireOwner(request, supabase) {
 
 const editableFields = new Set([
   'name', 'package', 'rush', 'balance_due', 'build_status', 'pay_link', 'domain', 'domain_active',
+  'next_step', 'target_launch_date', 'preview_url',
 ])
 
 export default async (request) => {
@@ -46,7 +48,7 @@ export default async (request) => {
   if (owner.error) return owner.error
 
   if (request.method === 'GET') {
-    const { data, error } = await supabase
+    const { data: profiles, error } = await supabase
       .from('client_profiles')
       .select('*')
       .order('created_at', { ascending: false })
@@ -54,7 +56,18 @@ export default async (request) => {
       console.error('Owner client list failed', error)
       return json(503, { error: 'Could not load clients' })
     }
-    return json(200, { clients: data })
+    const { data: operations, error: operationError } = await supabase.from('project_operations').select('*')
+    if (operationError) {
+      console.error('Owner project tracker list failed', operationError)
+      return json(503, { error: 'Project tracker is not configured. Run supabase/add-project-tracker.sql.' })
+    }
+    const operationByEmail = new Map((operations || []).map((operation) => [operation.email, operation]))
+    const clients = (profiles || []).map((profile) => ({
+      ...profile,
+      owner_tracker: mergeOwnerTracker(operationByEmail.get(profile.email)),
+    }))
+
+    return json(200, { clients })
   }
 
   let body
@@ -91,7 +104,10 @@ export default async (request) => {
       console.error('Owner client create failed', error)
       return json(error.code === '23505' ? 409 : 503, { error: error.code === '23505' ? 'That email already has a profile' : 'Could not create client' })
     }
-    return json(201, { client: data })
+    const tracker = sanitizeOwnerTracker(body.ownerTracker)
+    const { error: operationError } = await supabase.from('project_operations').upsert(operationRecord(email, tracker))
+    if (operationError) console.error('Owner project tracker create failed', operationError)
+    return json(201, { client: { ...data, owner_tracker: tracker } })
   }
 
   if (request.method === 'PATCH') {
@@ -108,6 +124,11 @@ export default async (request) => {
     if ('name' in updates) updates.name = String(updates.name || '').trim()
     if ('pay_link' in updates) updates.pay_link = String(updates.pay_link || '').trim()
     if ('domain' in updates) updates.domain = String(updates.domain || '').trim().toLowerCase()
+    if ('next_step' in updates) updates.next_step = String(updates.next_step || '').trim().slice(0, 4000)
+    if ('target_launch_date' in updates && !/^\d{4}-\d{2}-\d{2}$/.test(updates.target_launch_date || '')) updates.target_launch_date = null
+    if ('preview_url' in updates) updates.preview_url = safeUrl(updates.preview_url)
+    const tracker = sanitizeOwnerTracker(body.ownerTracker)
+    updates.client_progress = clientProgressFromTracker(tracker)
     updates.updated_at = new Date().toISOString()
 
     const { data, error } = await supabase
@@ -120,7 +141,14 @@ export default async (request) => {
       console.error('Owner client update failed', error)
       return json(503, { error: 'Could not update client' })
     }
-    return json(200, { client: data })
+    const { error: operationError } = await supabase
+      .from('project_operations')
+      .upsert(operationRecord(email, tracker))
+    if (operationError) {
+      console.error('Owner project tracker update failed', operationError)
+      return json(503, { error: 'Client profile saved, but the private tracker could not be saved' })
+    }
+    return json(200, { client: { ...data, owner_tracker: tracker } })
   }
 
   return json(405, { error: 'Method not allowed' })

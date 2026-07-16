@@ -63,6 +63,7 @@ function PageTitle() {
     document.title = demo
       ? `${demo.name} style example Â· FolioLabz`
       : pageTitles[pathname] || pageTitles['/']
+    document.title = document.title.replace(/\u00c2\u00b7/g, '\u00b7')
   }, [pathname])
   return null
 }

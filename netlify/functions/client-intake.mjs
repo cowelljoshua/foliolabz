@@ -58,6 +58,9 @@ export default async (request) => {
     console.error('Client profile insert failed', insertError)
     return json(503, { error: 'Client profile storage is temporarily unavailable' })
   }
+  const { error: trackerError } = await supabase.from('project_operations').upsert({ email })
+  if (trackerError) console.error('Project tracker initialization failed', trackerError)
+
 
   return json(201, { created: true })
 }

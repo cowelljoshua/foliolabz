@@ -1,6 +1,6 @@
 # FolioLabz Remaining Setup Guide
 
-Last audited: July 14, 2026
+Last audited: July 16, 2026
 
 This is the single checklist for getting the public intake form, file uploads, secure client portal, automatic Supabase profiles, and private owner dashboard working together.
 
@@ -47,6 +47,14 @@ These settings live inside your hosted accounts, so they must be checked manuall
 - [ ] Whether Netlify form email notifications are enabled.
 - [ ] Whether Stripe links have been tested in live mode.
 
+### Confirmed on the live site on July 16, 2026
+
+- [x] The production site loads on desktop and at a 390 px mobile viewport without horizontal overflow.
+- [x] Public pages load without broken images or browser console errors.
+- [x] The resume intake reports "Uploads unlocked," confirming that the live upload gate is configured.
+- [x] The secure client portal and private owner sign-in screens are available.
+- [ ] Submissions, email delivery, authentication, file storage, cleanup, and Stripe payments still require a controlled live dress rehearsal.
+
 ---
 
 ## 2. Launch blockers, in order
@@ -56,9 +64,9 @@ Complete these in this order:
 1. [ ] Verify or repair the Supabase table and policy.
 2. [ ] Create the Supabase server secret and add all Supabase variables to Netlify.
 3. [ ] Create your owner Authentication account and add `OWNER_EMAIL` to Netlify.
-4. [ ] Create the Cloudinary signed upload preset.
-5. [ ] Create the Cloudflare Turnstile widget.
-6. [ ] Add all Cloudinary and Turnstile variables to Netlify.
+4. [x] Create the Cloudinary signed upload preset (the live upload gate unlocks).
+5. [x] Create the Cloudflare Turnstile widget (the live upload gate unlocks).
+6. [x] Add all Cloudinary and Turnstile variables to Netlify (the live upload gate unlocks).
 7. [ ] Push the current local changes and allow Netlify to redeploy.
 8. [ ] Enable Netlify form email notifications.
 9. [ ] Run the complete live-site test plan at the bottom of this file.

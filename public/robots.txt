@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /owner
+Disallow: /portal
+
+Sitemap: https://foliolabz.com/sitemap.xml

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
 import { site, portal, balances, domainOffer, edits, stripeLinks } from '../config/site.js'
+import ClientProjectStatus from '../components/ClientProjectStatus.jsx'
 import { supabase, supabaseConfigured } from '../lib/supabase.js'
 
 /* ---------- shared bits ---------- */
@@ -143,7 +144,7 @@ export default function Portal() {
       setLoadingPortal(true)
       const { data, error: profileError } = await supabase
         .from('client_profiles')
-        .select('name, email, package, rush, balance_due, build_status, pay_link, domain, domain_active')
+        .select('name, email, package, rush, balance_due, build_status, pay_link, domain, domain_active, next_step, target_launch_date, preview_url, client_progress')
         .maybeSingle()
 
       if (!active) return
@@ -161,6 +162,10 @@ export default function Portal() {
           payLink: data.pay_link,
           domain: data.domain,
           domainActive: data.domain_active,
+          nextStep: data.next_step,
+          targetLaunchDate: data.target_launch_date,
+          previewUrl: data.preview_url,
+          clientProgress: data.client_progress,
         })
         setName(data.name)
         setEmail(data.email)
@@ -352,6 +357,12 @@ export default function Portal() {
       {client && (
         <Reveal delay={0.08} className="mt-6">
           <BuildStatus status={client.buildStatus} />
+          <ClientProjectStatus
+            progress={client.clientProgress}
+            nextStep={client.nextStep}
+            targetLaunchDate={client.targetLaunchDate}
+            previewUrl={client.previewUrl}
+          />
         </Reveal>
       )}
 

@@ -1,8 +1,8 @@
 # FolioLabz: Your Setup Checklist
 
-The site is built. Three things are left, and they are all yours because they need
-your accounts: **Stripe** (payments), **Netlify** (hosting + the intake form), and a
-couple of config touches. Budget about an hour total.
+The site is built and live. The remaining work is a controlled dress rehearsal in
+your hosted accounts: confirm submissions and notifications, owner and client sign-in,
+file storage, and real Stripe checkout behavior before announcing the business.
 
 ---
 
@@ -10,14 +10,9 @@ couple of config touches. Budget about an hour total.
 
 These are the things only you can do. The first two block your launch posts.
 
-- [ ] **1. Fix file uploads (BROKEN on the live site right now).** The upload code
-  is in place, but the accounts behind it are not, so the intake form currently
-  shows "File uploads are not configured yet" and the resume track cannot be
-  submitted at all (it requires a resume upload). Do section
-  **"2. Cloudinary + Turnstile + Netlify"** below: create the Cloudinary preset,
-  create the Turnstile widget, paste all the environment variables into Netlify,
-  and redeploy. About 30 minutes. **Do not post the launch announcement until
-  this works.**
+- [x] **1. File-upload gate configured (verified 2026-07-16).** The live resume
+  intake reports "Uploads unlocked." The dress rehearsal still needs to prove that a
+  real test file reaches Cloudinary and remains attached to the submitted form.
 - [x] **2. Add your photo. DONE (2026-07-14):** the rocket photo is cropped to
   `public/josh-founder.jpg` and shows in the home-page story section. Optional
   upgrade whenever: a close-up of your face (no sunglasses, ~600x600) saved as
