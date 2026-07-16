@@ -22,6 +22,10 @@ alter table public.project_operations enable row level security;
 -- No browser role can read or modify the private operations table.
 revoke all on public.project_operations from anon, authenticated;
 
+grant usage on schema public to service_role;
+grant select, insert, update, delete on table public.client_profiles to service_role;
+grant select, insert, update, delete on table public.project_operations to service_role;
+
 -- Ensure every existing client has a matching private operations row.
 insert into public.project_operations (email)
 select email from public.client_profiles
