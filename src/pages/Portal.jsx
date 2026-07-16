@@ -272,8 +272,8 @@ export default function Portal() {
       setAuthMessage(result.approved
         ? 'Check your email for a secure link to choose your password.'
         : `We could not find an approved client account for that email. Please email me at ${site.email}.`)
-    } catch {
-      setAuthMessage(`We could not send the password email. Please email me at ${site.email}.`)
+    } catch (requestError) {
+      setAuthMessage(requestError.message || `We could not send the password email. Please email me at ${site.email}.`)
     } finally {
       setSigningIn(false)
     }

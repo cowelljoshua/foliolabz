@@ -63,6 +63,9 @@ export default async (request) => {
 
   if (resetError) {
     console.error('Portal password email failed', resetError)
+    if (resetError.code === 'over_email_send_rate_limit') {
+      return json(429, { error: 'Too many password emails were requested. Wait about one hour, then try once more.' })
+    }
     return json(503, { error: 'Portal password setup is temporarily unavailable' })
   }
 
