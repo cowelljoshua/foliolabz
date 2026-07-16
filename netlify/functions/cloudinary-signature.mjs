@@ -39,7 +39,9 @@ export default async (request) => {
   }
 
   try {
-    return json(200, { signature: cloudinarySignature(paramsToSign) })
+    // The upload widget appends source=uw to the actual request but omits it from
+    // paramsToSign, so it must be signed here or Cloudinary rejects the signature.
+    return json(200, { signature: cloudinarySignature({ ...paramsToSign, source: 'uw' }) })
   } catch (error) {
     console.error(error)
     return json(503, { error: 'Cloudinary signing is not configured' })
