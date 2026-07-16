@@ -39,21 +39,21 @@ function ScrollToTop() {
 }
 
 const pageTitles = {
-  '/': 'FolioLabz Â· Portfolio websites, built for you',
-  '/styles': 'Styles Â· FolioLabz',
-  '/pricing': 'Pricing Â· FolioLabz',
-  '/start': 'Start my build Â· FolioLabz',
-  '/thanks': 'Brief received Â· FolioLabz',
-  '/portal': 'Client portal Â· FolioLabz',
+  '/': 'FolioLabz · Portfolio websites, built for you',
+  '/styles': 'Styles · FolioLabz',
+  '/pricing': 'Pricing · FolioLabz',
+  '/start': 'Start my build · FolioLabz',
+  '/thanks': 'Brief received · FolioLabz',
+  '/portal': 'Client portal · FolioLabz',
   '/owner': 'Owner workspace · FolioLabz',
-  '/examples/launch': 'Launch package example Â· FolioLabz',
-  '/examples/pro': 'Pro package example Â· FolioLabz',
-  '/examples/pro/work': 'Pro example: Work Â· FolioLabz',
-  '/examples/pro/case-study': 'Pro example: Case Study Â· FolioLabz',
-  '/examples/pro/gallery': 'Pro example: Gallery Â· FolioLabz',
-  '/examples/pro/about': 'Pro example: About Â· FolioLabz',
-  '/examples/pro/resume': 'Pro example: Resume Â· FolioLabz',
-  '/examples/pro/contact': 'Pro example: Contact Â· FolioLabz',
+  '/examples/launch': 'Launch package example · FolioLabz',
+  '/examples/pro': 'Pro package example · FolioLabz',
+  '/examples/pro/work': 'Pro example: Work · FolioLabz',
+  '/examples/pro/case-study': 'Pro example: Case Study · FolioLabz',
+  '/examples/pro/gallery': 'Pro example: Gallery · FolioLabz',
+  '/examples/pro/about': 'Pro example: About · FolioLabz',
+  '/examples/pro/resume': 'Pro example: Resume · FolioLabz',
+  '/examples/pro/contact': 'Pro example: Contact · FolioLabz',
 }
 
 function PageTitle() {
@@ -61,9 +61,8 @@ function PageTitle() {
   useEffect(() => {
     const demo = demoStyles.find((d) => pathname === `/styles/${d.id}`)
     document.title = demo
-      ? `${demo.name} style example Â· FolioLabz`
+      ? `${demo.name} style example · FolioLabz`
       : pageTitles[pathname] || pageTitles['/']
-    document.title = document.title.replace(/\u00c2\u00b7/g, '\u00b7')
   }, [pathname])
   return null
 }

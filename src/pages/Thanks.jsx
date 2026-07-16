@@ -86,7 +86,7 @@ export default function Thanks() {
         </Reveal>
 
         <Reveal delay={0.6} className="mt-10">
-          <Link to="/" className="text-sm text-mist hover:text-frost">â† Back home</Link>
+          <Link to="/" className="text-sm text-mist hover:text-frost">← Back home</Link>
         </Reveal>
       </div>
     </main>
