@@ -155,17 +155,6 @@ export default function Home() {
           </div>
         </Reveal>
       </section>
-
-      <section className="px-6 pb-8 pt-10 lg:px-10">
-        <Reveal>
-          <div className="final-cta">
-            <h2 className="font-head mx-auto max-w-4xl text-4xl leading-tight text-white sm:text-6xl">Your work deserves more than a folder full of links.</h2>
-
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row"><Link to="/start" className="btn-accent">Start my build <Arrow /></Link><Link to="/pricing" className="btn-dark-ghost">See pricing</Link></div>
-            <p className="mt-5 text-xs text-white/45">{deposit.label} · no technical setup · private preview before launch</p>
-          </div>
-        </Reveal>
-      </section>
-    </main>
+</main>
   )
 }

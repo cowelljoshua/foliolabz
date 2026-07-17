@@ -16,7 +16,7 @@ import {
   resumeService,
 } from '../config/site.js'
 
-const MAX_UPLOADS = 30
+const MAX_UPLOADS = 55
 const MAX_PROJECTS = 10
 const MAX_IMAGES_PER_PROJECT = 5
 const PROJECTS_PAGE = 'Projects / Work'
@@ -132,7 +132,7 @@ export default function Start() {
     brands: [],
     emulate: '',
     bio: '',
-    siteFormat: '',
+    siteFormat: paramPackage === 'pro' ? 'multi' : 'single',
     pages: [],
     domainInterest: '',
     netlifyChoices: ['', '', ''],
@@ -148,6 +148,7 @@ export default function Start() {
   })
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }))
+  const selectPackage = (packageId) => setForm((f) => ({ ...f, package: packageId, siteFormat: packageId === 'pro' ? 'multi' : 'single', pages: [] }))
   const toggleIn = (key, value) =>
     setForm((f) => ({
       ...f,
@@ -535,7 +536,7 @@ export default function Start() {
                     <button
                       key={t.id}
                       type="button"
-                      onClick={() => set('package', t.id)}
+                      onClick={() => selectPackage(t.id)}
                       className={`flex items-baseline justify-between rounded-2xl border p-5 text-left transition-colors ${
                         form.package === t.id ? 'border-violet bg-violet/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
                       }`}
@@ -622,26 +623,9 @@ export default function Start() {
             {/* CONTENT */}
             {step === 'content' && (
               <>
-                <div>
-                  <p className="mb-2 text-sm font-medium">How should the site be organized?</p>
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    {siteFormats.map((option) => (
-                      <button
-                        key={option.id}
-                        type="button"
-                        aria-pressed={form.siteFormat === option.id}
-                        onClick={() => set('siteFormat', option.id)}
-                        className={`rounded-2xl border p-4 text-left transition-colors ${
-                          form.siteFormat === option.id
-                            ? 'border-violet bg-violet/10'
-                            : 'hairline bg-frost/[0.03] hover:border-frost/30'
-                        }`}
-                      >
-                        <span className="font-display block text-sm font-semibold">{option.name}</span>
-                        <span className="mt-1.5 block text-xs leading-relaxed text-mist">{option.detail}</span>
-                      </button>
-                    ))}
-                  </div>
+                <div className="rounded-2xl border border-violet/25 bg-violet/[0.06] p-5">
+                  <p className="font-display text-sm font-semibold text-frost">{form.package === 'pro' ? 'Pro format: separate pages' : 'Launch format: one scrolling page'}</p>
+                  <p className="mt-1.5 text-xs leading-relaxed text-mist">{form.package === 'pro' ? 'Your story can spread across dedicated pages for your work, résumé, photos, writing, contact details, and anything else worth showing.' : 'Your story flows through four focused sections: Home, About, Work, and Contact.'}</p>
                 </div>
                 <Field label="Tell me about yourself" optional>
                   <textarea
@@ -683,7 +667,7 @@ export default function Start() {
                   )}
                   {form.pages.length >= pageLimit && (
                     <p className="mt-1.5 text-xs text-mist/60">
-                      {tier?.name || 'Launch'} tops out at {pageLimit} {contentUnit}. {form.package === 'launch' ? 'Go Pro for up to 4.' : ''}
+                      {tier?.name || 'Launch'} includes up to {pageLimit} {contentUnit}. {form.package === 'launch' ? 'Launch stays on one scrolling page; Pro gives your content room to spread across dedicated pages.' : ''}
                     </p>
                   )}
                 </div>

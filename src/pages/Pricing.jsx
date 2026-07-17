@@ -27,35 +27,21 @@ function TierCard({ tier, onOpen }) {
       className={`h-full ${tier.popular ? 'border-violet/60' : ''}`}
       spotColor={tier.popular ? 'rgba(34,211,238,0.14)' : 'rgba(124,92,255,0.14)'}
     >
-      <button onClick={onOpen} className="block w-full p-7 pb-3 text-left">
-        {tier.popular && (
-          <span className="mb-3 inline-block rounded-full bg-violet/15 px-3 py-1 text-xs font-semibold text-violet-soft">
-            Best value
-          </span>
-        )}
+      <div className="p-7 pb-5 text-left">
+        {tier.popular && <span className="mb-3 inline-block rounded-full bg-violet/15 px-3 py-1 text-xs font-semibold text-violet-soft">Best value</span>}
         <h3 className="font-display text-xl font-semibold">{tier.name}</h3>
-        <div className="mt-2 flex items-baseline gap-2">
-          <span className="font-display text-lg font-semibold text-mist line-through">{tier.originalPriceLabel}</span>
-          <span className="font-display text-4xl font-bold">{tier.priceLabel}</span>
-        </div>
+        <div className="mt-2 flex items-baseline gap-2"><span className="font-display text-lg font-semibold text-mist line-through">{tier.originalPriceLabel}</span><span className="font-display text-4xl font-bold">{tier.priceLabel}</span></div>
         <p className="mt-1 text-xs font-semibold text-cyan">${tier.price} total &middot; ${deposit.amount} today &middot; ${tier.price - deposit.amount} after approval</p>
         <p className="mt-2 text-sm text-mist">{tier.blurb}</p>
-        <ul className="mt-5 space-y-2">
-          {tier.headline.map((f) => (
-            <li key={f} className="flex items-start gap-2 text-sm text-mist">
-              <span className="mt-0.5 text-mint">✓</span> {f}
-            </li>
-          ))}
-        </ul>
-        <p className="mt-6 text-sm font-semibold text-gradient">See everything included →</p>
-      </button>
-      <Link to={`/examples/${tier.id}`} className="mx-7 mb-7 inline-flex text-sm font-semibold text-violet underline underline-offset-4 transition hover:text-frost">
-        View {tier.name} example ↗
-      </Link>
+        <ul className="mt-5 space-y-2">{tier.headline.map((f) => <li key={f} className="flex items-start gap-2 text-sm text-mist"><span className="mt-0.5 text-mint">✓</span>{f}</li>)}</ul>
+      </div>
+      <div className="flex flex-col gap-3 px-7 pb-7">
+        <button type="button" onClick={onOpen} className="btn-primary justify-center">Select {tier.name}</button>
+        <Link to={`/examples/${tier.id}`} className="btn-ghost justify-center">View {tier.name} website example ↗</Link>
+      </div>
     </SpotlightCard>
   )
 }
-
 function TierModal({ tier, onClose }) {
   const [rushOn, setRushOn] = useState(false)
 

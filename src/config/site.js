@@ -66,11 +66,11 @@ export const tiers = [
     blurb: "A focused portfolio that makes your work easy to understand.",
     headline: ["One focused scrolling portfolio", "Up to 3 featured projects", "Custom visual direction"],
     full: [
-      "One polished scrolling portfolio with up to 4 sections: Home, Work, About, and Contact",
-      "A custom visual direction shaped around your career and work",
-      "Looks perfect on phones, tablets, and laptops",
-      "Contact, social, and resume-download links placed where they matter",
-      "A resume download button for recruiters",
+      "One focused scrolling portfolio: Home, About, Work, and Contact",
+      "Your three strongest projects, with simple what-I-did and outcome bullets",
+      "A visual gallery for extra photos, screenshots, artwork, or work samples",
+      "A résumé button plus sample email and LinkedIn contact links",
+      "Designed to look great on phones, tablets, and laptops",
       "Hosting included free for as long as you want it online when you use a yourname.netlify.app address",
       "Launch free on a clean web address, or add your own .com for $30/yr and I handle it",
     ],
@@ -87,11 +87,11 @@ export const tiers = [
     headline: ["An expanded portfolio with room to grow", "Up to 10 featured projects", "Contact form + strategy meeting"],
     full: [
       "Everything in Launch",
-      "One polished portfolio with up to 4 focused sections or pages",
-      "Up to 10 featured projects with richer descriptions, images, and results",
+      "A flexible multi-page portfolio shaped around the amount of work you have to show",
+      "Up to 10 clickable work stories with images, video, links, process notes, and outcomes",
+      "An extended About Me page with personal photos and the story behind your work",
       "A working contact form: visitor messages land straight in your email",
-      "A testimonials or recommendation section that adds proof",
-      "SEO and sharing setup so your link looks polished in Google and on LinkedIn",
+      "Google and sharing setup so your site is easier to find and looks polished when you send the link",
       "1 personal 30-minute strategy meeting with me",
     ],
     popular: true,
@@ -643,7 +643,7 @@ export const pageOptions = [
 ]
 
 // How many sections or pages each package can pick from the list above.
-export const pageLimits = { launch: 4, pro: 4 }
+export const pageLimits = { launch: 4, pro: 10 }
 
 // ------------------------------------------------------------
 // FAQ
