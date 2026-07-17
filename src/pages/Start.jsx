@@ -17,7 +17,7 @@ import {
 } from '../config/site.js'
 
 const MAX_UPLOADS = 30
-const MAX_PROJECTS = 6
+const MAX_PROJECTS = 10
 const MAX_IMAGES_PER_PROJECT = 5
 const PROJECTS_PAGE = 'Projects / Work'
 
@@ -54,6 +54,14 @@ const domainInterestOptions = [
   { id: 'maybe', label: 'Maybe, tell me more later' },
   { id: 'no', label: 'No, the free address is fine' },
 ]
+
+const cleanNetlifyName = (value) => value
+  .toLowerCase()
+  .replace(/^https?:\/\//, '')
+  .replace(/\.netlify\.app.*$/, '')
+  .replace(/[^a-z0-9-]/g, '-')
+  .replace(/-{2,}/g, '-')
+  .replace(/^-|-$/g, '')
 
 const stepTitles = {
   about: ['First, the basics', 'So I know who I am building for.'],
@@ -127,6 +135,7 @@ export default function Start() {
     siteFormat: '',
     pages: [],
     domainInterest: '',
+    netlifyChoices: ['', '', ''],
     socials: '',
     notes: '',
     headshot: [],
@@ -150,6 +159,7 @@ export default function Start() {
   const step = steps[stepIdx]
   const tier = tiers.find((t) => t.id === form.package)
   const pageLimit = pageLimits[form.package] || pageLimits.launch
+  const projectLimit = form.package === 'pro' ? 10 : 3
   const contentUnit = form.siteFormat === 'single' ? 'sections' : 'pages'
 
   const togglePage = (page) =>
@@ -166,7 +176,7 @@ export default function Start() {
     })
 
   const addProject = () =>
-    setForm((f) => (f.projects.length >= MAX_PROJECTS ? f : { ...f, projects: [...f.projects, emptyProject()] }))
+    setForm((f) => (f.projects.length >= (f.package === 'pro' ? 10 : 3) ? f : { ...f, projects: [...f.projects, emptyProject()] }))
   const removeProject = (idx) =>
     setForm((f) => ({ ...f, projects: f.projects.filter((_, i) => i !== idx) }))
   const updateProject = (idx, key, value) =>
@@ -196,7 +206,10 @@ export default function Start() {
   const canNext = useMemo(() => {
     if (step === 'about') return form.name.trim() && emailOk
     if (step === 'package') return !!form.package
-    if (step === 'content') return !!form.siteFormat && form.pages.length > 0
+    if (step === 'content') {
+      const freeAddressReady = form.domainInterest !== 'no' || form.netlifyChoices.every((choice) => choice.trim())
+      return !!form.siteFormat && form.pages.length > 0 && freeAddressReady
+    }
     if (step === 'resume') return form.resumeFile.length > 0 && !uploadsBusy
     if (step === 'files') return !uploadsBusy
     return true
@@ -261,6 +274,9 @@ export default function Start() {
       L.push('CONTENT')
       L.push(`Site format: ${siteFormats.find((option) => option.id === form.siteFormat)?.name || 'undecided'}`)
       L.push(`Custom domain interest: ${domainInterestOptions.find((option) => option.id === form.domainInterest)?.label || 'not answered'}`)
+      if (form.domainInterest === 'no') {
+        form.netlifyChoices.forEach((choice, index) => L.push('Netlify choice ' + (index + 1) + ': ' + choice + '.netlify.app'))
+      }
       if (form.pages.length) L.push(`Pages wanted (${form.pages.length}/${pageLimit}): ${form.pages.join(', ')}`)
       if (form.socials) L.push(`Links: ${form.socials}`)
       if (form.bio) L.push(`Bio: ${form.bio}`)
@@ -329,12 +345,16 @@ export default function Start() {
       fd.append('site_format', form.siteFormat)
       fd.append('pages', form.pages.join(', '))
       fd.append('domain_interest', form.domainInterest)
+      form.netlifyChoices.forEach((choice, index) => {
+        const value = form.domainInterest === 'no' ? choice + '.netlify.app' : ''
+        fd.append('netlify_option_' + (index + 1), value)
+      })
       fd.append('socials', form.socials)
       fd.append('extra_notes', form.notes)
       fd.append('headshot_url', form.headshot[0]?.url || '')
       fd.append('resume_url', form.resumeFile[0]?.url || '')
       fd.append('logo_url', form.logoFile[0]?.url || '')
-      form.projects.slice(0, MAX_PROJECTS).forEach((project, index) => {
+      form.projects.slice(0, projectLimit).forEach((project, index) => {
         fd.append(`project_${index + 1}_title`, project.title)
         fd.append(`project_${index + 1}_description`, project.description)
         fd.append(`project_${index + 1}_link`, project.link)
@@ -663,7 +683,7 @@ export default function Start() {
                   )}
                   {form.pages.length >= pageLimit && (
                     <p className="mt-1.5 text-xs text-mist/60">
-                      {tier?.name || 'Launch'} tops out at {pageLimit} {contentUnit}. {form.package === 'launch' ? 'Go Pro for up to 7.' : ''}
+                      {tier?.name || 'Launch'} tops out at {pageLimit} {contentUnit}. {form.package === 'launch' ? 'Go Pro for up to 4.' : ''}
                     </p>
                   )}
                 </div>
@@ -690,6 +710,32 @@ export default function Start() {
                       </button>
                     ))}
                   </div>
+                  {form.domainInterest === 'no' && (
+                    <div className="mt-5 rounded-2xl border border-cyan/25 bg-cyan/[0.04] p-5">
+                      <p className="text-sm font-semibold text-frost">Choose three free web-address preferences</p>
+                      <p className="mt-1 text-xs leading-relaxed text-mist">Enter the part that comes before .netlify.app, in order of preference. I will use the first available option.</p>
+                      <div className="mt-4 grid gap-3">
+                        {form.netlifyChoices.map((choice, index) => (
+                          <label key={index} className="block">
+                            <span className="mb-1.5 block text-xs font-medium text-mist">{index === 0 ? 'First' : index === 1 ? 'Second' : 'Third'} choice</span>
+                            <span className="flex overflow-hidden rounded-xl border hairline bg-ink-800 focus-within:border-violet">
+                              <input
+                                className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm outline-none"
+                                value={choice}
+                                onChange={(event) => set('netlifyChoices', form.netlifyChoices.map((item, choiceIndex) => choiceIndex === index ? cleanNetlifyName(event.target.value) : item))}
+                                placeholder={index === 0 ? 'your-name' : index === 1 ? 'your-portfolio' : 'your-name-work'}
+                                required
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck={false}
+                              />
+                              <span className="flex items-center border-l hairline bg-frost/[0.04] px-3 text-xs text-mist">.netlify.app</span>
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {wantsProjects && (
@@ -750,7 +796,7 @@ export default function Start() {
                         </div>
                       ))}
                     </div>
-                    {form.projects.length < MAX_PROJECTS && (
+                    {form.projects.length < projectLimit && (
                       <button type="button" onClick={addProject} className="btn-ghost mt-3 !px-4 !py-2 text-sm">
                         + Add another project
                       </button>

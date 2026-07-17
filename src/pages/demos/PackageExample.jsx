@@ -4,38 +4,17 @@ import Aurora from '../../components/reactbits/Aurora.jsx'
 import Reveal from '../../components/reactbits/Reveal.jsx'
 
 const projects = [
-  {
-    title: 'Hybrid Rocket Test Stand',
-    tag: 'Capstone',
-    body: 'Designed and instrumented a 500 lbf thrust stand, then completed 12 successful hot-fire tests.',
-    result: '12 clean tests',
-    role: 'Mechanical lead',
-    year: '2025',
-    tools: ['SolidWorks', 'LabVIEW', 'DAQ'],
-    image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=85',
-  },
-  {
-    title: 'Heat Exchanger Study',
-    tag: 'Research',
-    body: 'Reduced simulated pressure drop by 18% through shell-side baffle optimization.',
-    result: '18% lower pressure drop',
-    role: 'Thermal analyst',
-    year: '2024',
-    tools: ['ANSYS', 'MATLAB', 'CFD'],
-    image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=1200&q=85',
-  },
-  {
-    title: 'Six-Axis Robotic Arm',
-    tag: 'Personal',
-    body: 'Took a compact robotic arm from CAD through fabrication, controls, and bench testing.',
-    result: '0.4 mm repeatability',
-    role: 'Designer & builder',
-    year: '2024',
-    tools: ['Onshape', 'Python', 'Arduino'],
-    image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=85',
-  },
+  { title: 'Hybrid Rocket Test Stand', tag: 'Capstone', body: 'Designed and instrumented a 500 lbf thrust stand, then completed 12 successful hot-fire tests.', result: '12 clean tests', role: 'Mechanical lead', year: '2025', tools: ['SolidWorks', 'LabVIEW', 'DAQ'], image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Heat Exchanger Study', tag: 'Research', body: 'Reduced simulated pressure drop by 18% through shell-side baffle optimization.', result: '18% lower pressure drop', role: 'Thermal analyst', year: '2024', tools: ['ANSYS', 'MATLAB', 'CFD'], image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Six-Axis Robotic Arm', tag: 'Personal', body: 'Took a compact robotic arm from CAD through fabrication, controls, and bench testing.', result: '0.4 mm repeatability', role: 'Designer & builder', year: '2024', tools: ['Onshape', 'Python', 'Arduino'], image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Payload Release Mechanism', tag: 'Aerospace', body: 'Built a repeatable release fixture for flight hardware.', result: '95% first-pass reliability', role: 'Design engineer', year: '2024', tools: ['SolidWorks', 'GD&T'], image: 'https://images.unsplash.com/photo-1517976547714-720226b864c1?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Motor Test Fixture', tag: 'Manufacturing', body: 'Created a quick-change fixture for a faster test cycle.', result: '35% faster setup', role: 'Mechanical lead', year: '2023', tools: ['Fusion 360', 'DFM'], image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Thermal Enclosure', tag: 'Research', body: 'Modeled and tested a compact enclosure for thermal stability.', result: '±2°C stability', role: 'Thermal analyst', year: '2023', tools: ['ANSYS', 'MATLAB'], image: 'https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Autonomous Rover', tag: 'Team', body: 'Designed the chassis and integrated mechanical subsystems.', result: 'Competition ready', role: 'Subsystem lead', year: '2023', tools: ['Onshape', 'DFM'], image: 'https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Wind Tunnel Rig', tag: 'Testing', body: 'Built an adjustable rig for repeatable aerodynamic tests.', result: '40 test runs', role: 'Test engineer', year: '2022', tools: ['LabVIEW', 'DAQ'], image: 'https://images.unsplash.com/photo-1581093458791-9f3c3900df72?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Production Tooling', tag: 'Internship', body: 'Released drawings and production tooling for a manufacturing cell.', result: 'Reduced rework', role: 'Mechanical intern', year: '2022', tools: ['SolidWorks', 'GD&T'], image: 'https://images.unsplash.com/photo-1565043666747-69f6646db940?auto=format&fit=crop&w=1200&q=85' },
+  { title: 'Sensor Calibration Cart', tag: 'Systems', body: 'Developed a compact cart for sensor checks before field testing.', result: '10-minute setup', role: 'Builder', year: '2021', tools: ['Python', 'Arduino'], image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1200&q=85' },
 ]
-
 const gallery = [
   ['https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1000&q=85', 'Engineer reviewing a prototype'],
   ['https://images.unsplash.com/photo-1581092335397-9583eb92d232?auto=format&fit=crop&w=1000&q=85', 'Mechanical components on a workbench'],
@@ -45,11 +24,8 @@ const gallery = [
 ]
 
 const proPages = [
-  ['home', 'Home'],
-  ['work', 'Work'],
-  ['case-study', 'Case study'],
-  ['gallery', 'Gallery'],
-  ['about', 'About'],
+  ['home', 'About'],
+  ['work', 'Projects'],
   ['resume', 'Resume'],
   ['contact', 'Contact'],
 ]
@@ -58,8 +34,8 @@ function ExampleBar({ packageId }) {
   const isPro = packageId === 'pro'
   const other = isPro ? 'launch' : 'pro'
   const scope = isPro
-    ? 'Seven separate pages: Home, Work, Case Study, Gallery, About, Resume, and Contact'
-    : 'One focused page with four sections: Home, Work, About, and Contact'
+    ? 'A fuller portfolio with room for up to 10 projects'
+    : 'One focused portfolio with three top projects and CAD drawings'
 
   return (
     <div className="fixed inset-x-0 bottom-3 z-50 flex justify-center px-3 sm:bottom-4 sm:px-4">
@@ -85,9 +61,9 @@ function TopNav({ packageId, proPage }) {
 
   if (isPro) {
     return (
-      <nav className="sticky top-0 z-40 border-b border-white/10 bg-[#08080f]/90 px-4 text-white backdrop-blur-xl sm:px-6">
+      <nav className="absolute inset-x-0 top-5 z-40 mx-auto max-w-5xl rounded-full border border-white/25 bg-[#3f5f7c]/65 px-4 text-white shadow-xl backdrop-blur-xl sm:px-6">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-5">
-          <Link to="/examples/pro" className="shrink-0 text-sm font-bold uppercase tracking-[0.2em]">Mara Chen</Link>
+          <Link to="/examples/pro" className="shrink-0 text-sm font-bold uppercase tracking-[0.2em]">MC</Link>
           <div className="hidden items-center gap-4 text-xs font-semibold uppercase tracking-[0.1em] xl:flex">
             {proPages.map(([id, label]) => (
               <Link key={id} to={id === 'home' ? '/examples/pro' : '/examples/pro/' + id} className={proPage === id ? 'text-[#22d3ee]' : 'text-white/55 transition hover:text-white'}>
@@ -95,7 +71,6 @@ function TopNav({ packageId, proPage }) {
               </Link>
             ))}
           </div>
-          <Link to="/examples/pro/contact" className="shrink-0 rounded-full border border-[#22d3ee] px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-[#22d3ee] transition hover:bg-[#22d3ee] hover:text-[#08080f]">Let&apos;s talk</Link>
         </div>
         <div className="mx-auto flex max-w-7xl gap-5 overflow-x-auto pb-3 text-[11px] font-semibold uppercase tracking-[0.1em] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:hidden" aria-label="Example pages">
           {proPages.map(([id, label]) => (
@@ -187,7 +162,7 @@ function Work({ isPro }) {
       <div className={'mt-10 grid gap-6 ' + (isPro ? 'lg:grid-cols-3' : 'md:grid-cols-2')}>
         {visibleProjects.map((project, index) => (
           <Reveal key={project.title} delay={index * 0.08}>
-            <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] transition duration-300 hover:-translate-y-1 hover:border-white/20">
+            <Link to={`/examples/pro/case-study?project=${index + 1}`} className="group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-white/[0.04] transition duration-300 hover:-translate-y-1 hover:border-[#22d3ee]/60">
               <div className="relative overflow-hidden">
                 <img src={project.image} alt="" loading="lazy" className={'w-full object-cover opacity-80 transition duration-700 group-hover:scale-105 group-hover:opacity-100 ' + (isPro ? 'h-52' : 'h-44')} />
                 <span className="absolute left-4 top-4 rounded-full bg-[#08080f]/80 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white backdrop-blur">{project.year} · {project.tag}</span>
@@ -201,10 +176,11 @@ function Work({ isPro }) {
                 </div>
                 <div className="mt-auto flex items-end justify-between gap-4 border-t border-white/10 pt-5">
                   <div><p className="text-[10px] uppercase tracking-[0.14em] text-white/40">Outcome</p><p className="mt-1 text-sm font-semibold text-white">{project.result}</p></div>
-                  {isPro && <Link to="/examples/pro/case-study" aria-label={'Read the ' + project.title + ' case study'} className="shrink-0 text-sm font-semibold text-[#a595ff] transition hover:text-white">Case study &rarr;</Link>}
+
                 </div>
               </div>
-            </article>
+              {isPro && <span className="px-6 pb-6 text-sm font-bold text-[#22d3ee]">Open multimedia project story →</span>}
+            </Link>
           </Reveal>
         ))}
       </div>
@@ -261,7 +237,7 @@ function CaseStudy() {
         <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#22d3ee]">Featured case study · Propulsion</p>
         <div className="mt-4 grid gap-10 lg:grid-cols-[1.2fr_.8fr] lg:items-end">
           <div>
-            <h1 className="font-display text-4xl font-bold sm:text-6xl">A safer test stand, built from the ground up.</h1>
+            <h1 className="font-display text-4xl font-bold sm:text-6xl">A test stand built to make the next decision easier.</h1>
             <p className="mt-5 max-w-2xl leading-7 text-[#b7bccd]">I led the mechanical design and instrumentation plan for a student hybrid-rocket test stand—turning a rough test need into reliable hardware and decision-ready data.</p>
             <div className="mt-7 flex flex-wrap gap-2 text-xs text-white/60">
               {['Role: Mechanical lead', 'Timeline: 8 weeks', 'Team: 5 engineers'].map((item) => <span key={item} className="rounded-full border border-white/10 px-3 py-1.5">{item}</span>)}
@@ -424,62 +400,35 @@ function Contact({ isPro }) {
   )
 }
 
-function ProHome() {
-  const specialties = [
-    ['01', 'Mechanical design', 'CAD, GD&T, tolerance analysis, and design for manufacturing.'],
-    ['02', 'Test engineering', 'Instrumentation, procedures, data acquisition, and safe iteration.'],
-    ['03', 'Technical analysis', 'Thermal models and clear decisions grounded in measured results.'],
-  ]
-
+function LaunchExample() {
+  const featured = projects.slice(0, 3)
   return (
-    <>
-      <Hero isPro />
-      <section className="border-y border-white/10 bg-white/[0.025]">
-        <div className="mx-auto grid max-w-6xl gap-px px-6 py-7 text-center sm:grid-cols-3">
-          {['Propulsion systems', 'Design for test', 'Hardware + data'].map((item) => <p key={item} className="py-2 text-xs font-bold uppercase tracking-[0.2em] text-white/55">{item}</p>)}
-        </div>
-      </section>
-      <section className="mx-auto max-w-6xl px-6 py-24">
-        <Reveal className="grid overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] lg:grid-cols-2">
-          <img src={projects[0].image} alt="Rocket test equipment in an engineering lab" className="h-full min-h-[360px] w-full object-cover" />
-          <div className="flex flex-col justify-center p-8 sm:p-12">
-            <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#22d3ee]">Featured case study · 8 min read</p>
-            <h2 className="font-display mt-4 text-4xl font-semibold">A safer test stand, built from the ground up.</h2>
-            <p className="mt-5 leading-7 text-[#b7bccd]">See the requirements, tradeoffs, build process, instrumentation plan, and results behind twelve successful hot-fire tests.</p>
-            <div className="mt-6 flex gap-6">
-              <div><p className="text-2xl font-bold text-white">500 lbf</p><p className="text-xs text-white/45">design load</p></div>
-              <div><p className="text-2xl font-bold text-white">0</p><p className="text-xs text-white/45">test anomalies</p></div>
-            </div>
-            <Link to="/examples/pro/case-study" className="mt-8 inline-flex w-fit rounded-full bg-white px-5 py-3 text-sm font-bold text-[#08080f] transition hover:bg-[#22d3ee]">Explore the case study</Link>
-          </div>
-        </Reveal>
-      </section>
-      <section className="mx-auto max-w-6xl px-6 pb-24">
-        <Reveal>
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#22d3ee]">What I bring</p>
-          <h2 className="font-display mt-3 text-4xl font-bold">Engineering across the full loop.</h2>
-        </Reveal>
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {specialties.map(([number, title, body], index) => (
-            <Reveal key={title} delay={index * 0.06} className="rounded-3xl border border-white/10 bg-white/[0.04] p-6">
-              <p className="text-sm font-bold text-[#22d3ee]">{number}</p><h3 className="font-display mt-8 text-xl font-semibold">{title}</h3><p className="mt-3 text-sm leading-6 text-[#b7bccd]">{body}</p>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-      <section className="mx-auto max-w-4xl px-6 pb-40 text-center">
-        <Reveal>
-          <p className="text-5xl text-[#7c5cff]">&ldquo;</p>
-          <blockquote className="font-display text-2xl leading-relaxed sm:text-3xl">Mara brings structure to ambiguous engineering problems and communicates her decisions with unusual clarity.</blockquote>
-          <p className="mt-5 text-sm text-[#b7bccd]">Dr. Elena Ruiz · Capstone Advisor</p>
-          <Link to="/examples/pro/contact" className="mt-8 inline-flex rounded-full border border-white/15 px-5 py-3 text-sm font-semibold transition hover:border-white/35">Start a conversation</Link>
-        </Reveal>
-      </section>
-    </>
+    <div className="min-h-screen bg-[#0c0c0e] font-body text-[#f2f2f2] [background-image:linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] [background-size:48px_48px]">
+      <nav className="sticky top-0 z-40 border-b border-white/10 bg-[#0c0c0e]/95 px-6 backdrop-blur"><div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-5"><a href="#top" className="text-base font-black tracking-[.05em]">MARA <span className="text-[#ed2633]">CHEN</span></a><div className="hidden items-center gap-7 text-sm font-semibold text-white/70 md:flex"><a href="#about">About</a><a href="#projects">Projects</a><a href="#cad">CAD Gallery</a></div><a href="#contact" className="rounded-lg bg-[#ed2633] px-5 py-2.5 text-sm font-bold text-white">Contact</a></div></nav>
+      <main>
+        <header id="top" className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[1.2fr_.8fr] lg:items-center"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">Mechanical engineering · May 2026</p><h1 className="mt-6 font-display text-6xl font-bold tracking-[-.06em] sm:text-7xl">Mara Chen</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-white/70">Mechanical engineer focused on <b className="text-white">hardware that works</b>, thoughtful testing, and the practical details that make a system dependable.</p><div className="mt-8"><a href="/sample-resume.pdf" className="inline-flex rounded-lg bg-[#ed2633] px-5 py-3 font-bold">View résumé</a></div><div className="mt-10 grid max-w-xl grid-cols-3 overflow-hidden rounded-2xl border border-white/10 bg-[#151518]"><div className="p-5"><b className="text-2xl text-[#ed2633]">3</b><small className="mt-1 block text-[10px] font-bold uppercase tracking-[.14em] text-white/45">Top projects</small></div><div className="border-x border-white/10 p-5"><b className="text-2xl text-[#ed2633]">12</b><small className="mt-1 block text-[10px] font-bold uppercase tracking-[.14em] text-white/45">Test fires</small></div><div className="p-5"><b className="text-2xl text-[#ed2633]">2026</b><small className="mt-1 block text-[10px] font-bold uppercase tracking-[.14em] text-white/45">Graduation</small></div></div></Reveal><Reveal delay={.08} className="relative"><div className="absolute -inset-3 rounded-2xl border border-[#ed2633]/30" /><img src={projects[0].image} alt="Mara testing engineering hardware" className="relative aspect-[.82] w-full rounded-2xl object-cover" /></Reveal></header>
+        <section id="about" className="border-y border-white/10 bg-[#121215] py-20"><div className="mx-auto max-w-7xl px-6"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">About</p><h2 className="mt-3 font-display text-4xl font-bold">Straightforward work. Clear results.</h2><p className="mt-5 max-w-3xl leading-7 text-white/65">This Launch example is intentionally simple: a short introduction, three best projects, and a small CAD gallery. Everything useful is easy to find.</p></Reveal></div></section>
+        <section id="projects" className="mx-auto max-w-7xl px-6 py-20"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">Featured projects</p><h2 className="mt-3 font-display text-4xl font-bold">Top three projects.</h2></Reveal><div className="mt-9 space-y-5">{featured.map((project, index) => <Reveal key={project.title} delay={index*.07}><article className="grid overflow-hidden rounded-2xl border border-white/10 bg-[#151518] md:grid-cols-[.7fr_1.3fr]"><img src={project.image} alt="" className="h-full min-h-56 w-full object-cover" /><div className="p-7"><p className="text-[10px] font-bold uppercase tracking-[.16em] text-[#ed2633]">{String(index + 1).padStart(2,'0')} · {project.tag} · {project.year}</p><h3 className="mt-3 font-display text-3xl font-bold">{project.title}</h3><ul className="mt-5 space-y-2 text-sm leading-6 text-white/65"><li>• <b className="text-white">Role:</b> {project.role}</li><li>• <b className="text-white">Work:</b> {project.body}</li><li>• <b className="text-white">Result:</b> {project.result}</li><li>• <b className="text-white">Tools:</b> {project.tools.join(' · ')}</li></ul></div></article></Reveal>)}</div></section>
+        <section id="cad" className="border-t border-white/10 bg-[#121215] py-20"><div className="mx-auto max-w-7xl px-6"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">CAD gallery</p><h2 className="mt-3 font-display text-4xl font-bold">Drawings at a glance.</h2></Reveal><div className="mt-9 grid gap-4 sm:grid-cols-3">{['Test stand assembly','Heat exchanger section','Robotic arm layout'].map((drawing, i) => <Reveal key={drawing} delay={i*.07}><div className="aspect-[4/3] rounded-xl border border-white/15 bg-[#0d0d10] p-5 [background-image:linear-gradient(rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:22px_22px]"><div className="flex h-full items-center justify-center border border-[#ed2633]/55"><div className="h-20 w-32 border-2 border-[#ed2633] before:block before:h-10 before:w-full before:translate-x-7 before:translate-y-4 before:border-2 before:border-[#ed2633]" /></div><p className="mt-4 text-sm font-bold">{drawing}</p></div></Reveal>)}</div></div></section>
+        <section id="contact" className="px-6 py-20"><Reveal className="mx-auto max-w-7xl rounded-2xl border border-[#ed2633]/35 bg-[#ed2633]/10 p-10 text-center"><h2 className="font-display text-4xl font-bold">Let&apos;s connect.</h2><p className="mx-auto mt-3 max-w-lg text-white/65">Sample contact options for a focused Launch portfolio.</p><div className="mt-6 flex flex-wrap justify-center gap-3"><a href="mailto:mara.chen@example.com" className="inline-flex rounded-lg bg-[#ed2633] px-6 py-3 font-bold">Email Mara</a><a href="https://www.linkedin.com/in/mara-chen-example/" className="inline-flex rounded-lg border border-white/20 px-6 py-3 font-bold">LinkedIn</a></div></Reveal></section>
+      </main>
+    </div>
   )
 }
-
-function ProContent({ page }) {
+function ProHome() {
+  const lifePhotos = [
+    ['https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85', 'Hiking above the clouds'],
+    ['https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85', 'Mountain time outside of work'],
+    ['https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=85', 'A weekend outdoors'],
+  ]
+  return (
+    <>
+      <header className="relative flex min-h-[760px] items-center justify-center overflow-hidden bg-[#234e78] px-6 pt-12 text-center"><img src="https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=2200&q=85" alt="Waterfront city infrastructure at dusk" className="absolute inset-0 h-full w-full object-cover" /><div className="absolute inset-0 bg-[#123d68]/70" /><Reveal className="relative z-10 mx-auto max-w-4xl"><h1 className="font-serif text-5xl font-semibold tracking-[-.045em] text-white sm:text-7xl">Mara Chen, EIT</h1><p className="mt-5 text-lg text-[#e6cd8a] sm:text-2xl">Mechanical Engineer · Seattle, WA</p><p className="mx-auto mt-6 max-w-3xl text-lg leading-8 text-white/80">A thoughtful engineer who enjoys a good challenge, a well-earned weekend outside, and finding beauty in the details.</p><Link to="/examples/pro/contact" className="mt-9 inline-flex rounded-full border border-white/30 bg-[#4a9dec] px-7 py-3 font-bold text-white shadow-xl transition hover:bg-white hover:text-[#234e78]">Contact Mara</Link></Reveal></header>
+      <section className="bg-[#f6f3ed] px-6 py-24 text-[#1d2b38]"><div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[.85fr_1.15fr]"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#617a96]">About Mara</p><h2 className="mt-4 font-serif text-4xl font-semibold tracking-[-.04em]">The person behind the engineering.</h2></Reveal><Reveal delay={.08}><p className="text-lg leading-8 text-[#4d5d6b]">Mara is drawn to problems where a careful detail changes the outcome. At work, that means turning big questions into testable systems, making decisions with data, and helping teams move forward with confidence.</p><p className="mt-5 text-lg leading-8 text-[#4d5d6b]">Outside of work, she is usually finding a new trail, taking a camera along for the day, or planning the next weekend trip. This is a portfolio that makes room for the human story too.</p><div className="mt-7 grid gap-3 sm:grid-cols-3"><div className="border border-[#22384d]/10 bg-white/60 p-4"><b>Curious</b><p className="mt-1 text-sm text-[#4d5d6b]">Always learning how things work.</p></div><div className="border border-[#22384d]/10 bg-white/60 p-4"><b>Practical</b><p className="mt-1 text-sm text-[#4d5d6b]">Builds for real-world use.</p></div><div className="border border-[#22384d]/10 bg-white/60 p-4"><b>Outdoorsy</b><p className="mt-1 text-sm text-[#4d5d6b]">Recharges outside.</p></div></div></Reveal></div></section>
+      <section className="bg-white px-6 pb-32 pt-20 text-[#1d2b38]"><div className="mx-auto max-w-6xl"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#617a96]">Outside the office</p><h2 className="mt-3 font-serif text-4xl font-semibold tracking-[-.04em]">A little more of the story.</h2></Reveal><div className="mt-9 grid gap-4 md:grid-cols-[1.2fr_.8fr_.8fr]">{lifePhotos.map(([src, alt], index) => <Reveal key={src} delay={index*.07}><figure className="overflow-hidden rounded-2xl bg-[#e9edf1]"><img src={src} alt={alt} className={'w-full object-cover ' + (index === 0 ? 'h-[360px]' : 'h-[240px] md:h-[360px]')} /><figcaption className="p-4 text-sm font-semibold">{index === 0 ? 'Always making time to get outside.' : index === 1 ? 'A new view resets the brain.' : 'The quiet moments count too.'}</figcaption></figure></Reveal>)}</div></div></section>
+    </>
+  )
+}function ProContent({ page }) {
   if (page === 'work') return <Work isPro />
   if (page === 'case-study') return <CaseStudy />
   if (page === 'gallery') return <Gallery />
@@ -503,13 +452,9 @@ export default function PackageExample({ packageId, proPage = 'home' }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#08080f] font-body text-[#eef0f8]">
-      <TopNav packageId="launch" />
-      <Hero isPro={false} />
-      <Work isPro={false} />
-      <About isPro={false} />
-      <Contact isPro={false} />
+    <>
+      <LaunchExample />
       <ExampleBar packageId="launch" />
-    </div>
+    </>
   )
 }

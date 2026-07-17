@@ -7,7 +7,7 @@
 
 export const site = {
   brand: "FolioLabz",
-  tagline: "Portfolio websites, built for you.",
+  tagline: "Portfolios made easy",
 
   // CHANGE THIS to the email you want client submissions and questions to reach.
   // (Netlify form notifications are configured separately in the Netlify dashboard,
@@ -63,15 +63,15 @@ export const tiers = [
     originalPriceLabel: "$350",
     price: 300,
     priceLabel: "$300",
-    blurb: "Everything you need to look professional.",
-    headline: ["Up to 4 pages", "Custom design in your style", "Launched and live for you"],
+    blurb: "A focused portfolio that makes your work easy to understand.",
+    headline: ["One focused scrolling portfolio", "Up to 3 featured projects", "Custom visual direction"],
     full: [
-      "Up to 4 pages: Home, Work, Resume, Contact",
-      "A custom design shaped around your career and chosen color direction",
+      "One polished scrolling portfolio with up to 4 sections: Home, Work, About, and Contact",
+      "A custom visual direction shaped around your career and work",
       "Looks perfect on phones, tablets, and laptops",
-      "Contact and social buttons wherever you want them",
+      "Contact, social, and resume-download links placed where they matter",
       "A resume download button for recruiters",
-      "Hosting included free, for as long as you want it online",
+      "Hosting included free for as long as you want it online when you use a yourname.netlify.app address",
       "Launch free on a clean web address, or add your own .com for $30/yr and I handle it",
     ],
     popular: false,
@@ -83,15 +83,15 @@ export const tiers = [
     originalPriceLabel: "$600",
     price: 550,
     priceLabel: "$550",
-    blurb: "For people who want to stand out.",
-    headline: ["Up to 7 pages", "Expanded galleries and case studies", "1 personal strategy meeting"],
+    blurb: "For people with more proof, depth, and ambition to show.",
+    headline: ["An expanded portfolio with room to grow", "Up to 10 featured projects", "Contact form + strategy meeting"],
     full: [
       "Everything in Launch",
-      "Up to 7 pages",
-      "Larger photo galleries and in-depth project case studies",
+      "One polished portfolio with up to 4 focused sections or pages",
+      "Up to 10 featured projects with richer descriptions, images, and results",
       "A working contact form: visitor messages land straight in your email",
-      "A testimonials section that builds instant trust",
-      "Extra animation and polish throughout",
+      "A testimonials or recommendation section that adds proof",
+      "SEO and sharing setup so your link looks polished in Google and on LinkedIn",
       "1 personal 30-minute strategy meeting with me",
     ],
     popular: true,
@@ -115,7 +115,7 @@ export const hosting = {
   free: {
     title: "Free web address",
     example: "yourname.netlify.app",
-    detail: "Go live at no cost on a clean address like yourname.netlify.app. Hosting stays free for as long as you want.",
+    detail: "Go live at no cost on a clean address like yourname.netlify.app. Free hosting applies only while you use a .netlify.app address.",
   },
   custom: {
     title: "Your own .com or .net",
@@ -334,7 +334,7 @@ export const demoStyles = [
 
 // ------------------------------------------------------------
 // CAREER-AWARE PALETTES
-// Ten universal color directions. The visitor's career changes
+// Thirty universal color directions. The visitor's career changes
 // the recommended content, while every visual stays color-only.
 // ------------------------------------------------------------
 export const portfolioPalettes = [
@@ -418,6 +418,166 @@ export const portfolioPalettes = [
     bestFor: "Organic and relaxed.",
     swatch: ["#e9ddc7", "#a85d3f", "#626b47"],
   },
+  {
+    id: "lavender",
+    name: "Lavender Haze",
+    type: "Lilac / indigo / pearl",
+    blurb: "Soft lilac with deep indigo and a luminous pearl backdrop.",
+    bestFor: "Imaginative and polished.",
+    swatch: ["#f1edfa", "#5446a8", "#c8b9ef"],
+  },
+  {
+    id: "citrus",
+    name: "Citrus Ink",
+    type: "Ink / lemon / white",
+    blurb: "Dark ink sharpened by bright lemon and clean white.",
+    bestFor: "Energetic and direct.",
+    swatch: ["#15191d", "#f4d53f", "#f8faf8"],
+  },
+  {
+    id: "copper",
+    name: "Copper Blue",
+    type: "Steel / copper / cream",
+    blurb: "Cool steel blue balanced by warm copper and soft cream.",
+    bestFor: "Technical and refined.",
+    swatch: ["#25384a", "#b86f4b", "#f3eadc"],
+  },
+  {
+    id: "meadow",
+    name: "Meadow",
+    type: "Cream / grass / sky",
+    blurb: "A bright cream base with fresh grass green and open-sky blue.",
+    bestFor: "Optimistic and friendly.",
+    swatch: ["#fbf7e8", "#5b8f45", "#86b9d1"],
+  },
+  {
+    id: "wine",
+    name: "Wine & Rose",
+    type: "Wine / rose / linen",
+    blurb: "Full-bodied wine with dusty rose and a warm linen neutral.",
+    bestFor: "Rich and expressive.",
+    swatch: ["#4a1830", "#c27b8f", "#f3e9df"],
+  },
+  {
+    id: "arctic",
+    name: "Arctic",
+    type: "Ice / cobalt / navy",
+    blurb: "Pale ice with crisp cobalt and a deep navy anchor.",
+    bestFor: "Clear and confident.",
+    swatch: ["#e9f4f7", "#2864dc", "#10243b"],
+  },
+  {
+    id: "papaya",
+    name: "Papaya",
+    type: "Papaya / teal / cream",
+    blurb: "Warm papaya orange contrasted with saturated teal and cream.",
+    bestFor: "Playful and memorable.",
+    swatch: ["#f28b62", "#126b68", "#fff3df"],
+  },
+  {
+    id: "espresso",
+    name: "Espresso",
+    type: "Coffee / caramel / oat",
+    blurb: "Dark coffee brown with caramel warmth and a soft oat base.",
+    bestFor: "Grounded and sophisticated.",
+    swatch: ["#2d211c", "#b77845", "#e8dcc9"],
+  },
+  {
+    id: "orchid",
+    name: "Electric Orchid",
+    type: "Black / orchid / lavender",
+    blurb: "Near-black with a vivid orchid accent and pale lavender.",
+    bestFor: "Creative and high-impact.",
+    swatch: ["#151218", "#c348d6", "#ead8f1"],
+  },
+  {
+    id: "harbor",
+    name: "Harbor",
+    type: "Slate / aqua / fog",
+    blurb: "Marine slate with quiet aqua and a light coastal fog.",
+    bestFor: "Dependable and calm.",
+    swatch: ["#263a45", "#5aa6a6", "#e3ecea"],
+  },
+  {
+    id: "marigold",
+    name: "Marigold",
+    type: "Charcoal / marigold / bone",
+    blurb: "Graphic charcoal lifted by warm marigold and a bone neutral.",
+    bestFor: "Bold and welcoming.",
+    swatch: ["#252525", "#dda62b", "#f2eee3"],
+  },
+  {
+    id: "eucalyptus",
+    name: "Eucalyptus",
+    type: "Eucalyptus / cream / charcoal",
+    blurb: "Muted eucalyptus green with airy cream and gentle charcoal.",
+    bestFor: "Natural and composed.",
+    swatch: ["#6f8f7b", "#f4f0e5", "#29332e"],
+  },
+  {
+    id: "ruby",
+    name: "Ruby Signal",
+    type: "Ruby / ink / blush",
+    blurb: "A clear ruby signal against dark ink and restrained blush.",
+    bestFor: "Decisive and modern.",
+    swatch: ["#c73546", "#171b23", "#f2dadd"],
+  },
+  {
+    id: "denim",
+    name: "Washed Denim",
+    type: "Denim / sand / rust",
+    blurb: "Washed denim blue paired with natural sand and a rust accent.",
+    bestFor: "Relaxed and capable.",
+    swatch: ["#55758f", "#e8dcc5", "#a95736"],
+  },
+  {
+    id: "mintchip",
+    name: "Mint Chip",
+    type: "Mint / chocolate / white",
+    blurb: "Cool mint with deep chocolate and a clean white finish.",
+    bestFor: "Fresh and distinctive.",
+    swatch: ["#c9eadf", "#352925", "#fbfbf7"],
+  },
+  {
+    id: "ultraviolet",
+    name: "Ultraviolet",
+    type: "Violet / midnight / silver",
+    blurb: "Saturated violet set against midnight blue and soft silver.",
+    bestFor: "Futuristic and bold.",
+    swatch: ["#6f42d9", "#10172b", "#d9dce5"],
+  },
+  {
+    id: "terrace",
+    name: "Terrace",
+    type: "Brick / moss / parchment",
+    blurb: "Weathered brick and moss softened by a parchment background.",
+    bestFor: "Earthy and editorial.",
+    swatch: ["#9f503d", "#586248", "#eee3cc"],
+  },
+  {
+    id: "sorbet",
+    name: "Sorbet",
+    type: "Peach / raspberry / vanilla",
+    blurb: "Soft peach with a raspberry accent and creamy vanilla.",
+    bestFor: "Bright and personable.",
+    swatch: ["#f7b69e", "#bd3f68", "#fff4dc"],
+  },
+  {
+    id: "blueprint",
+    name: "Blueprint",
+    type: "Blueprint / white / orange",
+    blurb: "Classic blueprint blue with crisp white and a precise orange mark.",
+    bestFor: "Structured and inventive.",
+    swatch: ["#174b78", "#f6f8f5", "#ed7b32"],
+  },
+  {
+    id: "moonstone",
+    name: "Moonstone",
+    type: "Moon gray / teal / plum",
+    blurb: "A moon-gray foundation with jewel-like teal and muted plum.",
+    bestFor: "Balanced and uncommon.",
+    swatch: ["#d9dadd", "#277b7a", "#68445f"],
+  },
 ]
 
 // ------------------------------------------------------------
@@ -482,8 +642,8 @@ export const pageOptions = [
   "About me", "Projects / Work", "Resume", "Photo gallery", "Testimonials", "Experience timeline", "Contact", "Blog / Writing", "Skills & tools", "Certifications", "Awards & honors", "Publications / research", "Services", "FAQ", "Press / features", "Speaking & events", "Booking / availability",
 ]
 
-// How many pages each package can pick from the list above.
-export const pageLimits = { launch: 4, pro: 7 }
+// How many sections or pages each package can pick from the list above.
+export const pageLimits = { launch: 4, pro: 4 }
 
 // ------------------------------------------------------------
 // FAQ
@@ -507,7 +667,7 @@ export const faq = [
   },
   {
     q: "Do I pay for hosting or a domain?",
-    a: "Hosting is included free, for as long as you want your site online, and you can launch free on a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $30 a year. If you have a name in mind, I check availability; if not, you can decide later. Payment starts only after I confirm the name, then I buy it, set it up, and bill it through your account.",
+    a: "Hosting is free only when your site uses a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $30 a year. If you have a name in mind, I check availability; if not, you can decide later. Payment starts only after I confirm the name, then I buy it, set it up, and bill it through your account.",
   },
   {
     q: "Can I make changes myself?",

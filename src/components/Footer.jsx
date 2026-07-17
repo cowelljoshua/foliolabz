@@ -11,7 +11,7 @@ export default function Footer() {
               <span className="font-display text-2xl font-bold tracking-[-0.03em] text-white">Folio<span className="text-[#91a6ff]">Labz</span></span>
             </Link>
             <p className="mt-5 text-sm leading-relaxed text-white/55">
-              Portfolio websites designed, built, and launched for you. One polished link for the work you are proud of.
+              Portfolios made easy.
             </p>
             <a href={'mailto:' + site.email} className="mt-5 inline-block text-sm font-semibold text-white transition hover:text-[#91a6ff]">
               {site.email}

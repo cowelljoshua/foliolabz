@@ -27,7 +27,7 @@ function TierCard({ tier, onOpen }) {
       className={`h-full ${tier.popular ? 'border-violet/60' : ''}`}
       spotColor={tier.popular ? 'rgba(34,211,238,0.14)' : 'rgba(124,92,255,0.14)'}
     >
-      <button onClick={onOpen} className="block h-full w-full p-7 text-left">
+      <button onClick={onOpen} className="block w-full p-7 pb-3 text-left">
         {tier.popular && (
           <span className="mb-3 inline-block rounded-full bg-violet/15 px-3 py-1 text-xs font-semibold text-violet-soft">
             Best value
@@ -49,6 +49,9 @@ function TierCard({ tier, onOpen }) {
         </ul>
         <p className="mt-6 text-sm font-semibold text-gradient">See everything included →</p>
       </button>
+      <Link to={`/examples/${tier.id}`} className="mx-7 mb-7 inline-flex text-sm font-semibold text-violet underline underline-offset-4 transition hover:text-frost">
+        View {tier.name} example ↗
+      </Link>
     </SpotlightCard>
   )
 }
@@ -173,7 +176,7 @@ export default function Pricing() {
           Simple pricing. <span className="text-gradient italic">Zero surprises.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-mist">
-          Start with a ${deposit.amount} deposit. You pay the rest only once your site is live and you love it.
+          Want a website like this? Email <a className="font-semibold text-violet underline underline-offset-4" href="mailto:foliolabz@gmail.com">foliolabz@gmail.com</a> for a quote.
         </p>
       </Reveal>
 

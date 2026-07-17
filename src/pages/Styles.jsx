@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import CareerMiniSite from '../components/CareerMiniSite.jsx'
@@ -5,40 +6,24 @@ import DeviceFrame from '../components/DeviceFrame.jsx'
 import { portfolioPalettes, realSites } from '../config/site.js'
 
 export default function Styles() {
+  const [showAllPalettes, setShowAllPalettes] = useState(false)
   const liveSites = realSites.filter((site) => site.live && site.url)
   const comingSoon = realSites.filter((site) => !site.live)
+  const visiblePalettes = showAllPalettes ? portfolioPalettes : portfolioPalettes.slice(0, 5)
 
   return (
     <main className="mx-auto max-w-6xl px-6 pt-32">
       <section id="finder">
         <Reveal className="mx-auto max-w-3xl text-center">
-          <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-mist">
-            <span className="h-2 w-2 rounded-full bg-violet" />
-            10 universal color palettes
-          </span>
-          <h1 className="font-head mt-6 text-4xl leading-tight sm:text-6xl">
-            Choose a palette that feels like you.
-          </h1>
+          <h1 className="font-head text-4xl leading-tight sm:text-6xl">Color palettes.</h1>
           <p className="mx-auto mt-5 max-w-2xl text-mist sm:text-lg">
-            No job categories or prebuilt layouts. Pick the colors you like, and I will shape the website around your actual work later.
+            Every option can work for any portfolio. Choose by taste; the structure, projects, and page flow are handled separately.
           </p>
-          <div className="mt-6 flex flex-wrap justify-center gap-2 text-xs text-mist">
-            <span className="rounded-full border hairline px-3 py-1.5">10 color choices</span>
-            <span className="rounded-full border hairline px-3 py-1.5">Layout designed later</span>
-          </div>
         </Reveal>
 
         <div className="mt-14">
-          <Reveal>
-            <p className="section-kicker">Pick a starting point</p>
-            <h2 className="font-head mt-2 text-3xl sm:text-4xl">Ten palettes. Nothing else decided yet.</h2>
-            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-mist">
-              Every option can work for any portfolio. Choose by taste; the structure, projects, and page flow are handled separately.
-            </p>
-          </Reveal>
-
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-            {portfolioPalettes.map((palette, index) => (
+            {visiblePalettes.map((palette, index) => (
               <Reveal key={palette.id} delay={Math.min(index, 4) * 0.035}>
                 <Link
                   to={'/start?style=' + palette.id}
@@ -57,17 +42,25 @@ export default function Styles() {
               </Reveal>
             ))}
           </div>
+          {portfolioPalettes.length > 5 && (
+            <div className="mt-7 text-center">
+              <button
+                type="button"
+                onClick={() => setShowAllPalettes((value) => !value)}
+                className="btn-ghost"
+                aria-expanded={showAllPalettes}
+              >
+                {showAllPalettes ? 'Show fewer palettes' : `Show ${portfolioPalettes.length - 5} more palettes`}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
       <section className="mt-28 border-t hairline pt-20">
         <Reveal className="max-w-2xl">
-          <span className="glass inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm text-mist">
-            <span className="h-2 w-2 animate-pulse-soft rounded-full bg-mint" />
-            Real launches, live right now
-          </span>
-          <h2 className="font-head mt-5 text-4xl sm:text-5xl">This is not a mockup.</h2>
-          <p className="mt-4 text-mist">Explore real client sites to see how the final result changes around each person and their work.</p>
+          <h2 className="font-head text-4xl sm:text-5xl">My work</h2>
+
         </Reveal>
 
         <div className="mt-12 grid gap-8 lg:grid-cols-2">

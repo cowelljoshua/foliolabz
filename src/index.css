@@ -25,8 +25,6 @@
 
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-serif-display: "DM Serif Display", Georgia, serif;
-  --font-fraunces: "Fraunces", Georgia, serif;
 
   --animate-float: float 7s ease-in-out infinite;
   --animate-pulse-soft: pulse-soft 2.6s ease-in-out infinite;
@@ -53,11 +51,11 @@ body {
   font-family: var(--font-display);
 }
 
-/* Serif display face for marketing headlines. */
+/* Clean display face for marketing headlines. Avoid ornate glyphs that can read as visual glitches. */
 .font-head {
-  font-family: var(--font-fraunces);
+  font-family: var(--font-display);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.025em;
 }
 
 /* Accent text. Kept under its old name so existing markup works. */
@@ -400,7 +398,7 @@ body {
 }
 
 .proof-number {
-  font-family: var(--font-fraunces);
+  font-family: var(--font-display);
   font-size: 2rem;
   line-height: 1;
   color: var(--color-violet);
@@ -431,7 +429,7 @@ body {
 
 .section-title {
   margin-top: 0.75rem;
-  font-family: var(--font-fraunces);
+  font-family: var(--font-display);
   font-size: clamp(2.35rem, 5vw, 4.2rem);
   font-weight: 600;
   line-height: 1.04;
@@ -498,7 +496,7 @@ body {
 }
 
 .outcome-number {
-  font-family: var(--font-fraunces);
+  font-family: var(--font-display);
   font-size: clamp(1.8rem, 4vw, 2.35rem);
   font-weight: 600;
   line-height: 1;

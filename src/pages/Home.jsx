@@ -5,10 +5,10 @@ import { asset } from '../lib/asset.js'
 import { site, resumeService, realSites, tiers, deposit } from '../config/site.js'
 
 const buyingReasons = [
-  ['$50', 'Starts your build', 'The remaining balance is due only after your site is live.'],
-  ['~2 weeks', 'Typical turnaround', 'You get a polished site without losing weeks to a DIY builder.'],
-  ['3 rounds', 'Edits included', 'I refine the details with you before you approve the final site.'],
-  ['1:1', 'Built with a real person', 'Work directly with me from the first form through launch.'],
+  ['$50', 'Starts your build'],
+  ['~2 weeks', 'Typical turnaround'],
+  ['3 rounds', 'Edits included'],
+  ['1:1', 'Built personally'],
 ]
 
 const rise = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 } }
@@ -110,8 +110,7 @@ export default function Home() {
             <div className="founder-caption"><span className="h-2 w-2 rounded-full bg-mint" /> Built personally by Josh</div>
           </Reveal>
           <Reveal delay={0.12} className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
-            <p className="section-kicker">A real person behind the work</p>
-            <h2 className="font-head mt-4 text-4xl leading-tight sm:text-5xl">I built the service I wished I had.</h2>
+            <h2 className="font-head text-4xl leading-tight sm:text-5xl">I built the service I wished I had.</h2>
             <div className="mt-6 space-y-4 leading-relaxed text-mist">
               <p>I got tired of sending interviewers a messy mix of folders, screenshots, and project links. So I built myself one clear place that actually showed what I could do.</p>
               <p>That turned into helping other people do the same. FolioLabz is intentionally personal: you work with me from the first form through launch.</p>
@@ -127,9 +126,8 @@ export default function Home() {
       <section className="home-section pt-8">
         <div className="value-panel">
           <Reveal className="max-w-xl">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/55">A finished site, without the website project</p>
-            <h2 className="font-head mt-4 text-4xl leading-tight text-white sm:text-5xl">You send the work. I handle everything else.</h2>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70">No templates to wrestle with, no hosting setup, and no wondering if it looks professional.</p>
+            <h2 className="font-head text-4xl leading-tight text-white sm:text-5xl">You send the work. I handle everything else.</h2>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70">No templates to wrestle with, no hosting setup, and no coding.</p>
             <Link to="/start" className="btn-light mt-8">Start with ${deposit.amount} <Arrow /></Link>
           </Reveal>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -138,7 +136,6 @@ export default function Home() {
                 <article className="outcome-card">
                   <span className="outcome-number">{item[0]}</span>
                   <h3 className="font-display mt-4 text-lg font-semibold text-white">{item[1]}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/60">{item[2]}</p>
                 </article>
               </Reveal>
             ))}

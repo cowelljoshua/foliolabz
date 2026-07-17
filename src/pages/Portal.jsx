@@ -31,6 +31,16 @@ function BackLink({ onClick }) {
 
 
 // Payment button that gracefully falls back when a Stripe link is not set yet.
+const isNetlifyAddress = (domain = '') => domain.toLowerCase().replace(/\/$/, '').endsWith('.netlify.app')
+const domainHref = (domain = '') => domain ? (domain.startsWith('http') ? domain : 'https://' + domain) : ''
+const cleanAddressChoice = (value) => value
+  .toLowerCase()
+  .replace(/^https?:\/\//, '')
+  .replace(/\.netlify\.app.*$/, '')
+  .replace(/[^a-z0-9-]/g, '-')
+  .replace(/-{2,}/g, '-')
+  .replace(/^-|-$/g, '')
+
 function PayBlock({ url, label }) {
   if (url) {
     return (
@@ -125,6 +135,9 @@ export default function Portal() {
   const clientDepositPending = Boolean(client && clientBalanceInfo && owed === Number(clientBalanceInfo.total.replace(/[^0-9]/g, '')))
   const clientPayUrl = client ? (client.payLink || (!client.rush && clientBalanceInfo ? stripeLinks[clientBalanceInfo.stripeKey] : '')) : ''
   const chosenBalance = balances.find((b) => b.pkg === balancePkg)
+  const prefersFreeAddress = client?.domainInterest === 'no'
+  const clientHasNetlifyAddress = isNetlifyAddress(client?.domain)
+  const displayedDomain = client?.domain?.replace(/^https?:\/\//, '').replace(/\/$/, '') || ''
 
   useEffect(() => {
     if (!supabaseConfigured) {
@@ -145,7 +158,7 @@ export default function Portal() {
       setLoadingPortal(true)
       const { data, error: profileError } = await supabase
         .from('client_profiles')
-        .select('name, email, package, rush, balance_due, build_status, pay_link, domain, domain_active, next_step, target_launch_date, preview_url, client_progress')
+        .select('name, email, package, rush, balance_due, build_status, pay_link, domain, domain_active, next_step, target_launch_date, preview_url, client_progress, intake')
         .maybeSingle()
 
       if (!active) return
@@ -167,6 +180,7 @@ export default function Portal() {
           targetLaunchDate: data.target_launch_date,
           previewUrl: data.preview_url,
           clientProgress: data.client_progress,
+          domainInterest: data.intake?.domainInterest || '',
         })
         setName(data.name)
         setEmail(data.email)
@@ -192,12 +206,15 @@ export default function Portal() {
   const buildSummary = (type) => {
     const L = [`FOLIOLAB CLIENT REQUEST`, `=======================`, `Name: ${name}`, `Email: ${email}`, '']
     if (type === 'domain') {
-      L.push('Request: Set up a custom domain')
+      L.push(prefersFreeAddress ? 'Request: Set up a free Netlify address' : 'Request: Set up a custom domain')
       domainChoices.forEach((choice, index) => {
-        L.push(`Choice ${index + 1}: ${choice || 'left blank'}`)
+        const fullChoice = prefersFreeAddress && choice ? `${choice}.netlify.app` : choice
+        L.push(`Choice ${index + 1}: ${fullChoice || 'left blank'}`)
       })
       if (domainNotes) L.push(`Notes: ${domainNotes}`)
-      L.push('Next step: Check availability before updating the client profile or requesting payment.')
+      L.push(prefersFreeAddress
+        ? 'Next step: Reserve the first available Netlify address and add it to the client profile.'
+        : 'Next step: Check availability before updating the client profile or requesting payment.')
     } else if (type === 'edit') {
       L.push(`Request: ${chosenEdit?.name} (${chosenEdit?.priceLabel})`)
       L.push('')
@@ -220,7 +237,7 @@ export default function Portal() {
     fd.append('email', email)
     fd.append('request_type', type)
     domainChoices.forEach((choice, index) => {
-      fd.append(`domain_option_${index + 1}`, type === 'domain' ? choice : '')
+      fd.append('domain_option_' + (index + 1), type === 'domain' ? (prefersFreeAddress && choice ? choice + '.netlify.app' : choice) : '')
     })
     fd.append('domain_notes', type === 'domain' ? domainNotes : '')
     fd.append('edit_type', type === 'edit' ? editType : '')
@@ -347,9 +364,15 @@ export default function Portal() {
               {owed > 0 ? `$${owed} due at launch` : 'Fully paid ✓'}
             </span>
             {client.domain && (
-              <span className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${client.domainActive ? 'bg-mint/15 text-mint' : 'bg-frost/10 text-mist'}`}>
-                {client.domain}{client.domainActive ? ' · active ✓' : ' · payment needed'}
-              </span>
+              client.domainActive ? (
+                <a href={domainHref(client.domain)} target="_blank" rel="noreferrer" className="rounded-full bg-mint/15 px-3.5 py-1.5 text-xs font-semibold text-mint hover:underline">
+                  {displayedDomain} · live ↗
+                </a>
+              ) : (
+                <span className="rounded-full bg-frost/10 px-3.5 py-1.5 text-xs font-semibold text-mist">
+                  {displayedDomain}{clientHasNetlifyAddress ? ' · being prepared' : ' · payment needed'}
+                </span>
+              )
             )}
           </div>
         )}
@@ -406,13 +429,17 @@ export default function Portal() {
                     <path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18" stroke="currentColor" strokeWidth="1.4" />
                   </svg>
                 </span>
-                <h2 className="font-display mt-3 text-lg font-semibold">Set up a domain</h2>
+                <h2 className="font-display mt-3 text-lg font-semibold">Your web address</h2>
                 <p className="mt-1 text-sm text-mist">
                   {client?.domainActive
-                    ? `${client.domain} is live and billing.`
+                    ? `${displayedDomain} is live.`
                     : client?.domain
-                      ? `${client.domain} is available. Payment is needed before launch.`
-                      : 'Share any domain names you want me to check.'}
+                      ? clientHasNetlifyAddress
+                        ? `${displayedDomain} is being prepared.`
+                        : `${displayedDomain} is available. Payment is needed before launch.`
+                      : prefersFreeAddress
+                        ? 'Choose three free .netlify.app address preferences.'
+                        : 'Share any custom domain names you want me to check.'}
                 </p>
               </SpotlightCard>
             </button>
@@ -507,13 +534,16 @@ export default function Portal() {
           <motion.div key="domain" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.25 }} className="mt-10">
             <div className="glass rounded-3xl p-7">
               <div className="flex items-center justify-between">
-                <h2 className="font-display text-xl font-semibold">Set up your custom domain</h2>
+                <h2 className="font-display text-xl font-semibold">{prefersFreeAddress || clientHasNetlifyAddress ? 'Your free web address' : 'Set up your custom domain'}</h2>
                 <BackLink onClick={() => setAction(null)} />
               </div>
-              <p className="mt-2 text-sm text-mist">{domainOffer.detail}</p>
+              <p className="mt-2 text-sm text-mist">
+                {prefersFreeAddress || clientHasNetlifyAddress
+                  ? 'Your .netlify.app address and hosting are free for as long as you want the site online.'
+                  : domainOffer.detail}
+              </p>
 
               {client?.domainActive ? (
-                /* Their domain is already live and billing. */
                 <div className="mt-5 rounded-2xl border border-mint/40 bg-mint/[0.06] p-6 text-center">
                   <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-mint/12 text-mint">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -521,63 +551,79 @@ export default function Portal() {
                       <path d="M8.5 12.5l2.4 2.4L15.5 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </span>
-                  <p className="font-display mt-2 font-semibold">{client.domain} is live.</p>
-                  <p className="mt-1 text-sm text-mist">Nothing to do here.</p>
+                  <a href={domainHref(client.domain)} target="_blank" rel="noreferrer" className="font-display mt-2 block font-semibold text-violet hover:underline">{displayedDomain} ↗</a>
+                  <p className="mt-1 text-sm text-mist">Your site is live at this address{clientHasNetlifyAddress ? ', with no domain fee' : ''}.</p>
                 </div>
               ) : client?.domain ? (
-                /* I already know the domain they want; just start billing. */
-                <div className="mt-5 space-y-4">
-                  <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-6 text-center">
-                    <p className="text-sm text-mist">Available domain confirmed</p>
-                    <p className="font-display mt-1 text-2xl font-bold">{client.domain}</p>
-                    <p className="mt-2 text-sm text-mist">
-                      Your domain payment has not started yet. Start the {domainOffer.yearly.label} subscription before I can register it and put your site live there.
-                    </p>
+                clientHasNetlifyAddress ? (
+                  <div className="mt-5 rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-6 text-center">
+                    <p className="text-sm text-mist">Free address reserved</p>
+                    <p className="font-display mt-1 text-2xl font-bold">{displayedDomain}</p>
+                    <p className="mt-2 text-sm text-mist">I am preparing this address for launch. No domain payment is needed.</p>
                   </div>
-                  <PayBlock
-                    url={stripeLinks[domainOffer.yearly.stripeKey]}
-                    label={`Start ${client.domain} · ${domainOffer.yearly.label}`}
-                  />
-                </div>
+                ) : (
+                  <div className="mt-5 space-y-4">
+                    <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-6 text-center">
+                      <p className="text-sm text-mist">Available domain confirmed</p>
+                      <p className="font-display mt-1 text-2xl font-bold">{displayedDomain}</p>
+                      <p className="mt-2 text-sm text-mist">Your domain payment has not started yet. Start the {domainOffer.yearly.label} subscription before I can register it and put your site live there.</p>
+                    </div>
+                    <PayBlock url={stripeLinks[domainOffer.yearly.stripeKey]} label={`Start ${displayedDomain} · ${domainOffer.yearly.label}`} />
+                  </div>
+                )
               ) : !submitted ? (
                 <div className="mt-5 space-y-5">
                   <p className="text-sm text-mist">
-                    Share three domain names you would like me to check, in order of preference.
+                    {prefersFreeAddress
+                      ? 'Share three free address preferences, in order. I will use the first available option.'
+                      : 'Share three domain names you would like me to check, in order of preference.'}
                   </p>
                   {domainChoices.map((choice, index) => (
                     <Field key={index} label={`${index === 0 ? 'First' : index === 1 ? 'Second' : 'Third'} choice`}>
-                      <input
-                        className="field-input"
-                        value={choice}
-                        onChange={(e) => setDomainChoices((current) => current.map((item, choiceIndex) => choiceIndex === index ? e.target.value : item))}
-                        required
-                        autoCapitalize="none"
-                        autoCorrect="off"
-                        spellCheck={false}
-                      />
+                      {prefersFreeAddress ? (
+                        <span className="flex overflow-hidden rounded-xl border hairline bg-ink-800 focus-within:border-violet">
+                          <input
+                            className="min-w-0 flex-1 bg-transparent px-3 py-2.5 text-sm outline-none"
+                            value={choice}
+                            onChange={(event) => setDomainChoices((current) => current.map((item, choiceIndex) => choiceIndex === index ? cleanAddressChoice(event.target.value) : item))}
+                            required
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            spellCheck={false}
+                          />
+                          <span className="flex items-center border-l hairline bg-frost/[0.04] px-3 text-xs text-mist">.netlify.app</span>
+                        </span>
+                      ) : (
+                        <input
+                          className="field-input"
+                          value={choice}
+                          onChange={(event) => setDomainChoices((current) => current.map((item, choiceIndex) => choiceIndex === index ? event.target.value : item))}
+                          required
+                          autoCapitalize="none"
+                          autoCorrect="off"
+                          spellCheck={false}
+                        />
+                      )}
                     </Field>
                   ))}
                   <Field label="Anything I should know?" optional>
-                    <textarea className="field-input min-h-20" value={domainNotes} onChange={(e) => setDomainNotes(e.target.value)} placeholder="Anything else you want me to know." />
+                    <textarea className="field-input min-h-20" value={domainNotes} onChange={(event) => setDomainNotes(event.target.value)} placeholder="Anything else you want me to know." />
                   </Field>
                   {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
-                  <button
-                    onClick={() => submitRequest('domain')}
-                    disabled={sending || domainChoices.some((choice) => !choice.trim())}
-                    className="btn-primary w-full justify-center disabled:opacity-40"
-                  >
-                    {sending ? 'Sending…' : 'Send my domain request'}
+                  <button onClick={() => submitRequest('domain')} disabled={sending || domainChoices.some((choice) => !choice.trim())} className="btn-primary w-full justify-center disabled:opacity-40">
+                    {sending ? 'Sending…' : prefersFreeAddress ? 'Send my address preferences' : 'Send my domain request'}
                   </button>
                 </div>
               ) : (
                 <div className="mt-6 rounded-xl border border-mint/40 bg-mint/[0.06] p-4 text-sm">
-                  Request sent. I will check the names you shared and reach out before confirming a domain. No payment is due until I confirm the name. After that, come back here to start the {domainOffer.yearly.label} subscription so I can put it live.
+                  {prefersFreeAddress
+                    ? 'Preferences sent. I will reserve the first available .netlify.app address and show it here once it is ready.'
+                    : `Request sent. I will check the names you shared and reach out before confirming a domain. No payment is due until I confirm the name. After that, come back here to start the ${domainOffer.yearly.label} subscription so I can put it live.`}
                 </div>
               )}
             </div>
           </motion.div>
         )}
-
         {/* ---- edit ---- */}
         {action === 'edit' && (
           <motion.div key="edit" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.25 }} className="mt-10">
