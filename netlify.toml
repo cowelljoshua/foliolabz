@@ -14,6 +14,12 @@
     Permissions-Policy = "camera=(), geolocation=(), microphone=()"
 
 
+# Dedicated social-share route. Browsers immediately return home; crawlers get its metadata.
+[[redirects]]
+  from = "/share"
+  to = "/share.html"
+  status = 200
+
 # Send every route to index.html so React Router handles it
 [[redirects]]
   from = "/*"
