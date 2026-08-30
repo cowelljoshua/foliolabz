@@ -79,14 +79,13 @@ const pageTitles = {
   '/portal': 'Client portal · FolioLabz',
   '/owner': 'Owner workspace · FolioLabz',
   '/reset-password': 'Reset password · FolioLabz',
-  '/examples/launch': 'Launch package example · FolioLabz',
-  '/examples/pro': 'Pro package example · FolioLabz',
-  '/examples/pro/work': 'Pro example: Work · FolioLabz',
-  '/examples/pro/case-study': 'Pro example: Case Study · FolioLabz',
-  '/examples/pro/gallery': 'Pro example: Gallery · FolioLabz',
-  '/examples/pro/about': 'Pro example: About · FolioLabz',
-  '/examples/pro/resume': 'Pro example: Resume · FolioLabz',
-  '/examples/pro/contact': 'Pro example: Contact · FolioLabz',
+  '/examples/pro': 'Website example · FolioLabz',
+  '/examples/pro/work': 'Website example: Work · FolioLabz',
+  '/examples/pro/case-study': 'Website example: Case Study · FolioLabz',
+  '/examples/pro/gallery': 'Website example: Gallery · FolioLabz',
+  '/examples/pro/about': 'Website example: About · FolioLabz',
+  '/examples/pro/resume': 'Website example: Resume · FolioLabz',
+  '/examples/pro/contact': 'Website example: Contact · FolioLabz',
 }
 
 function PageTitle() {
@@ -139,14 +138,15 @@ export default function App() {
         <Route path="/styles/mono" element={<Mono />} />
         <Route path="/styles/coastal" element={<Coastal />} />
         <Route path="/styles/luxe" element={<Luxe />} />
-        <Route path="/examples/launch" element={<PackageExample packageId="launch" />} />
-        <Route path="/examples/pro" element={<PackageExample packageId="pro" />} />
-        <Route path="/examples/pro/work" element={<PackageExample packageId="pro" proPage="work" />} />
-        <Route path="/examples/pro/case-study" element={<PackageExample packageId="pro" proPage="case-study" />} />
-        <Route path="/examples/pro/gallery" element={<PackageExample packageId="pro" proPage="gallery" />} />
-        <Route path="/examples/pro/about" element={<PackageExample packageId="pro" proPage="about" />} />
-        <Route path="/examples/pro/resume" element={<PackageExample packageId="pro" proPage="resume" />} />
-        <Route path="/examples/pro/contact" element={<PackageExample packageId="pro" proPage="contact" />} />
+        {/* Old Launch example link, kept so any shared URL still lands somewhere useful */}
+        <Route path="/examples/launch" element={<Navigate to="/examples/pro" replace />} />
+        <Route path="/examples/pro" element={<PackageExample />} />
+        <Route path="/examples/pro/work" element={<PackageExample proPage="work" />} />
+        <Route path="/examples/pro/case-study" element={<PackageExample proPage="case-study" />} />
+        <Route path="/examples/pro/gallery" element={<PackageExample proPage="gallery" />} />
+        <Route path="/examples/pro/about" element={<PackageExample proPage="about" />} />
+        <Route path="/examples/pro/resume" element={<PackageExample proPage="resume" />} />
+        <Route path="/examples/pro/contact" element={<PackageExample proPage="contact" />} />
         {/* Unknown URLs go home rather than silently rendering Home at a wrong address */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

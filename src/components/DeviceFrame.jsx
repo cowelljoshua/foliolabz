@@ -1,7 +1,45 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import { asset } from '../lib/asset.js'
+
+// The small card previews load each site at a real desktop width and then
+// shrink the whole thing to fit. Without this the iframe is only ~500px wide,
+// so every site renders its cramped phone layout instead of the design people
+// are actually here to look at. 16:10 to match the card's aspect ratio.
+const PREVIEW_WIDTH = 1440
+const PREVIEW_HEIGHT = 900
+
+// Scale factor that makes a PREVIEW_WIDTH-wide iframe fit the measured box.
+// Measured straight away on layout, then kept in sync. ResizeObserver alone is
+// not enough: it can be delayed, and a stale scale leaves a visible gap.
+function useFitScale(ref) {
+  const [scale, setScale] = useState(0.35)
+
+  const measure = useCallback(() => {
+    const width = ref.current?.getBoundingClientRect().width
+    if (width > 0) setScale(width / PREVIEW_WIDTH)
+  }, [ref])
+
+  useLayoutEffect(measure, [measure])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return undefined
+    window.addEventListener('resize', measure)
+    let observer
+    if (typeof ResizeObserver !== 'undefined') {
+      observer = new ResizeObserver(measure)
+      observer.observe(el)
+    }
+    return () => {
+      window.removeEventListener('resize', measure)
+      observer?.disconnect()
+    }
+  }, [ref, measure])
+
+  return scale
+}
 
 // Tracks whether we are on a small screen (phones).
 function useIsMobile() {
@@ -124,6 +162,8 @@ export default function DeviceFrame({ name, url, thumb, field }) {
   const isMobile = useIsMobile()
   const [open, setOpen] = useState(false)
   const [previewLoaded, setPreviewLoaded] = useState(false)
+  const previewBox = useRef(null)
+  const previewScale = useFitScale(previewBox)
 
   // Mobile: no embedded preview, just a clean card that opens the real site.
   if (isMobile) {
@@ -161,7 +201,7 @@ export default function DeviceFrame({ name, url, thumb, field }) {
         className="group block w-full overflow-hidden rounded-2xl border hairline bg-ink-800 text-left shadow-[0_18px_40px_-26px_rgba(24,34,48,0.5)] transition-transform duration-300 hover:-translate-y-1"
       >
         <BrowserBar url={url} />
-        <div className="relative aspect-[16/10] overflow-hidden">
+        <div ref={previewBox} className="relative aspect-[16/10] overflow-hidden bg-white">
           {/* Non-interactive live preview */}
           {!previewLoaded && (
             <div className="absolute inset-0 z-10 flex items-center justify-center bg-ink-900">
@@ -176,13 +216,19 @@ export default function DeviceFrame({ name, url, thumb, field }) {
               <span className="absolute text-xs text-mist">Loading live preview…</span>
             </div>
           )}
+          {/* Loaded wide, then shrunk, so the desktop layout is what shows. */}
           <iframe
             src={url}
             title={`Preview of ${name}`}
             loading="lazy"
             tabIndex={-1}
             onLoad={() => setPreviewLoaded(true)}
-            className="pointer-events-none h-full w-full bg-white"
+            className="pointer-events-none absolute left-0 top-0 origin-top-left border-0 bg-white"
+            style={{
+              width: PREVIEW_WIDTH,
+              height: PREVIEW_HEIGHT,
+              transform: `scale(${previewScale})`,
+            }}
           />
           {/* Hover overlay inviting a click */}
           <div className="absolute inset-0 z-20 flex items-center justify-center bg-frost/0 transition-colors duration-300 group-hover:bg-frost/35">

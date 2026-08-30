@@ -40,6 +40,16 @@ const editableFields = new Set([
   'next_step', 'target_launch_date', 'preview_url',
 ])
 
+// "pro" is the current $150 package. The other two are clients who signed up
+// under the old Launch/Pro pricing and still owe their original balance.
+const PACKAGE_IDS = ['pro', 'launch', 'pro-legacy']
+
+function balanceAfterDeposit(packageId) {
+  if (packageId === 'launch') return 250
+  if (packageId === 'pro-legacy') return 500
+  return 130
+}
+
 export default async (request) => {
   const supabase = configuredClient()
   if (!supabase || !process.env.OWNER_EMAIL) return json(503, { error: 'Owner dashboard is not configured' })
@@ -80,18 +90,15 @@ export default async (request) => {
   if (request.method === 'POST') {
     const email = typeof body.email === 'string' ? body.email.trim().toLowerCase() : ''
     const name = typeof body.name === 'string' ? body.name.trim() : ''
-    const packageId = body.package === 'pro' ? 'pro' : body.package === 'launch' ? 'launch' : ''
+    const packageId = PACKAGE_IDS.includes(body.package) ? body.package : ''
     if (!/.+@.+\..+/.test(email) || !name || !packageId) {
       return json(400, { error: 'Name, valid email, and package are required' })
     }
-    const rush = body.rush === true
-    const defaultBalance = (packageId === 'pro' ? 550 : 300) - 50 + (rush ? 75 : 0)
-    const balanceDue = Number.isFinite(Number(body.balance_due)) ? Math.max(0, Number(body.balance_due)) : defaultBalance
+    const balanceDue = Number.isFinite(Number(body.balance_due)) ? Math.max(0, Number(body.balance_due)) : balanceAfterDeposit(packageId)
     const record = {
       email,
       name,
       package: packageId,
-      rush,
       balance_due: balanceDue,
       build_status: ['brief', 'building', 'review', 'polish', 'live'].includes(body.build_status) ? body.build_status : 'brief',
       pay_link: typeof body.pay_link === 'string' ? body.pay_link.trim() : '',
@@ -118,7 +125,7 @@ export default async (request) => {
     for (const [key, value] of Object.entries(body.updates || {})) {
       if (editableFields.has(key)) updates[key] = value
     }
-    if (updates.package && !['launch', 'pro'].includes(updates.package)) delete updates.package
+    if (updates.package && !PACKAGE_IDS.includes(updates.package)) delete updates.package
     if (updates.build_status && !['brief', 'building', 'review', 'polish', 'live'].includes(updates.build_status)) delete updates.build_status
     if ('balance_due' in updates) updates.balance_due = Math.max(0, Number(updates.balance_due) || 0)
     if ('name' in updates) updates.name = String(updates.name || '').trim()

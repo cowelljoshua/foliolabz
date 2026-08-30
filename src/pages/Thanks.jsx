@@ -1,12 +1,13 @@
 import { Link, useLocation } from 'react-router-dom'
-import GridPaper from '../components/reactbits/GridPaper.jsx'
 import Reveal from '../components/reactbits/Reveal.jsx'
-import { site, stripeLinks, tiers, resumeService, deposit } from '../config/site.js'
+import StripeNote from '../components/StripeNote.jsx'
+import { site, stripeLinks, tier, resumeService, deposit } from '../config/site.js'
 
 export default function Thanks() {
   const { state } = useLocation()
   const track = state?.track
   const packageId = state?.packageId
+  const addResume = state?.addResume
   const firstName = state?.name?.split(' ')[0]
 
   // Work out whether we can offer instant payment.
@@ -17,9 +18,8 @@ export default function Thanks() {
     payUrl = t ? stripeLinks[t.stripeKey] : ''
     payNote = t ? `${t.name}, ${t.priceLabel}` : ''
   } else if (track === 'website') {
-    const t = tiers.find((x) => x.id === packageId)
     payUrl = stripeLinks.deposit
-    payNote = t ? `$${deposit.amount} deposit for ${t.name}` : `$${deposit.amount} deposit`
+    payNote = `$${deposit.amount} deposit for ${tier.name}`
   }
 
   const steps =
@@ -32,12 +32,12 @@ export default function Thanks() {
       : [
           [`You put down a $${deposit.amount} deposit`],
           ['I read your brief'],
+          ['I build your site'],
           ['Your preview link arrives'],
         ]
 
   return (
     <main className="relative flex min-h-[85vh] items-center justify-center overflow-hidden px-6 pt-24">
-      <GridPaper />
       <div className="relative z-10 mx-auto max-w-xl py-16 text-center">
         <Reveal>
           <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-mint/12 text-mint">
@@ -74,16 +74,35 @@ export default function Thanks() {
               <a href={payUrl} target="_blank" rel="noreferrer" className="btn-primary">
                 {track === 'website' ? `Pay ${payNote}` : `Pay now: ${payNote}`}
               </a>
-              <p className="mt-3 text-xs text-mist">
-                {track === 'website'
-                  ? 'The rest is due only when your site is live. Prefer to wait on the deposit? I will email you a link too.'
-                  : 'Prefer to wait? No problem, I will email you a payment link too.'}
-              </p>
+              {track !== 'website' && (
+                <p className="mt-3 text-xs text-mist">Prefer to wait? No problem, I will email you a payment link too.</p>
+              )}
+              {addResume && (
+                <p className="mt-3 text-xs text-mist">
+                  You also added {resumeService.tiers[0].name} ({resumeService.tiers[0].priceLabel}). That is billed separately and I will email you the link.
+                </p>
+              )}
+              <StripeNote center className="mt-3" />
             </>
           ) : (
             <p className="text-sm text-mist">Questions in the meantime? {site.email}</p>
           )}
         </Reveal>
+
+        {track === 'website' && (
+          <Reveal delay={0.55} className="mt-8">
+            <div className="glass rounded-2xl p-5 text-left">
+              <p className="font-display font-semibold">Your client portal is open</p>
+              <p className="mt-1 text-sm leading-relaxed text-mist">
+                The email you just used now works in the portal. Sign in there any time to check your build status, pay,
+                and request changes. No password needed.
+              </p>
+              <Link to="/portal" className="mt-3 inline-block text-sm font-semibold text-violet hover:text-frost">
+                Open the client portal &rarr;
+              </Link>
+            </div>
+          </Reveal>
+        )}
 
         <Reveal delay={0.6} className="mt-10">
           <Link to="/" className="text-sm text-mist hover:text-frost">← Back home</Link>

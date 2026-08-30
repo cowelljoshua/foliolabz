@@ -2,7 +2,7 @@ export const trackerPhases = ['Intake', 'Plan', 'Build', 'Review', 'Launch', 'Ha
 
 const taskTemplate = [
   ['brief-received', 'Intake', 'Review the complete intake and uploaded files', true, 'Brief received'],
-  ['confirm-scope', 'Intake', 'Confirm package, scope, price, and rush status', true, 'Scope confirmed'],
+  ['confirm-scope', 'Intake', 'Confirm package, scope, and price', true, 'Scope confirmed'],
   ['confirm-assets', 'Intake', 'List missing copy, photos, resume, links, and project assets', false, ''],
   ['send-kickoff', 'Intake', 'Send kickoff message with timeline and next request', false, ''],
   ['plan-pages', 'Plan', 'Finalize pages, sections, and navigation', false, ''],

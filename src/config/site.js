@@ -26,12 +26,14 @@ export const site = {
     photo: "/josh-headshot.jpg",
     showPhoto: false,
   },
+}
 
-  // Typical build timelines shown on the pricing page. Wording stays soft ("about").
-  delivery: {
-    standard: "about 2 weeks",
-    rush: "1 week",
-  },
+// ------------------------------------------------------------
+// PAYMENT TRUST
+// One short line plus the Stripe mark. Rendered by StripeNote.jsx.
+// ------------------------------------------------------------
+export const payments = {
+  short: "Payments handled securely by",
 }
 
 // ------------------------------------------------------------
@@ -42,70 +44,52 @@ export const site = {
 // "Start my build" flow keeps working either way.
 // ------------------------------------------------------------
 export const stripeLinks = {
-  deposit: "https://buy.stripe.com/00w4gs4Aw7CT6G0fly7Re00",         // $50 deposit that starts any website build
-  launchBalance: "https://buy.stripe.com/7sY14gd72f5l9Sc3CQ7Re01",   // $250 balance (Launch $300 minus the $50 deposit)
-  proBalance: "https://buy.stripe.com/bJe8wI0kg4qH3tOc9m7Re02",      // $500 balance (Pro $550 minus the $50 deposit)
-  domainYearly: "https://buy.stripe.com/9B6bIUc2Yf5l9Sc7T67Re03", // $30/yr recurring custom domain
+  deposit: "https://buy.stripe.com/3cI3co9UQaP50hC1uI7Re0c",         // $20 deposit that starts a website build
+  balance: "https://buy.stripe.com/fZu8wI4Awe1hfcw0qE7Re0d",         // $130 balance ($150 total minus the $20 deposit)
+  domainYearly: "https://buy.stripe.com/9B6bIUc2Yf5l9Sc7T67Re03",    // $30/yr recurring custom domain
+  domainMonthly: "https://buy.stripe.com/cNifZaeb6aP51lGgpC7Re04",   // $4/mo recurring custom domain
   editWording: "https://buy.stripe.com/6oU7sE2so3mDd4oehu7Re05",     // $10 wording edits (as many as they want in one request)
   editDesign: "https://buy.stripe.com/7sY7sEgje6yP5BW8Xa7Re06",      // $40 design change
-  resumePolish: "https://buy.stripe.com/4gMcMY3wsaP5d4o2yM7Re07",    // One-time $40
-  resumeMeeting: "https://buy.stripe.com/dRmfZa5EA5uL8O84GU7Re08",   // "Resume Polish Pro" in Stripe, one-time $75
+  resumePolish: "https://buy.stripe.com/9B63co5EA4qH1lGb5i7Re0b",    // One-time $20
+  // Legacy links, kept only so clients who bought the old Launch/Pro
+  // packages can still pay their original balance from the portal.
+  legacyDeposit: "https://buy.stripe.com/00w4gs4Aw7CT6G0fly7Re00",   // old $50 deposit
+  launchBalance: "https://buy.stripe.com/7sY14gd72f5l9Sc3CQ7Re01",   // $250 balance (old Launch $300 minus deposit)
+  proBalance: "https://buy.stripe.com/bJe8wI0kg4qH3tOc9m7Re02",      // $500 balance (old Pro $550 minus deposit)
 }
 
 // ------------------------------------------------------------
-// WEBSITE TIERS
+// THE PACKAGE
+// One price, one feature set. The id stays "pro" so existing
+// client records and the /examples/pro route keep working.
 // ------------------------------------------------------------
-export const tiers = [
-  {
-    id: "launch",
-    name: "Launch",
-    originalPrice: 350,
-    originalPriceLabel: "$350",
-    price: 300,
-    priceLabel: "$300",
-    blurb: "A focused portfolio that makes your work easy to understand.",
-    headline: ["One focused scrolling portfolio", "Up to 3 featured projects", "Custom visual direction"],
-    full: [
-      "One focused scrolling portfolio: Home, About, Work, and Contact",
-      "Your three strongest projects, with simple what-I-did and outcome bullets",
-      "A visual gallery for extra photos, screenshots, artwork, or work samples",
-      "A résumé button plus sample email and LinkedIn contact links",
-      "Designed to look great on phones, tablets, and laptops",
-      "Hosting included free for as long as you want it online when you use a yourname.netlify.app address",
-      "Launch free on a clean web address, or add your own .com for $30/yr and I handle it",
-    ],
-    popular: false,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    originalPrice: 600,
-    originalPriceLabel: "$600",
-    price: 550,
-    priceLabel: "$550",
-    blurb: "For people with more proof, depth, and ambition to show.",
-    headline: ["An expanded portfolio with room to grow", "Up to 10 featured projects", "Contact form + strategy meeting"],
-    full: [
-      "Everything in Launch",
-      "A flexible multi-page portfolio shaped around the amount of work you have to show",
-      "Up to 10 clickable work stories with images, video, links, process notes, and outcomes",
-      "An extended About Me page with personal photos and the story behind your work",
-      "A working contact form: visitor messages land straight in your email",
-      "Google and sharing setup so your site is easier to find and looks polished when you send the link",
-      "1 personal 30-minute strategy meeting with me",
-    ],
-    popular: true,
-  },
-]
+export const tier = {
+  id: "pro",
+  name: "Portfolio",
+  originalPrice: 300,
+  originalPriceLabel: "$300",
+  price: 150,
+  priceLabel: "$150",
+  blurb: "Everything you need in one portfolio, built and launched for you.",
+  headline: ["Built around your work", "Up to 10 featured projects", "Free hosting, no monthly fee"],
+}
+
+// Kept as an array so pages that map over packages need no special case.
+export const tiers = [tier]
+
+// The launch discount. Change the date here and every banner follows.
+export const sale = {
+  endsLabel: "through September 30",
+}
 
 // ------------------------------------------------------------
 // HOW PAYMENT WORKS (deposit first, balance at launch)
 // ------------------------------------------------------------
 export const deposit = {
-  amount: 50,
-  label: "$50 today, applied toward your total",
+  amount: 20,
+  label: "$20 today, applied toward your total",
   detail:
-    "Your $50 deposit is part of the package price, not an extra fee. The remaining balance is due only after your site is live and you approve it. Nothing else is charged by the form.",
+    "Your $20 deposit is part of the $150 total, not an extra fee. The remaining $130 is due only after your site is live and you approve it. Nothing is charged by the form.",
 }
 
 // ------------------------------------------------------------
@@ -120,8 +104,10 @@ export const hosting = {
   custom: {
     title: "Your own .com or .net",
     yearly: "$30/yr",
+    monthly: "$4/mo",
+    priceLine: "$30 a year, or $4 a month",
     detail:
-      "Want your own .com instead? It is $30/yr. I check availability first, then buy it, set it up, and bill it through your account, so you never deal with a domain company.",
+      "Want your own .com instead? It is $30 a year, or $4 a month. I check availability first, then buy it, set it up, and bill it through your account, so you never deal with a domain company.",
   },
 }
 
@@ -139,17 +125,28 @@ export const portal = {
     "No password needed. Your name and email just make sure everything reaches me and gets tagged to the right project.",
 }
 
-// Balance still owed after the $50 deposit, by package.
+// Balance still owed after the $20 deposit.
 export const balances = [
-  { pkg: "launch", name: "Launch", total: "$300", balanceLabel: "$250", stripeKey: "launchBalance" },
-  { pkg: "pro", name: "Pro", total: "$550", balanceLabel: "$500", stripeKey: "proBalance" },
+  { pkg: "pro", name: "Portfolio", total: "$150", balanceLabel: "$130", stripeKey: "balance" },
 ]
+
+// Old packages, kept only so clients who signed up before the single
+// price can still see the right numbers in the portal. Not shown as a
+// choice to anyone new.
+export const legacyBalances = [
+  { pkg: "launch", name: "Launch", total: "$300", balanceLabel: "$250", stripeKey: "launchBalance" },
+  { pkg: "pro-legacy", name: "Pro", total: "$550", balanceLabel: "$500", stripeKey: "proBalance" },
+]
+
+// Every balance definition, for looking up an existing client's package.
+export const allBalances = [...balances, ...legacyBalances]
 
 // Custom domain, handled by you. Payment is annual after availability is confirmed.
 export const domainOffer = {
   detail:
     "Interested in your own .com or .net? If you already have names in mind, share them. I check availability and confirm the domain before payment starts.",
   yearly: { label: "$30/yr", stripeKey: "domainYearly" },
+  monthly: { label: "$4/mo", stripeKey: "domainMonthly" },
 }
 
 // Post-launch edit requests, priced flat.
@@ -172,15 +169,6 @@ export const edits = [
 ]
 
 // ------------------------------------------------------------
-// RUSH (the only add-on)
-// ------------------------------------------------------------
-export const rush = {
-  price: 75,
-  label: "Rush my build",
-  detail: `Standard delivery is ${site.delivery.standard}. Rush moves you to the front of the line: ${site.delivery.rush}.`,
-}
-
-// ------------------------------------------------------------
 // GUARANTEES
 // ------------------------------------------------------------
 export const promises = {
@@ -199,29 +187,20 @@ export const promises = {
 // RESUME POLISH SERVICE
 // ------------------------------------------------------------
 export const resumeService = {
-  heading: "Not ready for a website? Start with your resume.",
-  humanLine: "Edited by a human.",
+  // One option only. Kept as an array so pages can keep mapping over it.
   tiers: [
     {
       id: "resume-polish",
       name: "Resume Polish",
-      price: 40,
-      priceLabel: "$40",
+      originalPrice: 40,
+      originalPriceLabel: "$40",
+      price: 20,
+      priceLabel: "$20",
       blurb: "Send your resume. Get it back sharper.",
       full: ["Wording that leads with results", "Clean, recruiter-friendly layout", "Personal notes on what I changed and why"],
       stripeKey: "resumePolish",
     },
-    {
-      id: "resume-meeting",
-      name: "Resume Polish Pro",
-      price: 75,
-      priceLabel: "$75",
-      blurb: "The polish, plus 30 minutes with me.",
-      full: ["Everything in Resume Polish", "A personal 30-minute meeting", "Resume, cover letter, or portfolio direction, your call"],
-      stripeKey: "resumeMeeting",
-    },
   ],
-  resumePdf: "/josh-resume.pdf",
 }
 
 // ------------------------------------------------------------
@@ -595,14 +574,6 @@ export const realSites = [
     live: true,
   },
   {
-    id: "caroline",
-    name: "Caroline",
-    field: "Nursing",
-    url: "https://carolinethomas.netlify.app/",
-    thumb: "/examples/caroline-hd.png",
-    live: true,
-  },
-  {
     id: "david",
     name: "David Cowell",
     field: "Engineering",
@@ -613,9 +584,25 @@ export const realSites = [
   {
     id: "caden",
     name: "Caden Solle",
-    field: "Mechanical Engineering",
+    field: "Engineering",
     url: "https://cowelljoshua.github.io/caden-solle/",
     thumb: "/examples/caden-hd.png",
+    live: true,
+  },
+  {
+    id: "dave",
+    name: "Dave Patchell",
+    field: "Talent Acquisition",
+    url: "https://davepatchell.netlify.app/",
+    thumb: "/examples/dave-hd.png",
+    live: true,
+  },
+  {
+    id: "caroline",
+    name: "Caroline",
+    field: "Nursing",
+    url: "https://carolinethomas.netlify.app/",
+    thumb: "/examples/caroline-hd.png",
     live: true,
   },
 ]
@@ -638,12 +625,13 @@ export const brandChips = [
   "Apple", "Nike", "Stripe", "Notion", "Airbnb", "Tesla", "Spotify", "Patagonia", "Rolex", "National Geographic",
 ]
 
+// The common ones. Anything else goes through the "Other" box on the form.
 export const pageOptions = [
-  "About me", "Projects / Work", "Resume", "Photo gallery", "Testimonials", "Experience timeline", "Contact", "Blog / Writing", "Skills & tools", "Certifications", "Awards & honors", "Publications / research", "Services", "FAQ", "Press / features", "Speaking & events", "Booking / availability",
+  "About me", "Projects / Work", "Resume", "Testimonials", "Experience timeline", "Contact", "Skills & tools", "Certifications", "Awards & honors", "Publications / research",
 ]
 
-// How many sections or pages each package can pick from the list above.
-export const pageLimits = { launch: 4, pro: 10 }
+// The most projects a client can submit.
+export const projectLimit = 10
 
 // ------------------------------------------------------------
 // FAQ
@@ -655,19 +643,19 @@ export const faq = [
   },
   {
     q: "When do I pay, and how much?",
-    a: "Your $50 deposit is part of the package price, not an extra fee. The remaining balance is due only after your site is live and you approve it. Nothing else is charged by the form.",
+    a: "A portfolio is $150 total, down from $300. Your $20 deposit is part of that price, not an extra fee, and the remaining $130 is due only after your site is live and you approve it. Nothing is charged by the form.",
+  },
+  {
+    q: "Is paying safe?",
+    a: "Yes. Every payment goes through Stripe, the same checkout used by millions of businesses. You pay on Stripe's own secure page, so your card details never touch this site and I never see them.",
   },
   {
     q: "How do changes and edits work?",
     a: "While I am building, you get up to 3 rounds of changes to get your site exactly right before launch. Send as many tweaks as you like in each round, then it goes live.",
   },
   {
-    q: "How long does it take?",
-    a: `Most sites are ready in ${site.delivery.standard}. Need it sooner? The rush option moves you to the front of the line for delivery in ${site.delivery.rush}.`,
-  },
-  {
     q: "Do I pay for hosting or a domain?",
-    a: "Hosting is free only when your site uses a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $30 a year. If you have a name in mind, I check availability; if not, you can decide later. Payment starts only after I confirm the name, then I buy it, set it up, and bill it through your account.",
+    a: "Hosting is free only when your site uses a clean address like yourname.netlify.app. Want your own .com or .net instead? That is $30 a year, or $4 a month. If you have a name in mind, I check availability; if not, you can decide later. Payment starts only after I confirm the name, then I buy it, set it up, and bill it through your account.",
   },
   {
     q: "Can I make changes myself?",

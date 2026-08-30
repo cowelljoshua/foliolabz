@@ -2,14 +2,8 @@ import { Link } from 'react-router-dom'
 import { motion } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import { asset } from '../lib/asset.js'
-import { site, resumeService, realSites, tiers, deposit } from '../config/site.js'
-
-const buyingReasons = [
-  ['$50', 'Starts your build'],
-  ['~2 weeks', 'Typical turnaround'],
-  ['3 rounds', 'Edits included'],
-  ['1:1', 'Built personally'],
-]
+import StripeNote from '../components/StripeNote.jsx'
+import { site, resumeService, realSites, tier, deposit } from '../config/site.js'
 
 const rise = { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 } }
 
@@ -70,9 +64,11 @@ export default function Home() {
               <Link to="/styles" className="btn-ghost justify-center sm:justify-start">See real client work</Link>
             </motion.div>
             <motion.div {...rise} transition={{ duration: 0.6, delay: 0.48 }} className="mt-7 flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium text-mist">
-              <span className="flex items-center gap-2"><Check /> Sites from {'$'}{tiers[0].price}</span>
-              <span className="flex items-center gap-2"><Check /> Ready {site.delivery.standard}</span>
+              <span className="flex items-center gap-2"><Check /> <span className="text-mist/60 line-through">{tier.originalPriceLabel}</span> <strong className="text-frost">{tier.priceLabel}</strong> all in</span>
               <span className="flex items-center gap-2"><Check /> 3 edit rounds</span>
+            </motion.div>
+            <motion.div {...rise} transition={{ duration: 0.6, delay: 0.56 }} className="mt-5">
+              <StripeNote />
             </motion.div>
           </div>
 
@@ -107,7 +103,6 @@ export default function Home() {
         <div className="founder-panel">
           <Reveal className="founder-photo-wrap">
             {site.founder.storyPhoto && <img src={asset(site.founder.storyPhoto)} alt="Josh Cowell standing with student-built rockets at Liberty University" className="h-full min-h-[28rem] w-full object-cover object-center" loading="lazy" />}
-            <div className="founder-caption"><span className="h-2 w-2 rounded-full bg-mint" /> Built personally by Josh</div>
           </Reveal>
           <Reveal delay={0.12} className="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
             <h2 className="font-head text-4xl leading-tight sm:text-5xl">I built the service I wished I had.</h2>
@@ -123,26 +118,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="home-section pt-8">
-        <div className="value-panel">
-          <Reveal className="max-w-xl">
-            <h2 className="font-head text-4xl leading-tight text-white sm:text-5xl">You send the work. I handle everything else.</h2>
-            <p className="mt-5 max-w-lg text-base leading-relaxed text-white/70">No templates to wrestle with, no hosting setup, and no coding.</p>
-            <Link to="/start" className="btn-light mt-8">Start with ${deposit.amount} <Arrow /></Link>
-          </Reveal>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {buyingReasons.map((item, index) => (
-              <Reveal key={item[1]} delay={index * 0.06}>
-                <article className="outcome-card">
-                  <span className="outcome-number">{item[0]}</span>
-                  <h3 className="font-display mt-4 text-lg font-semibold text-white">{item[1]}</h3>
-                </article>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <section className="home-section pt-4">
         <Reveal>
           <div className="resume-strip">
@@ -151,7 +126,7 @@ export default function Home() {
               <h2 className="font-head mt-3 text-3xl text-white sm:text-4xl">Start with a stronger resume.</h2>
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">Human-edited wording and a recruiter-ready layout.</p>
             </div>
-            <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end"><p className="font-head text-4xl text-white">{resumeService.tiers[0].priceLabel}</p><Link to="/pricing#resume" className="btn-light">Polish my resume <Arrow /></Link></div>
+            <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end"><p className="font-head text-4xl text-white"><span className="text-2xl text-white/45 line-through">{resumeService.tiers[0].originalPriceLabel}</span> {resumeService.tiers[0].priceLabel}</p><Link to="/pricing#resume" className="btn-light">Polish my resume <Arrow /></Link></div>
           </div>
         </Reveal>
       </section>

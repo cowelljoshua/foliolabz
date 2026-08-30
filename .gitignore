@@ -16,3 +16,6 @@ Thumbs.db
 
 # Raw photo originals (cropped web versions live in /public)
 /josh cowell (needs cropping).jpg
+
+# Local scratch files
+tmp/

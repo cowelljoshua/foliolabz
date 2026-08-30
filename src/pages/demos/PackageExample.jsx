@@ -30,25 +30,16 @@ const proPages = [
   ['contact', 'Contact'],
 ]
 
-function ExampleBar({ packageId }) {
-  const isPro = packageId === 'pro'
-  const other = isPro ? 'launch' : 'pro'
-  const scope = isPro
-    ? 'A fuller portfolio with room for up to 10 projects'
-    : 'One focused portfolio with three top projects and CAD drawings'
-
+function ExampleBar() {
   return (
     <div className="fixed inset-x-0 bottom-3 z-50 flex justify-center px-3 sm:bottom-4 sm:px-4">
       <div className="flex max-w-3xl flex-wrap items-center justify-center gap-2 rounded-2xl border border-white/15 bg-[#10111b]/90 px-3 py-2 text-white shadow-2xl backdrop-blur-xl sm:rounded-full sm:px-4">
         <span className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em]">
-          {isPro ? 'Pro example' : 'Launch example'}
+          Website example
         </span>
-        <span className="hidden text-xs text-white/60 lg:inline">{scope}</span>
-        <Link to={'/examples/' + other} className="rounded-full border border-white/20 px-3 py-1.5 text-xs font-semibold transition hover:bg-white/10">
-          Compare {isPro ? 'Launch' : 'Pro'}
-        </Link>
-        <Link to={'/start?package=' + packageId} className="rounded-full bg-[#7c5cff] px-4 py-1.5 text-xs font-bold transition hover:bg-[#8c70ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-          Choose {isPro ? 'Pro' : 'Launch'}
+        <span className="hidden text-xs text-white/60 lg:inline">A full portfolio with room for up to 10 projects</span>
+        <Link to="/start?package=pro" className="rounded-full bg-[#7c5cff] px-4 py-1.5 text-xs font-bold transition hover:bg-[#8c70ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+          Start my build
         </Link>
         <Link to="/pricing" className="rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-bold text-white transition hover:bg-white hover:text-[#10111b]">← Exit example</Link>
       </div>
@@ -400,21 +391,6 @@ function Contact({ isPro }) {
   )
 }
 
-function LaunchExample() {
-  const featured = projects.slice(0, 3)
-  return (
-    <div className="min-h-screen bg-[#0c0c0e] font-body text-[#f2f2f2] [background-image:linear-gradient(rgba(255,255,255,.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.045)_1px,transparent_1px)] [background-size:48px_48px]">
-      <nav className="sticky top-0 z-40 border-b border-white/10 bg-[#0c0c0e]/95 px-6 backdrop-blur"><div className="mx-auto grid h-16 max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4"><div className="flex items-center gap-3"><Link to="/pricing" aria-label="Exit example" title="Exit example" className="grid h-9 w-9 place-items-center rounded-full border border-white/35 text-xl font-light leading-none transition hover:bg-white hover:text-[#0c0c0e]">×</Link><a href="#top" className="text-base font-black tracking-[.05em]">MARA <span className="text-[#ed2633]">CHEN</span></a></div><div className="hidden items-center gap-7 text-sm font-semibold text-white/70 md:flex"><a href="#about">About</a><a href="#projects">Projects</a><a href="#cad">CAD Gallery</a></div><a href="#contact" className="rounded-lg bg-[#ed2633] px-5 py-2.5 text-sm font-bold text-white">Contact</a></div></nav>
-      <main>
-        <header id="top" className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[1.2fr_.8fr] lg:items-center"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">Mechanical engineering · May 2026</p><h1 className="mt-6 font-display text-6xl font-bold tracking-[-.06em] sm:text-7xl">Mara Chen</h1><p className="mt-5 max-w-2xl text-lg leading-8 text-white/70">Mechanical engineer focused on <b className="text-white">hardware that works</b>, thoughtful testing, and the practical details that make a system dependable.</p><div className="mt-8"><a href="/sample-resume.pdf" className="inline-flex rounded-lg bg-[#ed2633] px-5 py-3 font-bold">View résumé</a></div><div className="mt-10 grid max-w-xl grid-cols-3 overflow-hidden rounded-2xl border border-white/10 bg-[#151518]"><div className="p-5"><b className="text-2xl text-[#ed2633]">3</b><small className="mt-1 block text-[10px] font-bold uppercase tracking-[.14em] text-white/45">Top projects</small></div><div className="border-x border-white/10 p-5"><b className="text-2xl text-[#ed2633]">12</b><small className="mt-1 block text-[10px] font-bold uppercase tracking-[.14em] text-white/45">Test fires</small></div><div className="p-5"><b className="text-2xl text-[#ed2633]">2026</b><small className="mt-1 block text-[10px] font-bold uppercase tracking-[.14em] text-white/45">Graduation</small></div></div></Reveal><Reveal delay={.08} className="relative"><div className="absolute -inset-3 rounded-2xl border border-[#ed2633]/30" /><img src={projects[0].image} alt="Mara testing engineering hardware" className="relative aspect-[.82] w-full rounded-2xl object-cover" /></Reveal></header>
-        <section id="about" className="border-y border-white/10 bg-[#121215] py-20"><div className="mx-auto max-w-7xl px-6"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">About</p><h2 className="mt-3 font-display text-4xl font-bold">Straightforward work. Clear results.</h2><p className="mt-5 max-w-3xl leading-7 text-white/65">This Launch example is intentionally simple: a short introduction, three best projects, and a small CAD gallery. Everything useful is easy to find.</p></Reveal></div></section>
-        <section id="projects" className="mx-auto max-w-7xl px-6 py-20"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">Featured projects</p><h2 className="mt-3 font-display text-4xl font-bold">Top three projects.</h2></Reveal><div className="mt-9 space-y-5">{featured.map((project, index) => <Reveal key={project.title} delay={index*.07}><article className="grid overflow-hidden rounded-2xl border border-white/10 bg-[#151518] md:grid-cols-[.7fr_1.3fr]"><img src={project.image} alt="" className="h-full min-h-56 w-full object-cover" /><div className="p-7"><p className="text-[10px] font-bold uppercase tracking-[.16em] text-[#ed2633]">{String(index + 1).padStart(2,'0')} · {project.tag} · {project.year}</p><h3 className="mt-3 font-display text-3xl font-bold">{project.title}</h3><ul className="mt-5 space-y-2 text-sm leading-6 text-white/65"><li>• <b className="text-white">Role:</b> {project.role}</li><li>• <b className="text-white">Work:</b> {project.body}</li><li>• <b className="text-white">Result:</b> {project.result}</li><li>• <b className="text-white">Tools:</b> {project.tools.join(' · ')}</li></ul></div></article></Reveal>)}</div></section>
-        <section id="cad" className="border-t border-white/10 bg-[#121215] py-20"><div className="mx-auto max-w-7xl px-6"><Reveal><p className="text-xs font-bold uppercase tracking-[.2em] text-[#ed2633]">CAD gallery</p><h2 className="mt-3 font-display text-4xl font-bold">Drawings at a glance.</h2></Reveal><div className="mt-9 grid gap-4 sm:grid-cols-3">{['Test stand assembly','Heat exchanger section','Robotic arm layout'].map((drawing, i) => <Reveal key={drawing} delay={i*.07}><div className="aspect-[4/3] rounded-xl border border-white/15 bg-[#0d0d10] p-5 [background-image:linear-gradient(rgba(255,255,255,.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.06)_1px,transparent_1px)] [background-size:22px_22px]"><div className="flex h-full items-center justify-center border border-[#ed2633]/55"><div className="h-20 w-32 border-2 border-[#ed2633] before:block before:h-10 before:w-full before:translate-x-7 before:translate-y-4 before:border-2 before:border-[#ed2633]" /></div><p className="mt-4 text-sm font-bold">{drawing}</p></div></Reveal>)}</div></div></section>
-        <section id="contact" className="px-6 py-20"><Reveal className="mx-auto max-w-7xl rounded-2xl border border-[#ed2633]/35 bg-[#ed2633]/10 p-10 text-center"><h2 className="font-display text-4xl font-bold">Let&apos;s connect.</h2><p className="mx-auto mt-3 max-w-lg text-white/65">Sample contact options for a focused Launch portfolio.</p><div className="mt-6 flex flex-wrap justify-center gap-3"><a href="mailto:mara.chen@example.com" className="inline-flex rounded-lg bg-[#ed2633] px-6 py-3 font-bold">Email Mara</a><a href="https://www.linkedin.com/in/mara-chen-example/" className="inline-flex rounded-lg border border-white/20 px-6 py-3 font-bold">LinkedIn</a></div></Reveal></section>
-      </main>
-    </div>
-  )
-}
 function ProHome() {
   const lifePhotos = [
     ['https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1200&q=85', 'Hiking above the clouds'],
@@ -438,23 +414,12 @@ function ProHome() {
   return <ProHome />
 }
 
-export default function PackageExample({ packageId, proPage = 'home' }) {
-  const isPro = packageId === 'pro'
-
-  if (isPro) {
-    return (
-      <div className="min-h-screen bg-[#08080f] font-body text-[#eef0f8]">
-        <TopNav packageId="pro" proPage={proPage} />
-        <ProContent page={proPage} />
-        <ExampleBar packageId="pro" />
-      </div>
-    )
-  }
-
+export default function PackageExample({ proPage = 'home' }) {
   return (
-    <>
-      <LaunchExample />
-      <ExampleBar packageId="launch" />
-    </>
+    <div className="min-h-screen bg-[#08080f] font-body text-[#eef0f8]">
+      <TopNav packageId="pro" proPage={proPage} />
+      <ProContent page={proPage} />
+      <ExampleBar />
+    </div>
   )
 }

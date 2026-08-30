@@ -2,19 +2,27 @@ import { useCallback, useMemo, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
-import RushSwitch from '../components/RushSwitch.jsx'
 import CloudinaryUpload from '../components/CloudinaryUpload.jsx'
 import UploadGate from '../components/UploadGate.jsx'
+import StripeNote from '../components/StripeNote.jsx'
 import {
   site,
-  tiers,
+  tier,
   deposit,
   portfolioPalettes,
   brandChips,
   pageOptions,
-  pageLimits,
+  projectLimit,
   resumeService,
+  promises,
+  hosting,
 } from '../config/site.js'
+
+// The single resume option, offered as an add-on on the website track.
+const resumeTier = resumeService.tiers[0]
+
+// Write-in choice for anything not in pageOptions.
+const OTHER_PAGE = 'Other'
 
 const MAX_UPLOADS = 55
 const MAX_PROJECTS = 10
@@ -65,12 +73,12 @@ const cleanNetlifyName = (value) => value
 
 const stepTitles = {
   about: ['First, the basics', 'So I know who I am building for.'],
-  package: ['Your package', 'Change your mind anytime before I start.'],
+  package: ['What you get', 'One package, one price, everything included.'],
   style: ['Your palette', 'Choose the colors that feel like you.'],
-  content: ['Your content', 'Rough is fine. I polish everything.'],
-  files: ['Your files', 'Whatever you have. Missing something? Send it later.'],
+  content: ['Your content', ''],
+  files: ['Your files', ''],
   resume: ['Your resume', 'Attach it and tell me where you are aiming.'],
-  review: ['One last look', 'This exact brief lands in my inbox.'],
+  review: ['One last look', 'Here is what comes to me. Payment happens after, never in this form.'],
 }
 
 /* ---------- tiny shared inputs ---------- */
@@ -125,15 +133,17 @@ export default function Start() {
     email: '',
     phone: '',
     profession: paramCareer,
-    package: ['launch', 'pro'].includes(paramPackage) ? paramPackage : '',
-    rush: params.get('rush') === '1',
+    // There is only one website package now, so it is always selected.
+    package: tier.id,
     styles: portfolioPalettes.some((d) => d.id === params.get('style')) ? [params.get('style')] : [],
     styleNotes: '',
     brands: [],
     emulate: '',
     bio: '',
-    siteFormat: paramPackage === 'pro' ? 'multi' : 'single',
+    siteFormat: 'multi',
     pages: [],
+    otherPages: '',
+    addResume: false,
     domainInterest: '',
     netlifyChoices: ['', '', ''],
     socials: '',
@@ -148,7 +158,6 @@ export default function Start() {
   })
 
   const set = (key, value) => setForm((f) => ({ ...f, [key]: value }))
-  const selectPackage = (packageId) => setForm((f) => ({ ...f, package: packageId, siteFormat: packageId === 'pro' ? 'multi' : 'single', pages: [] }))
   const toggleIn = (key, value) =>
     setForm((f) => ({
       ...f,
@@ -158,10 +167,6 @@ export default function Start() {
 
   const steps = track === 'resume' ? resumeSteps : websiteSteps
   const step = steps[stepIdx]
-  const tier = tiers.find((t) => t.id === form.package)
-  const pageLimit = pageLimits[form.package] || pageLimits.launch
-  const projectLimit = form.package === 'pro' ? 10 : 3
-  const contentUnit = form.siteFormat === 'single' ? 'sections' : 'pages'
 
   const togglePage = (page) =>
     setForm((f) => {
@@ -170,14 +175,24 @@ export default function Start() {
         const projects = page === PROJECTS_PAGE ? [] : f.projects
         return { ...f, pages, projects }
       }
-      if (f.pages.length >= pageLimit) return f
       const pages = [...f.pages, page]
       const projects = page === PROJECTS_PAGE && f.projects.length === 0 ? [emptyProject()] : f.projects
       return { ...f, pages, projects }
     })
 
+  const pickedPageCount = form.pages.filter((p) => p !== OTHER_PAGE).length
+  const wantsOtherPages = form.pages.includes(OTHER_PAGE)
+  // "Other" only counts once the person has actually written something.
+  const hasPageSelection = pickedPageCount > 0 || (wantsOtherPages && form.otherPages.trim().length > 0)
+  const toggleOtherPages = () =>
+    setForm((f) => ({
+      ...f,
+      pages: f.pages.includes(OTHER_PAGE) ? f.pages.filter((p) => p !== OTHER_PAGE) : [...f.pages, OTHER_PAGE],
+      otherPages: f.pages.includes(OTHER_PAGE) ? '' : f.otherPages,
+    }))
+
   const addProject = () =>
-    setForm((f) => (f.projects.length >= (f.package === 'pro' ? 10 : 3) ? f : { ...f, projects: [...f.projects, emptyProject()] }))
+    setForm((f) => (f.projects.length >= projectLimit ? f : { ...f, projects: [...f.projects, emptyProject()] }))
   const removeProject = (idx) =>
     setForm((f) => ({ ...f, projects: f.projects.filter((_, i) => i !== idx) }))
   const updateProject = (idx, key, value) =>
@@ -209,12 +224,12 @@ export default function Start() {
     if (step === 'package') return !!form.package
     if (step === 'content') {
       const freeAddressReady = form.domainInterest !== 'no' || form.netlifyChoices.every((choice) => choice.trim())
-      return !!form.siteFormat && form.pages.length > 0 && freeAddressReady
+      return !!form.siteFormat && hasPageSelection && freeAddressReady
     }
     if (step === 'resume') return form.resumeFile.length > 0 && !uploadsBusy
     if (step === 'files') return !uploadsBusy
     return true
-  }, [step, form, emailOk, uploadsBusy])
+  }, [step, form, emailOk, uploadsBusy, hasPageSelection])
 
   const uploadManifest = () => [
     ...form.headshot.map((asset) => ({ ...asset, role: 'headshot' })),
@@ -255,16 +270,16 @@ export default function Start() {
       L.push(`Profession: ${form.profession || 'not given'}`)
       L.push('')
       L.push('PACKAGE')
-      L.push(`Tier: ${tier?.name} (${tier?.priceLabel})`)
-      L.push(`Rush: ${form.rush ? 'YES (+$75, 1 week)' : 'no, standard'}`)
-      L.push(`Payment: $${deposit.amount} deposit to start, balance due at launch`)
+      L.push(`Package: ${tier.name} (${tier.priceLabel})`)
+      L.push(`Resume polish add-on: ${form.addResume ? `YES (+${resumeTier.priceLabel}, billed separately)` : 'no'}`)
+      L.push(`Payment: $${deposit.amount} deposit to start, $${tier.price - deposit.amount} balance due at launch`)
       L.push('')
       L.push('SUPABASE PORTAL PROFILE — paste this into Supabase SQL Editor')
       L.push('---------------------------------------------------------------')
       const sqlText = (value) => String(value || '').replace(/'/g, "''")
-      const balanceDue = Math.max(0, (tier?.price || 0) - deposit.amount + (form.rush ? 75 : 0))
-      L.push(`insert into public.client_profiles (email, name, package, rush, balance_due, build_status, pay_link, domain, domain_active)`)
-      L.push(`values ('${sqlText(form.email.trim().toLowerCase())}', '${sqlText(form.name)}', '${form.package}', ${form.rush}, ${balanceDue}, 'brief', '', '', false);`)
+      const balanceDue = Math.max(0, tier.price - deposit.amount)
+      L.push(`insert into public.client_profiles (email, name, package, balance_due, build_status, pay_link, domain, domain_active)`)
+      L.push(`values ('${sqlText(form.email.trim().toLowerCase())}', '${sqlText(form.name)}', '${form.package}', ${balanceDue}, 'brief', '', '', false);`)
       L.push('')
       L.push('STYLE')
       L.push(`Color direction: ${form.styles.map((id) => portfolioPalettes.find((d) => d.id === id)?.name).filter(Boolean).join(', ') || 'undecided'}`)
@@ -278,7 +293,9 @@ export default function Start() {
       if (form.domainInterest === 'no') {
         form.netlifyChoices.forEach((choice, index) => L.push('Netlify choice ' + (index + 1) + ': ' + choice + '.netlify.app'))
       }
-      if (form.pages.length) L.push(`Pages wanted (${form.pages.length}/${pageLimit}): ${form.pages.join(', ')}`)
+      const pickedPages = form.pages.filter((p) => p !== OTHER_PAGE)
+      if (pickedPages.length) L.push(`Pages wanted (${pickedPages.length}): ${pickedPages.join(', ')}`)
+      if (wantsOtherPages && form.otherPages.trim()) L.push(`Other pages requested: ${form.otherPages.trim()}`)
       if (form.socials) L.push(`Links: ${form.socials}`)
       if (form.bio) L.push(`Bio: ${form.bio}`)
       if (form.notes) L.push(`Notes: ${form.notes}`)
@@ -337,14 +354,15 @@ export default function Start() {
       fd.append('phone', form.phone)
       fd.append('profession', form.profession)
       fd.append('package', form.package)
-      fd.append('rush', form.rush ? 'yes' : 'no')
       fd.append('style_pick', form.styles.join(', '))
       fd.append('style_notes', form.styleNotes)
       fd.append('brand_inspo', form.brands.join(', '))
       fd.append('emulate_links', form.emulate)
       fd.append('bio', form.bio)
       fd.append('site_format', form.siteFormat)
-      fd.append('pages', form.pages.join(', '))
+      fd.append('pages', form.pages.filter((p) => p !== OTHER_PAGE).join(', '))
+      fd.append('other_pages', wantsOtherPages ? form.otherPages.trim() : '')
+      fd.append('add_resume_polish', form.addResume ? 'yes' : 'no')
       fd.append('domain_interest', form.domainInterest)
       form.netlifyChoices.forEach((choice, index) => {
         const value = form.domainInterest === 'no' ? choice + '.netlify.app' : ''
@@ -372,7 +390,7 @@ export default function Start() {
     const state = {
       track,
       packageId: track === 'resume' ? form.resumePkg : form.package,
-      rush: form.rush,
+      addResume: track === 'website' && form.addResume,
       name: form.name,
     }
 
@@ -429,7 +447,7 @@ export default function Start() {
                 </svg>
               </span>
               <h2 className="font-display mt-4 text-2xl font-semibold">A website</h2>
-              <p className="mt-2 text-sm text-mist">Your portfolio, built and launched for you. From $300.</p>
+              <p className="mt-2 text-sm text-mist">Your portfolio, built and launched for you. {tier.priceLabel} all in.</p>
               <p className="mt-5 text-sm font-semibold text-gradient">Let&rsquo;s go →</p>
             </button>
           </Reveal>
@@ -459,24 +477,47 @@ export default function Start() {
   const [title, subtitle] = stepTitles[step]
   const progress = ((stepIdx + 1) / steps.length) * 100
 
+  // A short, human recap for the client. The full brief still goes to me on submit.
+  const paletteNames = form.styles
+    .map((id) => portfolioPalettes.find((d) => d.id === id)?.name)
+    .filter(Boolean)
+  const pickedPageNames = [
+    ...form.pages.filter((page) => page !== OTHER_PAGE),
+    ...(wantsOtherPages ? form.otherPages.split(/[\n,]/).map((line) => line.trim()).filter(Boolean) : []),
+  ]
+  const filledProjects = form.projects.filter((project) => project.title.trim() || project.images.length).length
+  const reviewRows = (
+    track === 'resume'
+      ? [
+          ['Name', form.name],
+          ['Email', form.email],
+          form.phone && ['Phone', form.phone],
+          ['Service', `${resumeTier.name} · ${resumeTier.priceLabel}`],
+          ['Your resume', form.resumeFile[0]?.name || 'Not attached yet'],
+          form.target && ['Aiming for', form.target],
+        ]
+      : [
+          ['Name', form.name],
+          ['Email', form.email],
+          form.phone && ['Phone', form.phone],
+          [
+            'Package',
+            `${tier.name} · ${tier.priceLabel}${form.addResume ? ` + ${resumeTier.name} ${resumeTier.priceLabel}` : ''}`,
+          ],
+          ['Colors', paletteNames.join(', ') || 'Your call, I will pick'],
+          [form.siteFormat === 'single' ? 'Sections' : 'Pages', pickedPageNames.join(', ')],
+          filledProjects > 0 && ['Projects', `${filledProjects} added`],
+          ['Files', allFiles.length ? `${allFiles.length} attached` : 'Sending later'],
+        ]
+  ).filter(Boolean)
+
   return (
     <main className="mx-auto max-w-2xl px-6 pt-32 pb-24">
       {/* progress */}
       <div className="mb-8">
-        <div className="flex items-baseline justify-between">
-          <p className="text-xs font-semibold uppercase tracking-wide text-mist">
-            Step {stepIdx + 1} of {steps.length}
-          </p>
-          <button
-            onClick={() => {
-              setTrack(null)
-              setStepIdx(0)
-            }}
-            className="text-xs text-mist hover:text-frost"
-          >
-            Switch to {track === 'resume' ? 'website' : 'resume'} instead
-          </button>
-        </div>
+        <p className="text-xs font-semibold uppercase tracking-wide text-mist">
+          Step {stepIdx + 1} of {steps.length}
+        </p>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-frost/10">
           <motion.div
             className="h-full rounded-full bg-violet"
@@ -495,7 +536,7 @@ export default function Start() {
           transition={{ duration: 0.25 }}
         >
           <h1 className="font-head text-3xl">{title}</h1>
-          <p className="mt-1.5 text-sm text-mist">{subtitle}</p>
+          {subtitle && <p className="mt-1.5 text-sm text-mist">{subtitle}</p>}
 
           <div className="mt-8 space-y-6">
             {((step === 'content' && wantsProjects) || step === 'files' || step === 'resume') && (
@@ -528,39 +569,58 @@ export default function Start() {
               </>
             )}
 
-            {/* PACKAGE */}
+            {/* PACKAGE — a short confirmation. The full breakdown lives on /pricing. */}
             {step === 'package' && (
               <>
-                <div className="grid gap-3">
-                  {tiers.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => selectPackage(t.id)}
-                      className={`flex items-baseline justify-between rounded-2xl border p-5 text-left transition-colors ${
-                        form.package === t.id ? 'border-violet bg-violet/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
+                <div className="flex items-baseline justify-between gap-4 rounded-2xl border border-violet bg-violet/10 p-5">
+                  <span className="font-display font-semibold">{tier.name}</span>
+                  <span className="shrink-0 text-right">
+                    <span className="font-display block text-2xl font-bold">
+                      <span className="mr-1.5 text-base font-semibold text-mist line-through">{tier.originalPriceLabel}</span>
+                      {tier.priceLabel}
+                    </span>
+                    <span className="block text-[0.7rem] text-mist">${deposit.amount} today &middot; ${tier.price - deposit.amount} after approval</span>
+                  </span>
+                </div>
+
+                {/* Optional resume polish, added on to the website order. */}
+                <button
+                  type="button"
+                  aria-pressed={form.addResume}
+                  onClick={() => set('addResume', !form.addResume)}
+                  className={`flex w-full items-center justify-between gap-4 rounded-2xl border p-5 text-left transition-colors ${
+                    form.addResume ? 'border-mint bg-mint/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
+                  }`}
+                >
+                  <span className="flex items-start gap-3">
+                    <span
+                      className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border text-[0.7rem] font-bold transition-colors ${
+                        form.addResume ? 'border-mint bg-mint text-ink-950' : 'border-frost/30 text-transparent'
                       }`}
+                      aria-hidden="true"
                     >
-                      <span>
-                        <span className="font-display block font-semibold">{t.name}</span>
-                        <span className="mt-0.5 block text-xs text-mist">{t.blurb}</span>
-                      </span>
-                      <span className="shrink-0 pl-4 text-right">
-                        <span className="block text-xs font-semibold text-mist line-through">{t.originalPriceLabel}</span>
-                        <span className="font-display block font-bold">{t.priceLabel} total</span>
-                        <span className="block text-[0.7rem] text-mist">${deposit.amount} today &middot; ${t.price - deposit.amount} after approval</span>
-                        <span className="block text-[0.65rem] font-semibold uppercase tracking-wide text-violet">Save $50 &middot; Sale ends July 26</span>
-                      </span>
-                    </button>
-                  ))}
-                </div>
+                      ✓
+                    </span>
+                    <span>
+                      <span className="font-display block font-semibold">Add {resumeTier.name}</span>
+                      <span className="mt-0.5 block text-xs text-mist">{resumeTier.blurb} {promises.resume.title}.</span>
+                    </span>
+                  </span>
+                  <span className="font-display shrink-0 text-xl font-bold">
+                    <span className="mr-1.5 text-sm font-semibold text-mist line-through">{resumeTier.originalPriceLabel}</span>
+                    +{resumeTier.priceLabel}
+                  </span>
+                </button>
 
-                <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-5">
-                  <p className="font-display text-sm font-semibold text-frost">{deposit.label}</p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-mist">{deposit.detail}</p>
-                </div>
+                <p className="text-sm leading-relaxed text-mist">
+                  Nothing is charged by this form. Your ${deposit.amount} deposit comes after you send the brief, and the ${tier.price - deposit.amount} balance is due only once your site is live and you approve it.
+                  {form.addResume && ` The ${resumeTier.priceLabel} resume polish is billed separately, and I will email you that link.`}
+                </p>
 
-                <RushSwitch on={form.rush} onChange={(v) => set('rush', v)} />
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <StripeNote />
+                  <Link to="/pricing" className="text-xs text-cyan hover:underline">See everything included ↗</Link>
+                </div>
               </>
             )}
 
@@ -623,10 +683,6 @@ export default function Start() {
             {/* CONTENT */}
             {step === 'content' && (
               <>
-                <div className="rounded-2xl border border-violet/25 bg-violet/[0.06] p-5">
-                  <p className="font-display text-sm font-semibold text-frost">{form.package === 'pro' ? 'Pro format: separate pages' : 'Launch format: one scrolling page'}</p>
-                  <p className="mt-1.5 text-xs leading-relaxed text-mist">{form.package === 'pro' ? 'Your story can spread across dedicated pages for your work, résumé, photos, writing, contact details, and anything else worth showing.' : 'Your story flows through four focused sections: Home, About, Work, and Contact.'}</p>
-                </div>
                 <Field label="Tell me about yourself" optional>
                   <textarea
                     className="field-input min-h-28"
@@ -637,38 +693,51 @@ export default function Start() {
                 </Field>
                 <div>
                   <p className="mb-2 text-sm font-medium">
-                    {form.siteFormat === 'single' ? 'Sections' : 'Pages'} you want on the site <span className="rounded-full bg-violet/10 px-2 py-0.5 text-[0.65rem] font-semibold text-violet">required</span> <span className="text-xs font-normal text-mist/60">{form.pages.length}/{pageLimit} picked</span>
+                    {form.siteFormat === 'single' ? 'Sections' : 'Pages'} you want on the site <span className="rounded-full bg-violet/10 px-2 py-0.5 text-[0.65rem] font-semibold text-violet">required</span>
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {pageOptions.map((s) => {
                       const active = form.pages.includes(s)
-                      const disabled = !active && form.pages.length >= pageLimit
                       return (
                         <button
                           key={s}
                           type="button"
                           onClick={() => togglePage(s)}
-                          disabled={disabled}
                           className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
                             active
                               ? 'border-violet bg-violet/20 text-frost'
-                              : disabled
-                                ? 'cursor-not-allowed border-frost/10 text-mist/40'
-                                : 'border-frost/20 text-mist hover:border-frost/40'
+                              : 'border-frost/20 text-mist hover:border-frost/40'
                           }`}
                         >
                           {s}
                         </button>
                       )
                     })}
+                    {/* Write-in for anything not in the list. */}
+                    <button
+                      type="button"
+                      aria-pressed={wantsOtherPages}
+                      onClick={toggleOtherPages}
+                      className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
+                        wantsOtherPages
+                          ? 'border-violet bg-violet/20 text-frost'
+                          : 'border-frost/20 text-mist hover:border-frost/40'
+                      }`}
+                    >
+                      Other{wantsOtherPages ? '' : ' +'}
+                    </button>
                   </div>
-                  {form.pages.length === 0 && (
-                    <p className="mt-2 text-xs font-medium text-violet">Choose at least one before continuing.</p>
+                  {wantsOtherPages && (
+                    <textarea
+                      className="field-input mt-3 min-h-20"
+                      value={form.otherPages}
+                      onChange={(e) => set('otherPages', e.target.value)}
+                      placeholder="What else do you want on the site? One per line is perfect."
+                      aria-label="Other sections or pages you want"
+                    />
                   )}
-                  {form.pages.length >= pageLimit && (
-                    <p className="mt-1.5 text-xs text-mist/60">
-                      {tier?.name || 'Launch'} includes up to {pageLimit} {contentUnit}. {form.package === 'launch' ? 'Launch stays on one scrolling page; Pro gives your content room to spread across dedicated pages.' : ''}
-                    </p>
+                  {!hasPageSelection && (
+                    <p className="mt-2 text-xs font-medium text-violet">Choose at least one before continuing.</p>
                   )}
                 </div>
 
@@ -676,7 +745,7 @@ export default function Start() {
                   <p className="text-sm font-medium">
                     Interested in a custom .com later? <span className="text-xs font-normal text-mist/60">optional</span>
                   </p>
-                  <p className="mt-1 text-xs leading-relaxed text-mist">This does not reserve a name or start payment. It just lets me know whether to bring it up later.</p>
+                  <p className="mt-1 text-xs leading-relaxed text-mist">A custom domain is {hosting.custom.priceLine}, and I buy it and set it up for you. Answering here does not reserve a name or start payment. It just lets me know whether to bring it up later.</p>
                   <div className="mt-3 grid gap-2 sm:grid-cols-3">
                     {domainInterestOptions.map((option) => (
                       <button
@@ -780,10 +849,14 @@ export default function Start() {
                         </div>
                       ))}
                     </div>
-                    {form.projects.length < projectLimit && (
+                    {form.projects.length < projectLimit ? (
                       <button type="button" onClick={addProject} className="btn-ghost mt-3 !px-4 !py-2 text-sm">
                         + Add another project
                       </button>
+                    ) : (
+                      <p className="mt-3 text-xs text-mist/70">
+                        That is {projectLimit} projects. Want more? Email me at {site.email} and we will sort it out.
+                      </p>
                     )}
                   </div>
                 )}
@@ -802,6 +875,7 @@ export default function Start() {
               <>
                 <CloudinaryUpload
                   label="Headshot"
+                  note="Any photo of you works. I clean it up so it looks professional."
                   hint="JPG, JPEG, PNG, HEIC or WebP · 15 MB"
                   assets={form.headshot}
                   onChange={(value) => set('headshot', value)}
@@ -830,6 +904,7 @@ export default function Start() {
                 />
                 <CloudinaryUpload
                   label="Logo"
+                  note="No logo? Leave this blank and I will design one for you."
                   hint="JPG, JPEG, PNG, HEIC, WebP or PDF · 15 MB"
                   assets={form.logoFile}
                   onChange={(value) => set('logoFile', value)}
@@ -841,30 +916,18 @@ export default function Start() {
                   onAuthorizationExpired={expireUploads}
                   onUploadingChange={(active) => markUploading('logo', active)}
                 />
-                <p className="text-xs text-mist/70">
-                  Files upload directly to Cloudinary and never pass through Netlify. Up to {MAX_UPLOADS} files total, 15 MB each.
-                </p>
               </>
             )}
 
             {/* RESUME TRACK */}
             {step === 'resume' && (
               <>
-                <div className="grid gap-3 sm:grid-cols-2">
-                  {resumeService.tiers.map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => set('resumePkg', t.id)}
-                      className={`rounded-2xl border p-5 text-left transition-colors ${
-                        form.resumePkg === t.id ? 'border-mint bg-mint/10' : 'hairline bg-frost/[0.03] hover:border-frost/30'
-                      }`}
-                    >
-                      <span className="font-display block font-semibold">{t.name}</span>
-                      <span className="font-display mt-1 block text-2xl font-bold">{t.priceLabel}</span>
-                      <span className="mt-1 block text-xs text-mist">{t.blurb}</span>
-                    </button>
-                  ))}
+                <div className="flex items-baseline justify-between gap-4 rounded-2xl border border-mint bg-mint/10 p-5">
+                  <span className="font-display font-semibold">{resumeService.tiers[0].name}</span>
+                  <span className="font-display shrink-0 text-2xl font-bold">
+                    <span className="mr-1.5 text-base font-semibold text-mist line-through">{resumeService.tiers[0].originalPriceLabel}</span>
+                    {resumeService.tiers[0].priceLabel}
+                  </span>
                 </div>
                 <CloudinaryUpload
                   label="Your current resume"
@@ -894,13 +957,19 @@ export default function Start() {
 
             {/* REVIEW */}
             {step === 'review' && (
-              <div className="space-y-4">
-                <pre className="glass overflow-x-auto whitespace-pre-wrap rounded-2xl p-6 font-body text-sm leading-relaxed text-mist">
-                  {buildSummary()}
-                </pre>
-                <p className="text-xs text-mist/70">
-                  Spot something off? Use Back to fix it. Payment comes after, nothing is charged by this form.
-                </p>
+              <div className="space-y-5">
+                <div className="glass rounded-2xl p-6">
+                  <dl className="divide-y divide-frost/10">
+                    {reviewRows.map(([label, value]) => (
+                      <div key={label} className="flex items-baseline justify-between gap-6 py-2.5 first:pt-0 last:pb-0">
+                        <dt className="shrink-0 text-xs uppercase tracking-wide text-mist/70">{label}</dt>
+                        <dd className="text-right text-sm text-frost">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+
+                <StripeNote />
                 {error && <p className="rounded-xl bg-[#b3261e]/10 p-4 text-sm text-[#8f1d16]">{error}</p>}
               </div>
             )}

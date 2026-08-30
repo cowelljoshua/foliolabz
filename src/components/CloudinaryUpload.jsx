@@ -39,6 +39,7 @@ function sizeLabel(bytes) {
 export default function CloudinaryUpload({
   label,
   hint,
+  note,
   assets,
   onChange,
   multiple = false,
@@ -163,7 +164,9 @@ export default function CloudinaryUpload({
 
   return (
     <div>
-      <p className="mb-1.5 text-sm font-medium">{label}</p>
+      <p className={note ? 'text-sm font-medium' : 'mb-1.5 text-sm font-medium'}>{label}</p>
+      {/* Reassurance the person needs BEFORE deciding to skip this upload. */}
+      {note && <p className="mb-2 mt-0.5 text-xs leading-relaxed text-mist/80">{note}</p>}
       <button
         type="button"
         onClick={openWidget}

@@ -24,11 +24,13 @@ export default async (request) => {
   const intake = body?.intake
   const email = typeof intake?.email === 'string' ? intake.email.trim().toLowerCase() : ''
   const name = typeof intake?.name === 'string' ? intake.name.trim() : ''
-  const packageId = intake?.package === 'pro' ? 'pro' : intake?.package === 'launch' ? 'launch' : ''
-  if (!email || !name || !packageId) return json(400, { error: 'Incomplete client profile' })
+  // Only one package is sold now. Anything else from a stale cached form is
+  // treated as the current one rather than rejected.
+  const packageId = 'pro'
+  if (!email || !name) return json(400, { error: 'Incomplete client profile' })
 
-  const rush = intake.rush === true
-  const balanceDue = (packageId === 'pro' ? 550 : 300) - 50 + (rush ? 75 : 0)
+  // $150 total minus the $20 deposit.
+  const balanceDue = 130
   const supabase = createClient(url, serverKey, {
     auth: { autoRefreshToken: false, persistSession: false },
   })
@@ -49,7 +51,6 @@ export default async (request) => {
     email,
     name,
     package: packageId,
-    rush,
     balance_due: balanceDue,
     build_status: 'brief',
     intake,

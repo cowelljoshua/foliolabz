@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
-import { site, portal, balances, domainOffer, edits, stripeLinks } from '../config/site.js'
+import StripeNote from '../components/StripeNote.jsx'
+import { site, portal, balances, allBalances, domainOffer, edits, stripeLinks, deposit } from '../config/site.js'
 import ClientProjectStatus from '../components/ClientProjectStatus.jsx'
 import { supabase, supabaseConfigured } from '../lib/supabase.js'
 
@@ -32,6 +33,10 @@ function BackLink({ onClick }) {
 
 // Payment button that gracefully falls back when a Stripe link is not set yet.
 const isNetlifyAddress = (domain = '') => domain.toLowerCase().replace(/\/$/, '').endsWith('.netlify.app')
+// Deposit = package total minus the balance, so legacy clients keep their
+// original $50 while new ones show $20.
+const money = (label = '') => Number(String(label).replace(/[^0-9]/g, '')) || 0
+const depositFor = (balanceInfo) => (balanceInfo ? money(balanceInfo.total) - money(balanceInfo.balanceLabel) : deposit.amount)
 const domainHref = (domain = '') => domain ? (domain.startsWith('http') ? domain : 'https://' + domain) : ''
 const cleanAddressChoice = (value) => value
   .toLowerCase()
@@ -131,9 +136,10 @@ export default function Portal() {
   const chosenEdit = edits.find((e) => e.id === editType)
 
   const owed = client?.balanceDue || 0
-  const clientBalanceInfo = client ? balances.find((b) => b.pkg === client.package) : null
+  // allBalances so clients on the old Launch/Pro packages still resolve.
+  const clientBalanceInfo = client ? allBalances.find((b) => b.pkg === client.package) : null
   const clientDepositPending = Boolean(client && clientBalanceInfo && owed === Number(clientBalanceInfo.total.replace(/[^0-9]/g, '')))
-  const clientPayUrl = client ? (client.payLink || (!client.rush && clientBalanceInfo ? stripeLinks[clientBalanceInfo.stripeKey] : '')) : ''
+  const clientPayUrl = client ? (client.payLink || (clientBalanceInfo ? stripeLinks[clientBalanceInfo.stripeKey] : '')) : ''
   const chosenBalance = balances.find((b) => b.pkg === balancePkg)
   const prefersFreeAddress = client?.domainInterest === 'no'
   const clientHasNetlifyAddress = isNetlifyAddress(client?.domain)
@@ -358,7 +364,7 @@ export default function Portal() {
         {client && (
           <div className="mt-5 flex flex-wrap gap-2">
             <span className="rounded-full bg-violet/15 px-3.5 py-1.5 text-xs font-semibold text-violet-soft">
-              {clientBalanceInfo?.name} build{client.rush ? ' · Rush' : ''}
+              {clientBalanceInfo?.name} build
             </span>
             <span className={`rounded-full px-3.5 py-1.5 text-xs font-semibold ${owed > 0 ? 'bg-cyan/15 text-cyan' : 'bg-mint/15 text-mint'}`}>
               {owed > 0 ? `$${owed} due at launch` : 'Fully paid ✓'}
@@ -414,7 +420,7 @@ export default function Portal() {
                   {client
                     ? owed > 0
                       ? clientDepositPending
-                        ? '$50 deposit needed to start your build.'
+                        ? `$${deposit.amount} deposit needed to start your build.`
                         : `$${owed} due when your site goes live.`
                       : 'All paid up, nothing due.'
                     : 'Clear the rest of your build once it is live.'}
@@ -475,12 +481,13 @@ export default function Portal() {
                       <p className="text-sm text-mist">
                         {clientDepositPending
                           ? `${clientBalanceInfo?.name} build, $${owed} package total`
-                          : `${clientBalanceInfo?.name} build${client.rush ? ' with rush' : ''}, $50 deposit paid`}
+                          : `${clientBalanceInfo?.name} build, $${depositFor(clientBalanceInfo)} deposit paid`}
                       </p>
-                      <p className="font-display mt-2 text-4xl font-bold">{clientDepositPending ? '$50' : `$${owed}`}</p>
+                      <p className="font-display mt-2 text-4xl font-bold">{clientDepositPending ? `$${depositFor(clientBalanceInfo)}` : `$${owed}`}</p>
                       <p className="mt-1 text-xs text-mist">{clientDepositPending ? 'deposit to start your build' : 'due when your site goes live'}</p>
                     </div>
-                    <PayBlock url={clientPayUrl} label={clientDepositPending ? 'Pay my $50 deposit' : `Pay my $${owed} balance`} />
+                    <PayBlock url={clientPayUrl} label={clientDepositPending ? `Pay my $${deposit.amount} deposit` : `Pay my $${owed} balance`} />
+                    <StripeNote center />
                   </div>
                 ) : (
                   <div className="mt-5 rounded-2xl border border-mint/40 bg-mint/[0.06] p-6 text-center">
@@ -498,9 +505,9 @@ export default function Portal() {
                 /* Unknown email: fall back to picking the package. */
                 <>
                   <p className="mt-2 text-sm text-mist">
-                    Your $50 deposit is already in. Pick the package you signed up for to pay the rest.
+                    Your deposit is already in. Confirm your package to pay the rest.
                   </p>
-                  <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  <div className="mt-5 grid gap-3">
                     {balances.map((b) => (
                       <button
                         key={b.pkg}
@@ -510,7 +517,7 @@ export default function Portal() {
                         }`}
                       >
                         <span className="font-display block font-semibold">{b.name}</span>
-                        <span className="mt-0.5 block text-xs text-mist">{b.total} total, $50 deposit paid</span>
+                        <span className="mt-0.5 block text-xs text-mist">{b.total} total, ${depositFor(b)} deposit paid</span>
                         <span className="font-display mt-2 block text-2xl font-bold">{b.balanceLabel} left</span>
                       </button>
                     ))}
@@ -518,9 +525,7 @@ export default function Portal() {
                   {chosenBalance && (
                     <div className="mt-6 flex flex-col gap-3">
                       <PayBlock url={stripeLinks[chosenBalance.stripeKey]} label={`Pay ${chosenBalance.balanceLabel} balance`} />
-                      <p className="text-center text-xs text-mist">
-                        Added rush? Your balance is $75 higher, I will email that link so nothing double-charges.
-                      </p>
+                      <StripeNote center />
                     </div>
                   )}
                 </>
@@ -566,9 +571,13 @@ export default function Portal() {
                     <div className="rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-6 text-center">
                       <p className="text-sm text-mist">Available domain confirmed</p>
                       <p className="font-display mt-1 text-2xl font-bold">{displayedDomain}</p>
-                      <p className="mt-2 text-sm text-mist">Your domain payment has not started yet. Start the {domainOffer.yearly.label} subscription before I can register it and put your site live there.</p>
+                      <p className="mt-2 text-sm text-mist">Your domain payment has not started yet. Pick how you want to be billed and I will register it and put your site live there.</p>
                     </div>
-                    <PayBlock url={stripeLinks[domainOffer.yearly.stripeKey]} label={`Start ${displayedDomain} · ${domainOffer.yearly.label}`} />
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <PayBlock url={stripeLinks[domainOffer.yearly.stripeKey]} label={`Pay yearly · ${domainOffer.yearly.label}`} />
+                      <PayBlock url={stripeLinks[domainOffer.monthly.stripeKey]} label={`Pay monthly · ${domainOffer.monthly.label}`} />
+                    </div>
+                    <p className="text-center text-xs text-mist">Same domain either way. Yearly works out cheaper.</p>
                   </div>
                 )
               ) : !submitted ? (
@@ -618,7 +627,7 @@ export default function Portal() {
                 <div className="mt-6 rounded-xl border border-mint/40 bg-mint/[0.06] p-4 text-sm">
                   {prefersFreeAddress
                     ? 'Preferences sent. I will reserve the first available .netlify.app address and show it here once it is ready.'
-                    : `Request sent. I will check the names you shared and reach out before confirming a domain. No payment is due until I confirm the name. After that, come back here to start the ${domainOffer.yearly.label} subscription so I can put it live.`}
+                    : `Request sent. I will check the names you shared and reach out before confirming a domain. No payment is due until I confirm the name. After that, come back here to start the domain subscription, ${domainOffer.yearly.label} or ${domainOffer.monthly.label}, so I can put it live.`}
                 </div>
               )}
             </div>

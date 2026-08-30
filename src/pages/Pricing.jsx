@@ -1,118 +1,60 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'motion/react'
 import Reveal from '../components/reactbits/Reveal.jsx'
 import SpotlightCard from '../components/reactbits/SpotlightCard.jsx'
-import StarBorder from '../components/reactbits/StarBorder.jsx'
-import RushSwitch from '../components/RushSwitch.jsx'
-import ResumeXray from '../components/ResumeXray.jsx'
+import StripeNote from '../components/StripeNote.jsx'
 import {
-  tiers,
+  tier,
+  sale,
   deposit,
-  rush,
   promises,
   resumeService,
+  realSites,
   faq,
 } from '../config/site.js'
 
-function startLink(tierId, rushOn) {
-  return `/start?package=${tierId}${rushOn ? '&rush=1' : ''}`
-}
+const startLink = `/start?package=${tier.id}`
 
-/* ---------------- Tier card + expanded panel ---------------- */
+// Show a real client site as the example, not a fictional demo.
+const exampleSite = realSites.find((s) => s.live && s.url) || realSites[0]
 
-function TierCard({ tier, onOpen }) {
+/* ---------------- Package cards ---------------- */
+
+function TierCard() {
   return (
-    <SpotlightCard
-      className={`h-full ${tier.popular ? 'border-violet/60' : ''}`}
-      spotColor={tier.popular ? 'rgba(34,211,238,0.14)' : 'rgba(124,92,255,0.14)'}
-    >
+    <SpotlightCard className="flex h-full flex-col border-violet/60" spotColor="rgba(34,211,238,0.14)">
       <div className="p-7 pb-5 text-left">
-        {tier.popular && <span className="mb-3 inline-block rounded-full bg-violet/15 px-3 py-1 text-xs font-semibold text-violet-soft">Best value</span>}
+        <span className="mb-3 inline-block rounded-full bg-violet/15 px-3 py-1 text-xs font-semibold text-violet-soft">Save $150</span>
         <h3 className="font-display text-xl font-semibold">{tier.name}</h3>
-        <div className="mt-2 flex items-baseline gap-2"><span className="font-display text-lg font-semibold text-mist line-through">{tier.originalPriceLabel}</span><span className="font-display text-4xl font-bold">{tier.priceLabel}</span></div>
+        <div className="mt-2 flex items-baseline gap-2"><span className="font-display text-lg font-semibold text-mist line-through">{tier.originalPriceLabel}</span><span className="font-display text-4xl font-bold">{tier.priceLabel}</span><span className="text-sm text-mist">all in</span></div>
         <p className="mt-1 text-xs font-semibold text-cyan">${tier.price} total &middot; ${deposit.amount} today &middot; ${tier.price - deposit.amount} after approval</p>
         <p className="mt-2 text-sm text-mist">{tier.blurb}</p>
         <ul className="mt-5 space-y-2">{tier.headline.map((f) => <li key={f} className="flex items-start gap-2 text-sm text-mist"><span className="mt-0.5 text-mint">✓</span>{f}</li>)}</ul>
       </div>
-      <div className="flex flex-col gap-3 px-7 pb-7">
-        <button type="button" onClick={onOpen} className="btn-primary justify-center">Select {tier.name}</button>
-        <Link to={`/examples/${tier.id}`} className="btn-ghost justify-center">View {tier.name} website example ↗</Link>
+      <div className="mt-auto flex flex-col gap-3 px-7 pb-7">
+        <Link to={startLink} className="btn-primary justify-center">Start my build</Link>
+        <a href={exampleSite.url} target="_blank" rel="noreferrer" className="btn-ghost justify-center">See a real site I built ↗</a>
       </div>
     </SpotlightCard>
   )
 }
-function TierModal({ tier, onClose }) {
-  const [rushOn, setRushOn] = useState(false)
-
-  useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && onClose()
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [onClose])
-
+function ResumeCard() {
+  const t = resumeService.tiers[0]
   return (
-    <motion.div
-      className="fixed inset-0 z-[60] flex items-end justify-center bg-frost/45 p-4 backdrop-blur-sm sm:items-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-    >
-      <motion.div
-        className="glass max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-3xl p-8"
-        initial={{ y: 60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 60, opacity: 0 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="font-display text-2xl font-bold">{tier.name}</h3>
-            <div className="mt-1 flex items-baseline gap-2">
-              <span className="font-display text-base font-semibold text-mist line-through">{tier.originalPriceLabel}</span>
-              <span className="font-display text-3xl font-bold text-gradient">{tier.priceLabel}</span>
-            </div>
-            <p className="mt-1 text-xs font-semibold text-cyan">${tier.price} total &middot; ${deposit.amount} today &middot; ${tier.price - deposit.amount} after approval</p>
-          </div>
-          <button onClick={onClose} className="rounded-full p-2 text-mist hover:bg-frost/10 hover:text-frost" aria-label="Close">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M4 4l10 10M14 4L4 14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-            </svg>
-          </button>
-        </div>
-
-        <ul className="mt-6 space-y-2.5">
-          {tier.full.map((f) => (
-            <li key={f} className="flex items-start gap-2.5 text-sm text-mist">
-              <span className="mt-0.5 text-mint">✓</span> {f}
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-6 rounded-2xl border border-cyan/30 bg-cyan/[0.05] p-5">
-          <p className="font-display text-sm font-semibold text-frost">How payment works</p>
-          <p className="mt-2 text-sm leading-relaxed text-mist">{deposit.detail}</p>
-        </div>
-
-        <div className="mt-6">
-          <RushSwitch on={rushOn} onChange={setRushOn} />
-        </div>
-
-        <div className="mt-7 flex flex-col gap-3">
-          <Link to={`/examples/${tier.id}`} className="btn-ghost justify-center">
-            View the {tier.name} example
-          </Link>
-          <Link to={startLink(tier.id, rushOn)} className="btn-primary justify-center">
-            Start my build
-          </Link>
-          <p className="text-center text-xs text-mist">
-            Your ${deposit.amount} deposit is included in the {tier.priceLabel} total. The remaining ${tier.price - deposit.amount} is due after you approve the live site{rushOn ? ', with the rush add-on included in that balance' : ''}.
-          </p>
-        </div>
-      </motion.div>
-    </motion.div>
+    <SpotlightCard className="flex h-full flex-col" spotColor="rgba(74,222,128,0.12)">
+      <div className="p-7 pb-5 text-left">
+        <span className="mb-3 inline-block rounded-full bg-mint/15 px-3 py-1 text-xs font-semibold text-mint">Save ${t.originalPrice - t.price}</span>
+        <h3 className="font-display text-xl font-semibold">{t.name}</h3>
+        <div className="mt-2 flex items-baseline gap-2"><span className="font-display text-lg font-semibold text-mist line-through">{t.originalPriceLabel}</span><span className="font-display text-4xl font-bold">{t.priceLabel}</span><span className="text-sm text-mist">one time</span></div>
+        <p className="mt-1 text-xs font-semibold text-mint">{promises.resume.title}</p>
+        <p className="mt-2 text-sm text-mist">{t.blurb}</p>
+        <ul className="mt-5 space-y-2">{t.full.map((f) => <li key={f} className="flex items-start gap-2 text-sm text-mist"><span className="mt-0.5 text-mint">✓</span>{f}</li>)}</ul>
+      </div>
+      <div className="mt-auto flex flex-col gap-3 px-7 pb-7">
+        <Link to={`/start?track=resume&package=${t.id}`} className="btn-primary justify-center">Polish my resume</Link>
+      </div>
+    </SpotlightCard>
   )
 }
 
@@ -153,13 +95,11 @@ function Faq() {
 /* ---------------- Page ---------------- */
 
 export default function Pricing() {
-  const [openTier, setOpenTier] = useState(null)
-
   return (
     <main className="mx-auto max-w-6xl px-6 pt-32">
       <Reveal className="text-center">
         <h1 className="font-head text-4xl sm:text-5xl">
-          Simple pricing. <span className="text-gradient italic">Zero surprises.</span>
+          One price. <span className="text-gradient italic">Zero surprises.</span>
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-mist">
           Want a website like this? Email <a className="font-semibold text-violet underline underline-offset-4" href="mailto:foliolabz@gmail.com">foliolabz@gmail.com</a> for a quote.
@@ -168,18 +108,24 @@ export default function Pricing() {
 
       <Reveal delay={0.08} className="mx-auto mt-7 max-w-3xl">
         <div className="rounded-2xl border border-violet/30 bg-violet/10 px-5 py-3 text-center text-sm font-semibold text-frost">
-          <span className="mr-2 inline-flex rounded-full bg-violet px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white">Save $50 &middot; Sale ends July 26</span>
-          Launch <span className="text-mist line-through">$350</span> <span className="text-violet">$300</span> &middot; Pro <span className="text-mist line-through">$600</span> <span className="text-violet">$550</span>
+          <span className="mr-2 inline-flex rounded-full bg-violet px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.12em] text-white">Sale</span>
+          Portfolio <span className="text-mist line-through">{tier.originalPriceLabel}</span> <span className="text-violet">{tier.priceLabel}</span> &middot; Resume <span className="text-mist line-through">{resumeService.tiers[0].originalPriceLabel}</span> <span className="text-violet">{resumeService.tiers[0].priceLabel}</span>
+          <span className="mt-1 block text-xs font-medium text-mist">Sale prices {sale.endsLabel}</span>
         </div>
       </Reveal>
-      {/* Tiers */}
-      <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
-        {tiers.map((t, i) => (
-          <Reveal key={t.id} delay={i * 0.1}>
-            <TierCard tier={t} onOpen={() => setOpenTier(t)} />
-          </Reveal>
-        ))}
+      {/* The two things you can buy, side by side */}
+      <div id="resume" className="mx-auto mt-12 grid max-w-4xl scroll-mt-28 gap-6 md:grid-cols-2">
+        <Reveal>
+          <TierCard />
+        </Reveal>
+        <Reveal delay={0.1}>
+          <ResumeCard />
+        </Reveal>
       </div>
+
+      <Reveal delay={0.12} className="mt-6">
+        <StripeNote center />
+      </Reveal>
 
       <Reveal delay={0.2} className="mt-10">
         <div className="star-border mx-auto max-w-3xl rounded-3xl">
@@ -203,68 +149,13 @@ export default function Pricing() {
         </div>
       </Reveal>
 
-      <AnimatePresence>
-        {openTier && <TierModal tier={openTier} onClose={() => setOpenTier(null)} />}
-      </AnimatePresence>
-
-      {/* RESUME POLISH */}
-      <section id="resume" className="mt-28 scroll-mt-28">
-        <Reveal className="text-center">
-          <h2 className="font-head text-3xl sm:text-4xl">{resumeService.heading}</h2>
-          <p className="mt-3 text-mist">{resumeService.humanLine}</p>
-        </Reveal>
-
-        <div className="mx-auto mt-10 grid max-w-3xl gap-6 sm:grid-cols-2">
-          {resumeService.tiers.map((t, i) => (
-            <Reveal key={t.id} delay={i * 0.1}>
-              <SpotlightCard className="h-full p-7" spotColor="rgba(74,222,128,0.12)">
-                <h3 className="font-display text-lg font-semibold">{t.name}</h3>
-                <p className="font-display mt-1 text-3xl font-bold">{t.priceLabel}</p>
-                <p className="mt-1.5 text-sm text-mist">{t.blurb}</p>
-                <ul className="mt-4 space-y-2">
-                  {t.full.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm text-mist">
-                      <span className="mt-0.5 text-mint">✓</span> {f}
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-6 flex flex-col gap-2.5">
-                  <Link to={`/start?track=resume&package=${t.id}`} className="btn-primary justify-center !py-2.5 text-sm">
-                    {i === 0 ? 'Polish my resume' : 'Polish + meet with me'}
-                  </Link>
-                </div>
-                <p className="mt-4 text-center text-xs font-semibold text-mint">
-                  {promises.resume.title}
-                </p>
-              </SpotlightCard>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Resume X-ray */}
-        <Reveal className="mx-auto mt-12 max-w-3xl">
-          <ResumeXray />
-        </Reveal>
-      </section>
-
       {/* FAQ */}
-      <section className="mt-24">
+      <section className="mt-24 pb-24">
         <Reveal className="text-center">
           <h2 className="font-head text-3xl">FAQs</h2>
         </Reveal>
         <Faq />
       </section>
-
-      {/* CTA */}
-      <Reveal className="mx-auto my-20 max-w-2xl">
-        <StarBorder className="rounded-2xl">
-          <div className="rounded-2xl p-10 text-center">
-            <h2 className="font-head text-2xl">Still deciding? Start the form.</h2>
-            <p className="mt-2 text-sm text-mist">Answering a few questions usually makes the choice obvious.</p>
-            <Link to="/start" className="btn-primary mt-6">Start my build</Link>
-          </div>
-        </StarBorder>
-      </Reveal>
     </main>
   )
 }
