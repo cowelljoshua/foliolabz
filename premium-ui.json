@@ -1,0 +1,11 @@
+{
+  "profile": "product-admin",
+  "sourceRoots": ["src/wedding", "src/pages/Wedding.jsx"],
+  "locale": "en-US",
+  "canonicalMap": "UX-CONTRACT.md",
+  "requiredCapabilities": ["Select/Listbox", "Date", "Form", "Scrollbar", "Toast", "CRUD"],
+  "ownership": {"Select/Listbox": "native", "Date": "native"},
+  "requiredCommands": ["build", "e2e"],
+  "commands": {"build": "npm run build", "e2e": "npx playwright test"},
+  "evidence": {"crudFullFlow": "tests/wedding.spec.js", "failurePaths": "tests/wedding.spec.js"}
+}

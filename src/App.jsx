@@ -11,6 +11,7 @@ const Start = lazy(() => import('./pages/Start.jsx'))
 const Thanks = lazy(() => import('./pages/Thanks.jsx'))
 const Portal = lazy(() => import('./pages/Portal.jsx'))
 const Owner = lazy(() => import('./pages/Owner.jsx'))
+const Wedding = lazy(() => import('./pages/Wedding.jsx'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword.jsx'))
 const Midnight = lazy(() => import('./pages/demos/Midnight.jsx'))
 const SoftLight = lazy(() => import('./pages/demos/SoftLight.jsx'))
@@ -78,6 +79,7 @@ const pageTitles = {
   '/thanks': 'Brief received · FolioLabz',
   '/portal': 'Client portal · FolioLabz',
   '/owner': 'Owner workspace · FolioLabz',
+  '/wedding': 'Ever After · Our wedding planner',
   '/reset-password': 'Reset password · FolioLabz',
   '/examples/pro': 'Website example · FolioLabz',
   '/examples/pro/work': 'Website example: Work · FolioLabz',
@@ -126,6 +128,7 @@ export default function App() {
           <Route path="/portal" element={<Portal />} />
         </Route>
         <Route path="/owner" element={<Owner />} />
+        <Route path="/wedding" element={<Wedding />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         {/* Full-screen style demos (immersive, no site nav) */}
         <Route path="/styles/midnight" element={<Midnight />} />

@@ -6,7 +6,8 @@ export default function ResetPassword() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const portalReset = searchParams.get('return') === 'portal'
-  const destination = portalReset ? '/portal' : '/owner'
+  const weddingReset = searchParams.get('return') === 'wedding'
+  const destination = weddingReset ? '/wedding' : portalReset ? '/portal' : '/owner'
   const [checking, setChecking] = useState(true)
   const [hasSession, setHasSession] = useState(false)
   const [password, setPassword] = useState('')
@@ -57,7 +58,7 @@ export default function ResetPassword() {
     }
 
     setComplete(true)
-    setNotice(`Password updated. Opening your ${portalReset ? 'client portal' : 'owner workspace'}…`)
+    setNotice(`Password updated. Opening your ${weddingReset ? 'wedding planner' : portalReset ? 'client portal' : 'owner workspace'}…`)
     window.setTimeout(() => navigate(destination, { replace: true }), 900)
   }
 
